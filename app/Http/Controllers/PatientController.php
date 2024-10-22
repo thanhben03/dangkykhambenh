@@ -61,7 +61,7 @@ class PatientController extends Controller
             'gender' => $this->removeVietnameseAccents($data['gender']),
             'birthday' => $this->removeVietnameseAccents($data['birthday']),
             'address' => $this->removeVietnameseAccents($data['address']),
-            'email' => $this->removeVietnameseAccents($data['email']),
+//            'email' => $this->removeVietnameseAccents($data['email']),
             'phone' => $this->removeVietnameseAccents($data['phone']),
             'arrival_time' => Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString(),
             'department' => $this->removeVietnameseAccents($data['department']),
