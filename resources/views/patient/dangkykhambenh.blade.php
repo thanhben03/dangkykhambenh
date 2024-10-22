@@ -36,7 +36,7 @@
             <div class="row">
                 <div class="col mb-3">
                     <label for="email" class="form-label">Email</label>
-                    <input type="email" name="email" class="form-control" id="email" placeholder="Nhập email" required>
+                    <input type="email" name="email" class="form-control" id="email" placeholder="Nhập email">
                 </div>
                 <div class="col mb-3">
                     <label for="appointmentDate" class="form-label">Chọn khoa khám</label>
