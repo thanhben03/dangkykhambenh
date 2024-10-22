@@ -53,7 +53,25 @@ class PatientController extends Controller
     public function register(Request $request)
     {
         $data = $request->all();
+        $response = Http::post('crow-wondrous-asp.ngrok-free.app/print', [
+            'stt' => '123',
+            'fullname' => $data['fullname'],
+            'cccd' => $data['cccd'],
+            'gender' => $data['gender'],
+            'birthday' => $data['birthday'],
+            'address' => $data['address'],
+            'email' => $data['email'],
+            'phone' => $data['phone'],
+            'arrival_time' => Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString(),
+            'department' => $data['department'],
+            'trieu_chung' => $data['trieu_chung'],
+        ]);
 
-        return response()->json($data);
+        if ($response->successful()) {
+            return $response->json();
+        } else {
+            return response()->json(['error' => 'API request failed'], 500);
+        }
+
     }
 }
