@@ -53,18 +53,19 @@ class PatientController extends Controller
     public function register(Request $request)
     {
         $data = $request->all();
+
         $response = Http::post('crow-wondrous-asp.ngrok-free.app/print', [
             'stt' => '123',
-            'fullname' => $data['fullname'],
-            'cccd' => $data['cccd'],
-            'gender' => $data['gender'],
-            'birthday' => $data['birthday'],
-            'address' => $data['address'],
-            'email' => $data['email'],
-            'phone' => $data['phone'],
+            'fullname' => $this->removeVietnameseAccents($data['fullname']),
+            'cccd' => $this->removeVietnameseAccents($data['cccd']),
+            'gender' => $this->removeVietnameseAccents($data['gender']),
+            'birthday' => $this->removeVietnameseAccents($data['birthday']),
+            'address' => $this->removeVietnameseAccents($data['address']),
+            'email' => $this->removeVietnameseAccents($data['email']),
+            'phone' => $this->removeVietnameseAccents($data['phone']),
             'arrival_time' => Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString(),
-            'department' => $data['department'],
-            'trieu_chung' => $data['trieu_chung'],
+            'department' => $this->removeVietnameseAccents($data['department']),
+            'trieu_chung' => $this->removeVietnameseAccents($data['trieu_chung']),
         ]);
 
         if ($response->successful()) {
@@ -73,5 +74,30 @@ class PatientController extends Controller
             return response()->json(['error' => 'API request failed'], 500);
         }
 
+    }
+
+    function removeVietnameseAccents($str) {
+        $accents = [
+            'a' => ['à', 'á', 'ả', 'ã', 'ạ', 'ă', 'ắ', 'ằ', 'ẳ', 'ẵ', 'ặ', 'â', 'ấ', 'ầ', 'ẩ', 'ẫ', 'ậ'],
+            'e' => ['è', 'é', 'ẻ', 'ẽ', 'ẹ', 'ê', 'ế', 'ề', 'ể', 'ễ', 'ệ'],
+            'i' => ['ì', 'í', 'ỉ', 'ĩ', 'ị'],
+            'o' => ['ò', 'ó', 'ỏ', 'õ', 'ọ', 'ô', 'ố', 'ồ', 'ổ', 'ỗ', 'ộ', 'ơ', 'ớ', 'ờ', 'ở', 'ỡ', 'ợ'],
+            'u' => ['ù', 'ú', 'ủ', 'ũ', 'ụ', 'ư', 'ứ', 'ừ', 'ử', 'ữ', 'ự'],
+            'y' => ['ỳ', 'ý', 'ỷ', 'ỹ', 'ỵ'],
+            'd' => ['đ'],
+            'A' => ['À', 'Á', 'Ả', 'Ã', 'Ạ', 'Ă', 'Ắ', 'Ằ', 'Ẳ', 'Ẵ', 'Ặ', 'Â', 'Ấ', 'Ầ', 'Ẩ', 'Ẫ', 'Ậ'],
+            'E' => ['È', 'É', 'Ẻ', 'Ẽ', 'Ẹ', 'Ê', 'Ế', 'Ề', 'Ể', 'Ễ', 'Ệ'],
+            'I' => ['Ì', 'Í', 'Ỉ', 'Ĩ', 'Ị'],
+            'O' => ['Ò', 'Ó', 'Ỏ', 'Õ', 'Ọ', 'Ô', 'Ố', 'Ồ', 'Ổ', 'Ỗ', 'Ộ', 'Ơ', 'Ớ', 'Ờ', 'Ở', 'Ỡ', 'Ợ'],
+            'U' => ['Ù', 'Ú', 'Ủ', 'Ũ', 'Ụ', 'Ư', 'Ứ', 'Ừ', 'Ử', 'Ữ', 'Ự'],
+            'Y' => ['Ỳ', 'Ý', 'Ỷ', 'Ỹ', 'Ỵ'],
+            'D' => ['Đ'],
+        ];
+
+        foreach ($accents as $nonAccent => $accentedChars) {
+            $str = str_replace($accentedChars, $nonAccent, $str);
+        }
+
+        return $str;
     }
 }
