@@ -109,7 +109,10 @@
                 url: '{{route('patient.register')}}',
                 data: form,
                 success: function (res) {
-                    console.log(res)
+                    alert('ok')
+                },
+                error: function (xhr) {
+                    console.log(xhr.responseJSON)
                 }
             })
         }

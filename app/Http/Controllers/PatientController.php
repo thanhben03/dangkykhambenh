@@ -10,12 +10,12 @@ class PatientController extends Controller
 {
     public function scan()
     {
-//        $response = Http::withHeaders([
-//            'Content-Type' => 'application/json',
-//        ])->timeout(0)->post('crow-wondrous-asp.ngrok-free.app/command', [
-//            'command' => 'scan_qr',
-//        ]);
-        return response()->json($this->getDataFromCCCD('089202017098|352576714|Lê Văn Lương|23052002|Nam|Tổ 10 Ấp An Thái, Hòa Bình, Chợ Mới, An Giang|31122021'));
+        $response = Http::withHeaders([
+            'Content-Type' => 'application/json',
+        ])->timeout(0)->post('crow-wondrous-asp.ngrok-free.app/command', [
+            'command' => 'scan_qr',
+        ]);
+//        return response()->json($this->getDataFromCCCD('089202017098|352576714|Lê Văn Lương|23052002|Nam|Tổ 10 Ấp An Thái, Hòa Bình, Chợ Mới, An Giang|31122021'));
 
         // Kiểm tra phản hồi
         if ($response->successful()) {
