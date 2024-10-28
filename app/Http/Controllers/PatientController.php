@@ -58,8 +58,16 @@ class PatientController extends Controller
     {
         $data = $request->all();
         $department = DB::table('departments')->where('id', '=', $data['department'])->first();
+
+        $patientVisit = PatientVisit::query()
+            ->where('department_id', $department->id)
+            ->whereDate('created_at', Carbon::toDay())
+            ->orderBy('created_at', 'desc')
+            ->first();
+
+        $stt = $patientVisit->stt + 1;
         $response = Http::post('crow-wondrous-asp.ngrok-free.app/print', [
-            'stt' => '123',
+            'stt' => $stt,
             'fullname' => $this->removeVietnameseAccents($data['fullname']),
             'cccd' => $this->removeVietnameseAccents($data['cccd']),
             'gender' => $this->removeVietnameseAccents($data['gender']),
@@ -68,7 +76,7 @@ class PatientController extends Controller
 //            'email' => $this->removeVietnameseAccents($data['email']),
             'phone' => $this->removeVietnameseAccents($data['phone']),
             'arrival_time' => Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString(),
-            'department' => $this->removeVietnameseAccents($department->department_name),
+            'department' => $this->removeVietnameseAccents($data['department']),
             'trieu_chung' => $this->removeVietnameseAccents($data['trieu_chung']),
         ]);
 
@@ -85,7 +93,7 @@ class PatientController extends Controller
                 'nic' => $data['cccd'],
             ]);
         }
-        $this->registerPatientVisit($patient->id > 0 ? $patient->id : $id+1, $data['trieu_chung'], $department->id);
+        $this->registerPatientVisit($patient->id > 0 ? $patient->id : $id+1, $data['trieu_chung'], $department->id, $stt);
 
         if ($response->successful()) {
             return $response->json();
@@ -155,7 +163,7 @@ class PatientController extends Controller
         $patient = Patient::query()->where('id', '=', $patientVisit->patient_id)->first();
 
         $this->done($stt);
-        $this->registerPatientVisit($patient->id, $trieu_chung, $department_id);
+        $this->registerPatientVisit($patient->id, $trieu_chung, $department_id, $stt);
 
     }
 

@@ -16,4 +16,5 @@ Route::post('/register', [PatientController::class, 'register'])->name('patient.
 
 Route::get('/done/{stt}', [PatientController::class, 'done'])->name('doctor.done');
 Route::get('/lich-hen', [PatientController::class, 'lichHen'])->name('doctor.lichHen');
+Route::post('/next-department', [PatientController::class, 'nextDepartment'])->name('doctor.lichHen');
 Route::get('/get-appointments', [PatientController::class, 'getAppointments'])->name('doctor.getAppointments');
