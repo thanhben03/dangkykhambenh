@@ -161,13 +161,35 @@ class PatientController extends Controller
 
     public function registerPatientVisit($patient_id, $trieu_chung, $department_id, $stt = null)
     {
+        $patientVisit = PatientVisit::query()->whereDate('created_at', Carbon::toDay())->orderBy('created_at', 'desc')->first();
 
-        PatientVisit::query()->create([
-            'patient_id' => $patient_id,
-            'stt' => $stt ?? PatientVisit::query()->whereDate('created_at', Carbon::toDay())->orderBy('created_at', 'desc')->first()->stt + 1,
-            'department_id' => $department_id,
-            'trieu_chung' => $trieu_chung,
-        ]);
+        // Không có bệnh nhân mà có stt -> bác sĩ chuyển khoa hoặc khám sktq
+
+        if ($stt) {
+            PatientVisit::query()->create([
+                'patient_id' => $patient_id,
+                'stt' => $stt,
+                'department_id' => $department_id,
+                'trieu_chung' => $trieu_chung,
+            ]);
+        } else if (!$stt && !$patientVisit) {
+            PatientVisit::query()->create([
+                'patient_id' => $patient_id,
+                'stt' => 1,
+                'department_id' => $department_id,
+                'trieu_chung' => $trieu_chung,
+            ]);
+        }
+
+        else {
+            PatientVisit::query()->create([
+                'patient_id' => $patient_id,
+                'stt' => PatientVisit::query()->whereDate('created_at', Carbon::toDay())->orderBy('created_at', 'desc')->first()->stt + 1,
+                'department_id' => $department_id,
+                'trieu_chung' => $trieu_chung,
+            ]);
+        }
+
     }
 
     public function lichHen()
