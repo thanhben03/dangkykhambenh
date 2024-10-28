@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\DB;
+use App\Models\PatientVisit;
+use App\Models\CurrentPatient;
+use App\Models\Patient;
 
 class PatientController extends Controller
 {
@@ -53,20 +57,36 @@ class PatientController extends Controller
     public function register(Request $request)
     {
         $data = $request->all();
+        $department = DB::table('departments')->where('id', '=', $data['department'])->first();
+//         $response = Http::post('crow-wondrous-asp.ngrok-free.app/print', [
+//             'stt' => '123',
+//             'fullname' => $this->removeVietnameseAccents($data['fullname']),
+//             'cccd' => $this->removeVietnameseAccents($data['cccd']),
+//             'gender' => $this->removeVietnameseAccents($data['gender']),
+//             'birthday' => $this->removeVietnameseAccents($data['birthday']),
+//             'address' => $this->removeVietnameseAccents($data['address']),
+// //            'email' => $this->removeVietnameseAccents($data['email']),
+//             'phone' => $this->removeVietnameseAccents($data['phone']),
+//             'arrival_time' => Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString(),
+//             'department' => $this->removeVietnameseAccents($data['department']),
+//             'trieu_chung' => $this->removeVietnameseAccents($data['trieu_chung']),
+//         ]);
 
-        $response = Http::post('crow-wondrous-asp.ngrok-free.app/print', [
-            'stt' => '123',
-            'fullname' => $this->removeVietnameseAccents($data['fullname']),
-            'cccd' => $this->removeVietnameseAccents($data['cccd']),
-            'gender' => $this->removeVietnameseAccents($data['gender']),
-            'birthday' => $this->removeVietnameseAccents($data['birthday']),
-            'address' => $this->removeVietnameseAccents($data['address']),
-//            'email' => $this->removeVietnameseAccents($data['email']),
-            'phone' => $this->removeVietnameseAccents($data['phone']),
-            'arrival_time' => Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString(),
-            'department' => $this->removeVietnameseAccents($data['department']),
-            'trieu_chung' => $this->removeVietnameseAccents($data['trieu_chung']),
-        ]);
+        $id = Patient::query()->orderBy('id', 'desc')->first()->id;
+        $patient = Patient::query()->where('nic', '=', $data['cccd'])->first();
+
+        if (!$patient) {
+            $patient = Patient::query()->create([
+                'id' => $id + 1,
+                'name' => $data['fullname'],
+                'address' => $data['address'],
+                'sex' => $data['gender'] == 'Nam' ? 'Male' : 'Female',
+                'bod' => $data['birthday'],
+                'telephone' => $data['phone'],
+                'nic' => $data['cccd'],
+            ]);
+        }
+        $this->registerPatientVisit($patient->id > 0 ? $patient->id : $id+1, $data['trieu_chung'], $department->id);
 
         if ($response->successful()) {
             return $response->json();
@@ -99,5 +119,87 @@ class PatientController extends Controller
         }
 
         return $str;
+    }
+
+    // Khi bac si an nut hoan thanh
+    public function done($stt)
+    {
+        PatientVisit::query()->where('stt','=', $stt)->update(['status' => 1]);
+
+        $currentPatient = CurrentPatient::query()
+            ->where('department_id', \auth()->user()->department_id ?? 1)
+            ->whereDate('created_at', Carbon::today())
+            ->orderBy('created_at', 'desc')
+            ->first();
+
+        $currentSTT = intval($currentPatient->stt);
+        $currentPatient->stt = $currentSTT + 1;
+        $currentPatient->save();
+
+        return response()->json([
+            'msg' => 'Ok'
+        ]);
+    }
+
+    public function nextDepartment(Request $request)
+    {
+        $stt = $request->stt;
+        $trieu_chung = $request->trieu_chung;
+        $department_id = $request->department_id;
+
+        $patientVisit = PatientVisit::query()
+            ->where('stt','=', $stt)
+            ->whereDate('created_at', Carbon::today())
+            ->orderBy('created_at', 'desc')
+            ->first();
+
+        $patient = Patient::query()->where('id', '=', $patientVisit->patient_id)->first();
+
+        $this->done($stt);
+        $this->registerPatientVisit($patient->id, $trieu_chung, $department_id);
+
+    }
+
+    public function registerPatientVisit($patient_id, $trieu_chung, $department_id, $stt = null)
+    {
+
+        PatientVisit::query()->create([
+            'patient_id' => $patient_id,
+            'stt' => $stt ?? PatientVisit::query()->whereDate('created_at', Carbon::toDay())->orderBy('created_at', 'desc')->first()->stt + 1,
+            'department_id' => $department_id,
+            'trieu_chung' => $trieu_chung,
+        ]);
+    }
+
+    public function lichHen()
+    {
+        $result = PatientVisit::query()
+            ->join('patients', 'patient_visits.patient_id', '=', 'patients.id')
+            ->select('patients.*','patient_visits.*','patient_visits.stt as stt')
+            ->where('department_id', '=', \auth()->user()->department_id ?? 1)
+            ->where('status', 0)
+            ->whereDate('patient_visits.created_at', '=', Carbon::tomorrow())
+            ->orderBy('patient_visits.created_at')
+            ->get();
+        return view('doctor.lich-hen', [
+            'appointments' => $result
+        ]);
+    }
+
+    public function getAppointments(Request $request)
+    {
+        $date = $request->query('date') ?? Carbon::tomorrow();
+
+
+        $result = PatientVisit::query()
+                ->join('patients', 'patient_visits.patient_id', '=', 'patients.id')
+                ->select('patients.*','patient_visits.*','patient_visits.stt as stt')
+                ->where('department_id', '=', \auth()->user()->department_id ?? 1)
+                ->where('status', 0)
+                ->whereDate('patient_visits.created_at', '=', $date)
+                ->orderBy('patient_visits.created_at')
+                ->get();
+
+        return response()->json($result);
     }
 }

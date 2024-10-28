@@ -1,3 +1,4 @@
+@php use Illuminate\Support\Facades\DB; @endphp
 @extends('layouts.patient')
 
 @section('content')
@@ -41,8 +42,8 @@
                 <div class="col mb-3">
                     <label for="appointmentDate" class="form-label">Chọn khoa khám</label>
                     <select name="department" class="form-select" id="appointmentDate" required>
-                        @foreach(\App\Enums\Specialty::asSelectArray() as $key => $value)
-                            <option value="{{$key}}">{{$value}}</option>
+                        @foreach(DB::table('departments')->get() as $item)
+                            <option value="{{$item->id}}">{{$item->department_name}}</option>
                         @endforeach
 
                     </select>
