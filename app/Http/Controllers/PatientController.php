@@ -72,9 +72,8 @@ class PatientController extends Controller
             'trieu_chung' => $this->removeVietnameseAccents($data['trieu_chung']),
         ]);
 
-        $id = Patient::query()->orderBy('id', 'desc')->first()->id;
+        $id = Patient::query()->orderBy('id', 'desc')->first()->id ?? 0;
         $patient = Patient::query()->where('nic', '=', $data['cccd'])->first();
-
         if (!$patient) {
             $patient = Patient::query()->create([
                 'id' => $id + 1,
