@@ -41,8 +41,8 @@
                             <tr>
                                 <th>STT</th>
                                 <th>Tên bệnh nhân</th>
-                                <th>Số CCCD</th>
-                                <th>Giờ hẹn</th>
+                                <th>Năm sinh</th>
+                                <th>Triệu chứng</th>
                             </tr>
                         </thead>
                         <tbody id="appointment-list">
