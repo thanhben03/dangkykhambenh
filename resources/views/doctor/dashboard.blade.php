@@ -78,8 +78,6 @@
                     </div>
                 </form>
 
-
-
                 @foreach ($patients as $patient)
                     <div class="row">
                         <div class="col-md-12">
@@ -87,17 +85,23 @@
                             <div class="card">
                                 <div class="card-header"
                                     @if ($patient['stt'] == $currentPatient->stt) style="background: #ffcccc;" @endif>
-                                    <h3 class="card-title">STT Khám Bệnh: {{ $patient['stt'] }} - {{ $patient['name'] }}
+                                    <h3 class="card-title">
+                                        STT Khám Bệnh: {{ $patient['stt'] }} - {{ $patient['name'] }}
+
+                                        @if ($patient['stt'] == $currentPatient->stt)
+                                            <button class="btn btn-warning">Đang tới lượt</button>
+                                            <button class="btn btn-danger">Bỏ qua</button>
+                                            <button onclick="step1({{ $patient['stt'] }})" type="button"
+                                                class="btn btn-success" style="float: right">{{ __('Hoàn Thành') }}</button>
+                                        @endif
+
                                     </h3>
                                     <button class="btn btn-primary" type="button" data-bs-toggle="collapse"
-                                        data-bs-target="#patientInfo-{{ $patient['stt'] }}" aria-expanded="true" aria-controls="patientInfo-3">
-                                        Xem chi tiết
-                                    </button>
-                                    @if ($patient['stt'] == $currentPatient->stt)
-                                        <button class="btn btn-danger">Đang tới lượt</button>
-                                        <button onclick="step1({{ $patient['stt'] }})" type="button"
-                                            class="btn btn-success" style="float: right">{{ __('Hoàn Thành') }}</button>
-                                    @endif
+                                    data-bs-target="#patientInfo-{{ $patient['stt'] }}" aria-expanded="true"
+                                    aria-controls="patientInfo-3">
+                                    Xem chi tiết
+                                </button>
+
                                 </div>
 
                                 <div class="collapse" id="patientInfo-{{ $patient['stt'] }}" aria-expanded="true">
@@ -144,8 +148,9 @@
                                                 <div class="mb-3 row">
                                                     <label for="nicNumber" class="col-sm-2 col-form-label">CCCD</label>
                                                     <div class="col-sm-10">
-                                                        <input readonly value="{{ $patient['info']->nic }}" type="text"
-                                                            class="form-control" id="nicNumber" name="reg_pnic">
+                                                        <input readonly value="{{ $patient['info']->nic }}"
+                                                            type="text" class="form-control" id="nicNumber"
+                                                            name="reg_pnic">
                                                     </div>
                                                 </div>
                                                 <div class="mb-3 row">

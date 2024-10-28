@@ -58,19 +58,19 @@ class PatientController extends Controller
     {
         $data = $request->all();
         $department = DB::table('departments')->where('id', '=', $data['department'])->first();
-//         $response = Http::post('crow-wondrous-asp.ngrok-free.app/print', [
-//             'stt' => '123',
-//             'fullname' => $this->removeVietnameseAccents($data['fullname']),
-//             'cccd' => $this->removeVietnameseAccents($data['cccd']),
-//             'gender' => $this->removeVietnameseAccents($data['gender']),
-//             'birthday' => $this->removeVietnameseAccents($data['birthday']),
-//             'address' => $this->removeVietnameseAccents($data['address']),
-// //            'email' => $this->removeVietnameseAccents($data['email']),
-//             'phone' => $this->removeVietnameseAccents($data['phone']),
-//             'arrival_time' => Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString(),
-//             'department' => $this->removeVietnameseAccents($data['department']),
-//             'trieu_chung' => $this->removeVietnameseAccents($data['trieu_chung']),
-//         ]);
+        $response = Http::post('crow-wondrous-asp.ngrok-free.app/print', [
+            'stt' => '123',
+            'fullname' => $this->removeVietnameseAccents($data['fullname']),
+            'cccd' => $this->removeVietnameseAccents($data['cccd']),
+            'gender' => $this->removeVietnameseAccents($data['gender']),
+            'birthday' => $this->removeVietnameseAccents($data['birthday']),
+            'address' => $this->removeVietnameseAccents($data['address']),
+//            'email' => $this->removeVietnameseAccents($data['email']),
+            'phone' => $this->removeVietnameseAccents($data['phone']),
+            'arrival_time' => Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString(),
+            'department' => $this->removeVietnameseAccents($data['department']),
+            'trieu_chung' => $this->removeVietnameseAccents($data['trieu_chung']),
+        ]);
 
         $id = Patient::query()->orderBy('id', 'desc')->first()->id;
         $patient = Patient::query()->where('nic', '=', $data['cccd'])->first();
