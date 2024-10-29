@@ -257,7 +257,7 @@
                                                     @foreach($patient['history'] as $history)
                                                         <tr>
                                                             <td>{{$history->created_at}}</td>
-                                                            <td>{{$history->chuan_doan ?? 'No data !'}}</td>
+                                                            <td>{{$history->chuan_doan ?? ''}}</td>
                                                             <td>
                                                                 {{ $history->medicines->map(function ($item) {
                                                                     return $item->medicine_name . ' (' . $item->use . ')';
