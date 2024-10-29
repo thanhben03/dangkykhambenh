@@ -274,20 +274,21 @@ class PatientController extends Controller
     {
         $data = $request->all();
         $medicineData = [];
-
-        for ($i = 0; $i < count($data['medicine_name']); $i++) {
-            $medicineData[] = [
-                'medicine_name' => $data['medicine_name'][$i],
-                'current_patient_visit' => $data['current_patient_visit'],
-                'qty' => $data['medicine_quantity'][$i],
-                'use' => $data['medicine_usage'][$i],
-            ];
-        }
-//        DB::table('medicine_prescriptions')->insert($medicineData);
         $patientVisit = PatientVisit::query()->find($data['current_patient_visit']);
 
-        MedicinePrescription::query()->where('current_patient_visit', '=', $data['current_patient_visit'])->delete();
-        MedicinePrescription::query()->insert($medicineData);
+        if (isset($data['medicine_name']) && count($data['medicine_name']) > 0) {
+            for ($i = 0; $i < count($data['medicine_name']); $i++) {
+                $medicineData[] = [
+                    'medicine_name' => $data['medicine_name'][$i],
+                    'current_patient_visit' => $data['current_patient_visit'],
+                    'qty' => $data['medicine_quantity'][$i],
+                    'use' => $data['medicine_usage'][$i],
+                ];
+            }
+
+            MedicinePrescription::query()->where('current_patient_visit', '=', $data['current_patient_visit'])->delete();
+            MedicinePrescription::query()->insert($medicineData);
+        }
 
         $patientVisit->update([
             'trieu_chung' => $data['symptoms'],

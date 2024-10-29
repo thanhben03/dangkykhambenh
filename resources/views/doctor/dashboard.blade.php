@@ -200,6 +200,7 @@
 
                                             <div role="tabpanel" class="tab-pane fade" id="diagnosis-{{$patient['stt']}}">
                                                 <form action="/luu-chuan-doan" method="POST">
+                                                    @csrf
                                                     <input hidden name="current_patient_visit" value="{{$patient['id']}}">
                                                     <div class="mb-3">
                                                         <label for="symptoms" class="form-label">Triệu Chứng</label>
@@ -247,6 +248,7 @@
                                             <table class="table table-bordered">
                                                 <thead>
                                                     <tr>
+                                                        <th>ID</th>
                                                         <th>Ngày Khám</th>
                                                         <th>Chuẩn Đoán</th>
                                                         <th>Kê Đơn Thuốc</th>
@@ -255,9 +257,14 @@
                                                 <tbody>
                                                     @foreach($patient['history'] as $history)
                                                         <tr>
+                                                            <td>{{$history->id}}</td>
                                                             <td>{{$history->created_at}}</td>
                                                             <td>{{$history->chuan_doan ?? 'No data !'}}</td>
-                                                            <td></td>
+                                                            <td>
+                                                                {{ $history->medicines->map(function ($item) {
+                                                                    return $item->medicine_name . ' (' . $item->use . ')';
+                                                                })->implode(', ') }}
+                                                            </td>
                                                         </tr>
                                                     @endforeach
                                                 </tbody>
