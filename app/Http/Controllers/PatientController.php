@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Department;
 use App\Models\Medicine;
 use App\Models\MedicinePrescription;
 use Carbon\Carbon;
@@ -61,13 +62,9 @@ class PatientController extends Controller
         $data = $request->all();
         $department = DB::table('departments')->where('id', '=', $data['department'])->first();
 
-        $patientVisit = PatientVisit::query()
-            ->where('department_id', $department->id)
-            ->whereDate('created_at', Carbon::toDay())
-            ->orderBy('created_at', 'desc')
-            ->first();
 
-        $stt = $patientVisit->stt + 1;
+        $stt = $this->getSTTOfDepartment($department);
+
         $response = Http::post('crow-wondrous-asp.ngrok-free.app/print', [
             'stt' => $stt,
             'fullname' => $this->removeVietnameseAccents($data['fullname']),
@@ -83,6 +80,7 @@ class PatientController extends Controller
         ]);
 
         $id = Patient::query()->orderBy('id', 'desc')->first()->id ?? 0;
+
         $patient = Patient::query()->where('nic', '=', $data['cccd'])->first();
         if (!$patient) {
             $patient = Patient::query()->create([
@@ -102,6 +100,20 @@ class PatientController extends Controller
         } else {
             return response()->json(['error' => 'API request failed'], 500);
         }
+
+    }
+
+    public function getSTTOfDepartment(Department $department)
+    {
+        $patientVisit = PatientVisit::query()
+            ->where('department_id', $department->id)
+            ->whereDate('created_at', Carbon::toDay())
+            ->orderBy('created_at', 'desc')
+            ->first();
+
+        $stt = $patientVisit->stt ? $patientVisit->stt + 1 : 1;
+
+        return $stt;
 
     }
 
