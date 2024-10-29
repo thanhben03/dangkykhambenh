@@ -61,7 +61,6 @@ class PatientController extends Controller
     {
         $data = $request->all();
         $department = Department::query()->where('id', '=', $data['department'])->first();
-
         $stt = $this->getSTTOfDepartment($department);
 
         $patientLatest = $this->getPatientLatest();
@@ -76,7 +75,7 @@ class PatientController extends Controller
             'address' => $this->removeVietnameseAccents($data['address']),
 //            'email' => $this->removeVietnameseAccents($data['email']),
             'phone' => $this->removeVietnameseAccents($data['phone']),
-            'arrival_time' => $this->getArrivalTime($department),
+            'arrival_time' => $this->getArrivalTime($department)->toDateString(),
             'department' => $this->removeVietnameseAccents($department->department_name),
             'trieu_chung' => $this->removeVietnameseAccents($data['trieu_chung']),
         ]);
