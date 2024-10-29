@@ -256,7 +256,7 @@
                                                     @foreach($patient['history'] as $history)
                                                         <tr>
                                                             <td>{{$history->created_at}}</td>
-                                                            <td>{{$history->chuan_doan ?? 'No data !php ả'}}</td>
+                                                            <td>{{$history->chuan_doan ?? 'No data !'}}</td>
                                                             <td></td>
                                                         </tr>
                                                     @endforeach
