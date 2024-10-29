@@ -35,6 +35,7 @@
         </div>
     </div>
 
+
     <div class="main-content">
 
         <div class="page-content">
@@ -90,7 +91,7 @@
 
                                         @if ($patient == reset($patients))
                                             <button class="btn btn-warning">Đang tới lượt</button>
-                                            <button class="btn btn-danger">Bỏ qua</button>
+                                            <button onclick="skip({{$patient['id']}})" class="btn btn-danger">Bỏ qua</button>
                                             <button onclick="step1({{ $patient['stt'] }})" type="button"
                                                 class="btn btn-success" style="float: right">{{ __('Hoàn Thành') }}</button>
                                         @endif
@@ -345,6 +346,22 @@
             })
         }
 
+        function skip(patient_visit_id) {
+            if (!confirm('Bạn có chắc chắn muốn bỏ qua bệnh nhân này ?')) {
+                return
+            }
+
+            $.ajax({
+                type: "GET",
+                url: "/skip/" + patient_visit_id,
+                success: function (res) {
+                    alert('Thành công !')
+
+                    window.location.reload()
+                }
+            })
+        }
+
         function nextDepartment() {
             let stt = $("#current-stt")
             let trieu_chung = $("#trieu_chung")
@@ -359,7 +376,9 @@
                     "_token": "{{ csrf_token() }}"
                 },
                 success: function(res) {
+                    alert('Chuyển khoa thành công !');
 
+                    window.location.reload()
                 }
             })
         }

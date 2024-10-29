@@ -39,6 +39,11 @@ class PatientController extends Controller
         }
     }
 
+    public function skip($patient_visit_id)
+    {
+        PatientVisit::query()->where('id', $patient_visit_id)->delete();
+    }
+
     public function getDataFromCCCD(string $data)
     {
         $arrData = explode("|", $data);
