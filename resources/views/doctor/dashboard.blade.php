@@ -108,15 +108,15 @@
                                     <!-- Nav tabs -->
                                     <ul class="nav nav-tabs" role="tablist">
                                         <li class="nav-item">
-                                            <a class="nav-link active" href="#info-3" aria-controls="info" role="tab"
+                                            <a class="nav-link active" href="#info-{{$patient['stt']}}" aria-controls="info" role="tab"
                                                 data-bs-toggle="tab">Thông Tin Bệnh Nhân</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="#diagnosis-3" aria-controls="diagnosis"
+                                            <a class="nav-link" href="#diagnosis-{{$patient['stt']}}" aria-controls="diagnosis"
                                                 role="tab" data-bs-toggle="tab">Chuẩn Đoán</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="#history-3" aria-controls="history" role="tab"
+                                            <a class="nav-link" href="#history-{{$patient['stt']}}" aria-controls="history" role="tab"
                                                 data-bs-toggle="tab">Lịch Sử Khám Bệnh</a>
                                         </li>
                                     </ul>
@@ -124,7 +124,7 @@
                                     <!-- Tab panes -->
                                     <div class="tab-content p-3">
                                         <!-- Tab 1: Thông tin bệnh nhân -->
-                                        <div role="tabpanel" class="tab-pane fade show active" id="info-3">
+                                        <div role="tabpanel" class="tab-pane fade show active" id="info-{{$patient['stt']}}">
                                             <form action="/editpatient" method="POST">
                                                 <input type="hidden" name="_token"
                                                     value="N3aCZEQBBHtMdURn9NrkZvXMdfVtQUf9WKa0L0fQ">
@@ -198,7 +198,7 @@
 
                                         <!-- Tab 2: Chuẩn đoán -->
 
-                                            <div role="tabpanel" class="tab-pane fade" id="diagnosis-3">
+                                            <div role="tabpanel" class="tab-pane fade" id="diagnosis-{{$patient['stt']}}">
                                                 <form action="/luu-chuan-doan" method="POST">
                                                     <input hidden name="current_patient_visit" value="{{$patient['id']}}">
                                                     <div class="mb-3">
@@ -242,7 +242,7 @@
                                             </div>
 
                                         <!-- Tab 3: Lịch sử khám bệnh -->
-                                        <div role="tabpanel" class="tab-pane fade" id="history-3">
+                                        <div role="tabpanel" class="tab-pane fade" id="history-{{$patient['stt']}}">
                                             <h4>Lịch sử khám bệnh của bệnh nhân</h4>
                                             <table class="table table-bordered">
                                                 <thead>
