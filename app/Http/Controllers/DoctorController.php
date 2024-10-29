@@ -11,6 +11,19 @@ use Carbon\Carbon;
 
 class DoctorController extends Controller
 {
+
+    public function stt($department_id)
+    {
+        $patientVisit = PatientVisit::query()
+            ->where('department_id', $department_id)
+            ->where('status', 0)
+            ->whereDate('created_at', Carbon::today())
+            ->first()
+        ;
+
+        dd($patientVisit);
+    }
+
     public function index(Request $request)
     {
         $result = PatientVisit::query()
@@ -31,11 +44,9 @@ class DoctorController extends Controller
             ->orderBy('patient_visits.created_at')
             ->get();
 
-        $currentPatient = $this->getCurrentPatientVisit();
         $result = PatientPendingResource::make($result)->resolve();
         return view('doctor.dashboard', [
-            'patients' => $result,
-            'currentPatient' => $currentPatient
+            'patients' => $result
         ]);
     }
 

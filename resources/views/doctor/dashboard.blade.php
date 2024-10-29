@@ -84,11 +84,11 @@
                             <!-- Card for Patient Info -->
                             <div class="card">
                                 <div class="card-header"
-                                    @if ($patient['stt'] == $currentPatient->stt) style="background: #ffcccc;" @endif>
+                                    @if ($patient == reset($patients)) style="background: #ffcccc;" @endif>
                                     <h3 class="card-title">
                                         STT Khám Bệnh: {{ $patient['stt'] }} - {{ $patient['name'] }}
 
-                                        @if ($patient['stt'] == $currentPatient->stt)
+                                        @if ($patient == reset($patients))
                                             <button class="btn btn-warning">Đang tới lượt</button>
                                             <button class="btn btn-danger">Bỏ qua</button>
                                             <button onclick="step1({{ $patient['stt'] }})" type="button"

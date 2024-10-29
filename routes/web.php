@@ -19,3 +19,6 @@ Route::get('/lich-hen', [PatientController::class, 'lichHen'])->name('doctor.lic
 Route::post('/next-department', [PatientController::class, 'nextDepartment'])->name('doctor.nextDepartment');
 Route::get('/get-appointments', [PatientController::class, 'getAppointments'])->name('doctor.getAppointments');
 Route::post('/luu-chuan-doan', [PatientController::class, 'luuChuanDoan'])->name('doctor.luuchuandoan');
+
+
+Route::get('/stt/{department_id}', [DoctorController::class, 'stt'])->name('doctor.stt');

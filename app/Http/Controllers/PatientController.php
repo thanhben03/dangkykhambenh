@@ -169,16 +169,6 @@ class PatientController extends Controller
     {
         PatientVisit::query()->where('stt','=', $stt)->update(['status' => 1]);
 
-        $currentPatient = CurrentPatient::query()
-            ->where('department_id', \auth()->user()->department_id ?? 1)
-            ->whereDate('created_at', Carbon::today())
-            ->orderBy('created_at', 'desc')
-            ->first();
-
-        $currentSTT = intval($currentPatient->stt);
-        $currentPatient->stt = $currentSTT + 1;
-        $currentPatient->save();
-
         return response()->json([
             'msg' => 'Ok'
         ]);
