@@ -179,7 +179,7 @@
                                                     </div>
                                                     <label for="dob" class="col-sm-2 col-form-label">DOB</label>
                                                     <div class="col-sm-3">
-                                                        <input readonly value="{{ $patient['info']->dob }}"
+                                                        <input readonly value="{{ $patient['info']->bod }}"
                                                             type="text" class="form-control" id="dob"
                                                             name="reg_pbd">
                                                     </div>
@@ -248,7 +248,6 @@
                                             <table class="table table-bordered">
                                                 <thead>
                                                     <tr>
-                                                        <th>ID</th>
                                                         <th>Ngày Khám</th>
                                                         <th>Chuẩn Đoán</th>
                                                         <th>Kê Đơn Thuốc</th>
@@ -257,7 +256,6 @@
                                                 <tbody>
                                                     @foreach($patient['history'] as $history)
                                                         <tr>
-                                                            <td>{{$history->id}}</td>
                                                             <td>{{$history->created_at}}</td>
                                                             <td>{{$history->chuan_doan ?? 'No data !'}}</td>
                                                             <td>
