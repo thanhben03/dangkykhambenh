@@ -75,7 +75,7 @@ class PatientController extends Controller
             'address' => $this->removeVietnameseAccents($data['address']),
 //            'email' => $this->removeVietnameseAccents($data['email']),
             'phone' => $this->removeVietnameseAccents($data['phone']),
-            'arrival_time' => $this->getArrivalTime($department)->toDateString(),
+            'arrival_time' => $this->getArrivalTime($department)->toDateTimeString(),
             'department' => $this->removeVietnameseAccents($department->department_name),
             'trieu_chung' => $this->removeVietnameseAccents($data['trieu_chung']),
         ]);
