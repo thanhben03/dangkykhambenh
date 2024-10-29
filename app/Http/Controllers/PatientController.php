@@ -62,7 +62,6 @@ class PatientController extends Controller
         $data = $request->all();
         $department = Department::query()->where('id', '=', $data['department'])->first();
 
-
         $stt = $this->getSTTOfDepartment($department);
 
         $patientLatest = $this->getPatientLatest();
@@ -77,11 +76,10 @@ class PatientController extends Controller
             'address' => $this->removeVietnameseAccents($data['address']),
 //            'email' => $this->removeVietnameseAccents($data['email']),
             'phone' => $this->removeVietnameseAccents($data['phone']),
-            'arrival_time' => Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString(),
+            'arrival_time' => $this->getArrivalTime($department),
             'department' => $this->removeVietnameseAccents($department->department_name),
             'trieu_chung' => $this->removeVietnameseAccents($data['trieu_chung']),
         ]);
-
 
         $patient = Patient::query()->where('nic', '=', $data['cccd'])->first();
         if (!$patient) {
@@ -125,12 +123,18 @@ class PatientController extends Controller
 
     public function getPatientVisitLatest(Department $department)
     {
-
+        return PatientVisit::query()
+            ->where('department_id', $department->id)
+            ->whereDate('created_at', Carbon::today())
+            ->orderBy('created_at', 'desc')
+            ->first();
     }
 
-    public function getArrivalTime()
+    public function getArrivalTime(Department $department)
     {
+        $patientVisit = $this->getPatientVisitLatest($department);
 
+        return Carbon::parse($patientVisit->created_at)->addMinutes(30);
     }
 
     function removeVietnameseAccents($str) {
