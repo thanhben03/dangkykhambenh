@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Patient;
 use Illuminate\Http\Request;
 use App\Models\PatientVisit;
 use App\Models\CurrentPatient;
@@ -29,17 +30,33 @@ class DoctorController extends Controller
             ->whereDate('patient_visits.created_at', Carbon::today())
             ->orderBy('patient_visits.created_at')
             ->get();
+
+        $currentPatient = $this->getCurrentPatientVisit();
+        $result = PatientPendingResource::make($result)->resolve();
+        return view('doctor.dashboard', [
+            'patients' => $result,
+            'currentPatient' => $currentPatient
+        ]);
+    }
+
+    public function getCurrentPatientVisit()
+    {
         $currentPatient = CurrentPatient::query()
             ->where('department_id', \auth()->user()->department_id ?? 1)
             ->whereDate('created_at', Carbon::today())
             ->orderBy('created_at', 'desc')
             ->first();
 
-        $result = PatientPendingResource::make($result)->resolve();
-        return view('doctor.dashboard', [
-            'patients' => $result,
-            'currentPatient' => $currentPatient
-        ]);
+        if (!$currentPatient) {
+            $currentPatient = CurrentPatient::create([
+                'department_id' => \auth()->user()->department_id ?? 1,
+                'stt' => 1,
+                'created_at' => now(),
+                // Các giá trị khác cần thiết
+            ]);
+        }
+
+        return $currentPatient;
     }
 
     // Khi bac si an nut hoan thanh

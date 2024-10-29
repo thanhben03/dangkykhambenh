@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Medicine;
+use App\Models\MedicinePrescription;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -230,5 +232,32 @@ class PatientController extends Controller
                 ->get();
 
         return response()->json($result);
+    }
+
+    public function luuChuanDoan(Request $request)
+    {
+        $data = $request->all();
+        $medicineData = [];
+
+        for ($i = 0; $i < count($data['medicine_name']); $i++) {
+            $medicineData[] = [
+                'medicine_name' => $data['medicine_name'][$i],
+                'current_patient_visit' => $data['current_patient_visit'],
+                'qty' => $data['medicine_quantity'][$i],
+                'use' => $data['medicine_usage'][$i],
+            ];
+        }
+//        DB::table('medicine_prescriptions')->insert($medicineData);
+        $patientVisit = PatientVisit::query()->find($data['current_patient_visit']);
+
+        MedicinePrescription::query()->where('current_patient_visit', '=', $data['current_patient_visit'])->delete();
+        MedicinePrescription::query()->insert($medicineData);
+
+        $patientVisit->update([
+            'trieu_chung' => $data['symptoms'],
+            'chuan_doan' => $data['diagnosis']
+        ]);
+
+        return redirect()->route('dashboard');
     }
 }

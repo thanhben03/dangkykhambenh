@@ -197,40 +197,49 @@
                                         </div>
 
                                         <!-- Tab 2: Chuẩn đoán -->
-                                        <div role="tabpanel" class="tab-pane fade" id="diagnosis-3">
-                                            <form method="POST">
-                                                <div class="mb-3">
-                                                    <label for="symptoms" class="form-label">Triệu Chứng</label>
-                                                    <textarea class="form-control" id="symptoms" name="symptoms" rows="3"></textarea>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="diagnosis" class="form-label">Chuẩn Đoán</label>
-                                                    <textarea class="form-control" id="diagnosis" name="diagnosis" rows="3"></textarea>
-                                                </div>
-                                                <!-- Prescription Section -->
-                                                <div class="mb-3">
-                                                    <label for="prescription" class="form-label">Kê Đơn Thuốc</label>
-                                                    <table class="table table-bordered" id="prescriptionTable">
-                                                        <thead>
+
+                                            <div role="tabpanel" class="tab-pane fade" id="diagnosis-3">
+                                                <form action="/luu-chuan-doan" method="POST">
+                                                    <input hidden name="current_patient_visit" value="{{$patient['id']}}">
+                                                    <div class="mb-3">
+                                                        <label for="symptoms" class="form-label">Triệu Chứng</label>
+                                                        <textarea class="form-control" id="symptoms" name="symptoms" rows="3">{{$patient['trieu_chung']}}</textarea>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="diagnosis" class="form-label">Chuẩn Đoán</label>
+                                                        <textarea class="form-control" id="diagnosis" name="diagnosis" rows="3">{{$patient['chuan_doan']}}</textarea>
+                                                    </div>
+                                                    <!-- Prescription Section -->
+                                                    <div class="mb-3">
+                                                        <label for="prescription" class="form-label">Kê Đơn Thuốc</label>
+                                                        <table class="table table-bordered" id="prescriptionTable">
+                                                            <thead>
                                                             <tr>
                                                                 <th>Tên Thuốc</th>
                                                                 <th>Số Lượng</th>
                                                                 <th>Cách Dùng</th>
                                                                 <th></th>
                                                             </tr>
-                                                        </thead>
-                                                        <tbody>
-
-                                                        </tbody>
-                                                    </table>
-                                                    <button type="button" class="btn btn-primary" id="addRow">Thêm
-                                                        Thuốc</button>
-                                                </div>
-                                                <div class="text-end">
-                                                    <button type="submit" class="btn btn-success">Lưu Chuẩn Đoán</button>
-                                                </div>
-                                            </form>
-                                        </div>
+                                                            </thead>
+                                                            <tbody>
+                                                                @foreach($patient['history_medicine'] as $medicine)
+                                                                    <tr>
+                                                                        <td><input value="{{$medicine->medicine_name}}" type="text" name="medicine_name[]" class="form-control" placeholder="Nhập tên thuốc..."></td>
+                                                                        <td><input value="{{$medicine->qty}}" type="number" name="medicine_quantity[]" class="form-control" placeholder="Nhập số lượng..."></td>
+                                                                        <td><input value="{{$medicine->use}}" type="text" name="medicine_usage[]" class="form-control" placeholder="Nhập cách dùng..."></td>
+                                                                        <td><button type="button" class="btn btn-danger removeRow">{{ __('Xóa') }}</button></td>
+                                                                    </tr>
+                                                                @endforeach
+                                                            </tbody>
+                                                        </table>
+                                                        <button type="button" class="btn btn-primary" id="addRow">Thêm
+                                                            Thuốc</button>
+                                                    </div>
+                                                    <div class="text-end">
+                                                        <button type="submit" class="btn btn-success">Lưu Chuẩn Đoán</button>
+                                                    </div>
+                                                </form>
+                                            </div>
 
                                         <!-- Tab 3: Lịch sử khám bệnh -->
                                         <div role="tabpanel" class="tab-pane fade" id="history-3">
@@ -244,7 +253,13 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <!-- Data từ database -->
+                                                    @foreach($patient['history'] as $history)
+                                                        <tr>
+                                                            <td>{{$history->created_at}}</td>
+                                                            <td>{{$history->chuan_doan ?? 'No data !php ả'}}</td>
+                                                            <td></td>
+                                                        </tr>
+                                                    @endforeach
                                                 </tbody>
                                             </table>
                                         </div>
