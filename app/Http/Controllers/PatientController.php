@@ -60,7 +60,7 @@ class PatientController extends Controller
     public function register(Request $request)
     {
         $data = $request->all();
-        $department = DB::table('departments')->where('id', '=', $data['department'])->first();
+        $department = Department::query()->where('id', '=', $data['department'])->first();
 
 
         $stt = $this->getSTTOfDepartment($department);
@@ -110,8 +110,7 @@ class PatientController extends Controller
             ->whereDate('created_at', Carbon::toDay())
             ->orderBy('created_at', 'desc')
             ->first();
-
-        $stt = $patientVisit->stt ? $patientVisit->stt + 1 : 1;
+        $stt = optional($patientVisit)->stt ? optional($patientVisit)->stt + 1 : 1;
 
         return $stt;
 
