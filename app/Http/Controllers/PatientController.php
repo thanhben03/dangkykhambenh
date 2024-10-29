@@ -65,6 +65,9 @@ class PatientController extends Controller
 
         $stt = $this->getSTTOfDepartment($department);
 
+        $patientLatest = $this->getPatientLatest();
+
+
         $response = Http::post('crow-wondrous-asp.ngrok-free.app/print', [
             'stt' => $stt,
             'fullname' => $this->removeVietnameseAccents($data['fullname']),
@@ -79,12 +82,11 @@ class PatientController extends Controller
             'trieu_chung' => $this->removeVietnameseAccents($data['trieu_chung']),
         ]);
 
-        $id = Patient::query()->orderBy('id', 'desc')->first()->id ?? 0;
 
         $patient = Patient::query()->where('nic', '=', $data['cccd'])->first();
         if (!$patient) {
             $patient = Patient::query()->create([
-                'id' => $id + 1,
+                'id' => $patientLatest->stt + 1,
                 'name' => $data['fullname'],
                 'address' => $data['address'],
                 'sex' => $data['gender'] == 'Nam' ? 'Male' : 'Female',
@@ -93,7 +95,7 @@ class PatientController extends Controller
                 'nic' => $data['cccd'],
             ]);
         }
-        $this->registerPatientVisit($patient->id > 0 ? $patient->id : $id+1, $data['trieu_chung'], $department->id, $stt);
+        $this->registerPatientVisit($patient->id > 0 ? $patient->id : $patientLatest->id + 1, $data['trieu_chung'], $department->id, $stt);
 
         if ($response->successful()) {
             return $response->json();
@@ -113,6 +115,21 @@ class PatientController extends Controller
         $stt = optional($patientVisit)->stt ? optional($patientVisit)->stt + 1 : 1;
 
         return $stt;
+
+    }
+
+    public function getPatientLatest()
+    {
+        return Patient::query()->orderBy('id', 'desc')->first();
+    }
+
+    public function getPatientVisitLatest(Department $department)
+    {
+
+    }
+
+    public function getArrivalTime()
+    {
 
     }
 
