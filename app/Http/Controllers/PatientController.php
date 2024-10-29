@@ -133,7 +133,7 @@ class PatientController extends Controller
     {
         $patientVisit = $this->getPatientVisitLatest($department);
 
-        return Carbon::parse($patientVisit->created_at)->addMinutes(30);
+        return Carbon::parse($patientVisit->created_at)->addMinutes(10);
     }
 
     function removeVietnameseAccents($str) {
