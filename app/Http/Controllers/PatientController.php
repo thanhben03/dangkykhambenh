@@ -139,7 +139,9 @@ class PatientController extends Controller
     public function getArrivalTime(Department $department)
     {
         $patientVisit = $this->getPatientVisitLatest($department);
-        if (!$patientVisit) {
+        $currentNow = Carbon::now('Asia/Ho_Chi_Minh');
+
+        if (!$patientVisit || $currentNow > $patientVisit->arrival_time) {
             return Carbon::now('Asia/Ho_Chi_Minh');
         }
 
