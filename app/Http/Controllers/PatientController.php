@@ -66,10 +66,25 @@ class PatientController extends Controller
     {
         $data = $request->all();
         $department = Department::query()->where('id', '=', $data['department'])->first();
-        $stt = $this->getSTTOfDepartment($department);
+        // $stt = $this->getSTTOfDepartment($department);
 
         $patientLatest = $this->getPatientLatest();
         $arrival_time = $this->getArrivalTime($department)->toDateTimeString();
+
+        $patient = Patient::query()->where('nic', '=', $data['cccd'])->first();
+        if (!$patient) {
+            $patient = Patient::query()->create([
+                'id' => $patientLatest->stt + 1,
+                'name' => $data['fullname'],
+                'address' => $data['address'],
+                'sex' => $data['gender'] == 'Nam' ? 'Male' : 'Female',
+                'bod' => $data['birthday'],
+                'telephone' => $data['phone'],
+                'nic' => $data['cccd'],
+            ]);
+        }
+        $stt = $this->registerPatientVisit($patient->id > 0 ? $patient->id : $patientLatest->id + 1, $data['trieu_chung'], $department->id);
+
 
         $response = Http::post('crow-wondrous-asp.ngrok-free.app/print', [
             'stt' => $stt,
@@ -85,20 +100,7 @@ class PatientController extends Controller
             'trieu_chung' => $this->removeVietnameseAccents($data['trieu_chung']),
         ]);
 
-        $patient = Patient::query()->where('nic', '=', $data['cccd'])->first();
-        if (!$patient) {
-            $patient = Patient::query()->create([
-                'id' => $patientLatest->stt + 1,
-                'name' => $data['fullname'],
-                'address' => $data['address'],
-                'sex' => $data['gender'] == 'Nam' ? 'Male' : 'Female',
-                'bod' => $data['birthday'],
-                'telephone' => $data['phone'],
-                'nic' => $data['cccd'],
-            ]);
-        }
-        $this->registerPatientVisit($patient->id > 0 ? $patient->id : $patientLatest->id + 1, $data['trieu_chung'], $department->id, $stt);
-
+        
         if ($response->successful()) {
             return $response->json();
         } else {
@@ -211,7 +213,11 @@ class PatientController extends Controller
                 'trieu_chung' => $trieu_chung,
                 'arrival_time' => $this->getArrivalTime($department)->toDateTimeString(),
             ]);
-        } else if (!$stt && !$patientVisit) {
+
+            return $stt;
+
+        }
+        else if (!$stt && !$patientVisit) {
             PatientVisit::query()->create([
                 'patient_id' => $patient_id,
                 'stt' => 1,
@@ -219,16 +225,21 @@ class PatientController extends Controller
                 'trieu_chung' => $trieu_chung,
                 'arrival_time' => $this->getArrivalTime($department)->toDateTimeString(),
             ]);
+
+            return 1;
         }
 
         else {
+            $stt = PatientVisit::query()->whereDate('created_at', Carbon::toDay())->orderBy('created_at', 'desc')->first()->stt + 1;
             PatientVisit::query()->create([
                 'patient_id' => $patient_id,
-                'stt' => PatientVisit::query()->whereDate('created_at', Carbon::toDay())->orderBy('created_at', 'desc')->first()->stt + 1,
+                'stt' => $stt,
                 'department_id' => $department_id,
                 'trieu_chung' => $trieu_chung,
                 'arrival_time' => $this->getArrivalTime($department)->toDateTimeString(),
             ]);
+
+            return $stt;
         }
 
     }

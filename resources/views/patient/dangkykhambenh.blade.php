@@ -111,7 +111,7 @@
                 data: form,
                 success: function (res) {
                     alert('ok')
-                    window.location.reload()
+                    // window.location.reload()
                 },
                 error: function (xhr) {
                     console.log(xhr.responseJSON)
