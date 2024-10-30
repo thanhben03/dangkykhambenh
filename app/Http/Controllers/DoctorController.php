@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\PatientVisit;
 use App\Models\CurrentPatient;
 use App\Http\Resources\PatientPendingResource;
+use App\Http\Resources\PatientResource;
 use Carbon\Carbon;
 
 class DoctorController extends Controller
@@ -46,6 +47,27 @@ class DoctorController extends Controller
 
         $result = PatientPendingResource::make($result)->resolve();
         return view('doctor.dashboard', [
+            'patients' => $result
+        ]);
+    }
+
+    public function history(Request $request)
+    {
+        $result = Patient::query()
+            ->when($request->name, function ($query) use ($request) {
+                return $query->where('patients.name', 'LIKE', '%' . $request->name . '%');
+            })
+            ->when($request->stt, function ($query) use ($request) {
+                return $query->where('patient_visits.stt', $request->stt);
+            })
+            ->when($request->cccd, function ($query) use ($request) {
+                return $query->where('patients.nic', 'LIKE', '%' . $request->cccd . '%');
+            })
+            ->orderBy('created_at')
+            ->get();
+
+        $result = PatientResource::make($result)->resolve();
+        return view('doctor.lich-su-kham-benh', [
             'patients' => $result
         ]);
     }

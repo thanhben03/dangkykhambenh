@@ -20,4 +20,8 @@ class PatientVisit extends Model
     {
         return $this->hasMany(MedicinePrescription::class, 'current_patient_visit');
     }
+
+    public function department () {
+        return $this->belongsTo(Department::class);
+    }
 }
