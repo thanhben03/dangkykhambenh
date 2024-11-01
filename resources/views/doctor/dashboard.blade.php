@@ -26,6 +26,7 @@
                         <label>Ghi Chú: </label>
                         <textarea class="form-control" id="trieu_chung"></textarea>
                     </div>
+                    
                 </div>
                 <div class="modal-footer">
                     <button onclick="nextDepartment()" type="button" class="btn btn-primary">Chuyển khoa</button>
@@ -41,23 +42,16 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalLabel">Chuyển Khoa</h5>
+                <h5 class="modal-title" id="modalLabel">Chuyển Khoa Tiếp Theo</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="form-group">
-                    <label>Chọn khoa: </label>
-                    <select class="form-control" name="" id="department_id_general">
-                        
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Ghi Chú: </label>
-                    <textarea class="form-control" id="trieu_chung_general"></textarea>
+                <div class="alert alert-warning">
+                    Xác nhận đã hoàn thành cho bệnh nhân này ?
                 </div>
             </div>
             <div class="modal-footer">
-                <button onclick="nextDepartmentGeneral()" type="button" class="btn btn-primary">Chuyển khoa</button>
+                <button onclick="nextDepartmentGeneral()" type="button" class="btn btn-primary">Xác nhận</button>
                 
             </div>
         </div>

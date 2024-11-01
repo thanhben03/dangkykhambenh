@@ -301,7 +301,6 @@ class PatientController extends Controller
         if ($patient_visit->department_id != 5) {
 
             $department = Department::query()->where('id', '=', $department_id)->first();
-
             PatientVisit::query()->create([
                 'patient_id' => $patient_visit->patient_id,
                 'stt' => $stt,
