@@ -220,6 +220,10 @@ class PatientController extends Controller
         // Không có bệnh nhân mà có stt -> bác sĩ chuyển khoa hoặc khám sktq
         $department = Department::query()->where('id', '=', $department_id)->first();
 
+        if ($department_id == 15) {
+            $department_id = 10;
+        }
+
         if ($stt) {
             PatientVisit::query()->create([
                 'patient_id' => $patient_id,
