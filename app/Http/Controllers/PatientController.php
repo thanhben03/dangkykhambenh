@@ -75,7 +75,11 @@ class PatientController extends Controller
     public function register(Request $request)
     {
         $data = $request->all();
-        $department = Department::query()->where('id', '=', $data['department'])->first();
+        if ($data['department'] != 15) {
+            $department = Department::query()->where('id', '=', $data['department'])->first();
+        } else {
+            $department = Department::query()->where('id', '=', 10)->first();
+        }
         // $stt = $this->getSTTOfDepartment($department);
 
         $patientLatest = $this->getPatientLatest();
