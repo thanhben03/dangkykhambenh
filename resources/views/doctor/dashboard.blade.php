@@ -3,6 +3,7 @@
 
 @section('content')
     <input type="text" hidden id="current-stt">
+    <input type="text" hidden id="current-patient-visit">
 
     <!-- The modal chuyen khoa -->
     <div class="modal fade" id="modal-next-department" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
@@ -35,7 +36,33 @@
         </div>
     </div>
 
-
+<!-- The modal chuyen khoa khám tq -->
+<div class="modal fade" id="modal-next-department-general" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalLabel">Chuyển Khoa</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Chọn khoa: </label>
+                    <select class="form-control" name="" id="department_id_general">
+                        
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Ghi Chú: </label>
+                    <textarea class="form-control" id="trieu_chung_general"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="nextDepartmentGeneral()" type="button" class="btn btn-primary">Chuyển khoa</button>
+                
+            </div>
+        </div>
+    </div>
+</div>
     <div class="main-content">
 
         <div class="page-content">
@@ -46,13 +73,6 @@
                     <div class="col-12">
                         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
                             <h4 class="mb-sm-0 font-size-18">Danh sách chờ</h4>
-
-                            <div class="page-title-right">
-                                <ol class="breadcrumb m-0">
-                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Pages</a></li>
-                                    <li class="breadcrumb-item active">Starter Page</li>
-                                </ol>
-                            </div>
 
                         </div>
                     </div>
@@ -92,8 +112,16 @@
                                         @if ($patient == reset($patients))
                                             <button class="btn btn-warning">Đang tới lượt</button>
                                             <button onclick="skip({{$patient['id']}})" class="btn btn-danger">Bỏ qua</button>
-                                            <button onclick="step1({{ $patient['stt'] }})" type="button"
+                                            @if ($patient['kham_tq'] == 0 )
+                                                <button onclick="step1({{ $patient['stt'] }})" type="button"
                                                 class="btn btn-success" style="float: right">{{ __('Hoàn Thành') }}</button>
+                                            @elseif($patient['kham_tq'] == 1 && $patient['department_id'] == 5)
+                                                <button onclick="step1General({{$patient['stt']}},{{ $patient['id'] }})" type="button"
+                                                class="btn btn-success" style="float: right">{{ __('Hoàn thành') }}</button>
+                                            @else
+                                                <button onclick="step1General({{$patient['stt']}},{{ $patient['id'] }})" type="button"
+                                                class="btn btn-success" style="float: right">{{ __('Chuyển khoa') }}</button>
+                                            @endif
                                         @endif
 
                                     </h3>
@@ -329,6 +357,12 @@
         function step1(stt) {
             $("#modal-next-department").modal('toggle')
             $("#current-stt").val(stt);
+        }
+
+        function step1General(stt,id) {
+            $("#modal-next-department-general").modal('toggle')
+            $("#current-patient-visit").val(id);
+            $("#current-stt").val(stt);
 
         }
 
@@ -362,15 +396,15 @@
             })
         }
 
-        function nextDepartment() {
-            let stt = $("#current-stt")
+        function nextDepartment(stt) {
+            let currentSTT = stt ? stt : $("#current-stt").val();
             let trieu_chung = $("#trieu_chung")
             let department_id = $("#department_id")
             $.ajax({
                 type: "POST",
                 url: "/next-department",
                 data: {
-                    stt: stt.val(),
+                    stt: currentSTT,
                     trieu_chung: trieu_chung.val(),
                     department_id: department_id.val(),
                     "_token": "{{ csrf_token() }}"
@@ -378,7 +412,29 @@
                 success: function(res) {
                     alert('Chuyển khoa thành công !');
 
-                    window.location.reload()
+                    // window.location.reload()
+                }
+            })
+        }
+
+        function nextDepartmentGeneral() {
+            let currentSTT = $("#current-stt").val();
+            let currentPatientVisit = $("#current-patient-visit").val();
+            let trieu_chung = $("#trieu_chung_general")
+            $.ajax({
+                type: "POST",
+                url: "/next-department-general",
+                data: {
+                    id: currentPatientVisit,
+                    stt: currentSTT,
+                    trieu_chung: trieu_chung.val(),
+                    // department_id: department_id.val(),
+                    "_token": "{{ csrf_token() }}"
+                },
+                success: function(res) {
+                    alert('Chuyển khoa thành công !');
+
+                    // window.location.reload()
                 }
             })
         }

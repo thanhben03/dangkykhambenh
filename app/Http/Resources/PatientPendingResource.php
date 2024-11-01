@@ -29,6 +29,8 @@ class PatientPendingResource extends ResourceCollection
                 'chuan_doan' => $item->chuan_doan,
                 'nic' => $item->nic,
                 'info' => $item->patient,
+                'kham_tq' => $item->kham_tq,
+                'department_id' => $item->department_id,
                 'history_medicine' => $item->medicines,
                 'history' => PatientVisit::query()
                     ->where('patient_id', $item->patient_id)

@@ -22,7 +22,7 @@ class PatientController extends Controller
         ])->timeout(0)->post('crow-wondrous-asp.ngrok-free.app/command', [
             'command' => 'scan_qr',
         ]);
-//        return response()->json($this->getDataFromCCCD('089202017098|352576714|Lê Văn Lương|23052002|Nam|Tổ 10 Ấp An Thái, Hòa Bình, Chợ Mới, An Giang|31122021'));
+        //        return response()->json($this->getDataFromCCCD('089202017098|352576714|Lê Văn Lương|23052002|Nam|Tổ 10 Ấp An Thái, Hòa Bình, Chợ Mới, An Giang|31122021'));
 
         // Kiểm tra phản hồi
         if ($response->successful()) {
@@ -39,6 +39,16 @@ class PatientController extends Controller
         }
     }
 
+    public function getPatientByStt($stt)
+    {
+        $patientVisit = PatientVisit::query()
+            ->where('stt', '=', $stt)
+            ->whereDate('created_at', Carbon::today())
+            ->first();
+
+        return response()->json($patientVisit);
+    }
+
     public function skip($patient_visit_id)
     {
         PatientVisit::query()->where('id', $patient_visit_id)->delete();
@@ -48,10 +58,10 @@ class PatientController extends Controller
     {
         $arrData = explode("|", $data);
         $strBirthday = $arrData[3];
-//        $birthday = substr($strBirthday, 0, 2).'-'. substr($strBirthday, 2,2). '-'. substr($strBirthday, 4);
-        $birthday = substr($strBirthday, 4).'-'. substr($strBirthday, 2,2). '-'. substr($strBirthday, 0,2);
+        //        $birthday = substr($strBirthday, 0, 2).'-'. substr($strBirthday, 2,2). '-'. substr($strBirthday, 4);
+        $birthday = substr($strBirthday, 4) . '-' . substr($strBirthday, 2, 2) . '-' . substr($strBirthday, 0, 2);
         return [
-            'stt' => rand(0,1000),
+            'stt' => rand(0, 1000),
             'bn_name' => $arrData[2],
             'dob' => $birthday,
             'gender' => $arrData[4],
@@ -93,20 +103,19 @@ class PatientController extends Controller
             'gender' => $this->removeVietnameseAccents($data['gender']),
             'birthday' => $this->removeVietnameseAccents($data['birthday']),
             'address' => $this->removeVietnameseAccents($data['address']),
-//            'email' => $this->removeVietnameseAccents($data['email']),
+            //            'email' => $this->removeVietnameseAccents($data['email']),
             'phone' => $this->removeVietnameseAccents($data['phone']),
             'arrival_time' => $arrival_time,
             'department' => $this->removeVietnameseAccents($department->department_name),
             'trieu_chung' => $this->removeVietnameseAccents($data['trieu_chung']),
         ]);
 
-        
+
         if ($response->successful()) {
             return $response->json();
         } else {
             return response()->json(['error' => 'API request failed'], 500);
         }
-
     }
 
     public function getSTTOfDepartment(Department $department)
@@ -119,7 +128,6 @@ class PatientController extends Controller
         $stt = optional($patientVisit)->stt ? optional($patientVisit)->stt + 1 : 1;
 
         return $stt;
-
     }
 
     public function getPatientLatest()
@@ -148,7 +156,8 @@ class PatientController extends Controller
         return Carbon::parse($patientVisit->arrival_time)->addMinutes(10);
     }
 
-    function removeVietnameseAccents($str) {
+    function removeVietnameseAccents($str)
+    {
         $accents = [
             'a' => ['à', 'á', 'ả', 'ã', 'ạ', 'ă', 'ắ', 'ằ', 'ẳ', 'ẵ', 'ặ', 'â', 'ấ', 'ầ', 'ẩ', 'ẫ', 'ậ'],
             'e' => ['è', 'é', 'ẻ', 'ẽ', 'ẹ', 'ê', 'ế', 'ề', 'ể', 'ễ', 'ệ'],
@@ -176,7 +185,10 @@ class PatientController extends Controller
     // Khi bac si an nut hoan thanh
     public function done($stt)
     {
-        PatientVisit::query()->where('stt','=', $stt)->update(['status' => 1]);
+        PatientVisit::query()
+            ->where('stt', '=', $stt)
+            ->whereDate('created_at', Carbon::today())
+            ->update(['status' => 1]);
 
         return response()->json([
             'msg' => 'Ok'
@@ -190,16 +202,16 @@ class PatientController extends Controller
         $department_id = $request->department_id;
 
         $patientVisit = PatientVisit::query()
-            ->where('stt','=', $stt)
+            ->where('stt', '=', $stt)
             ->whereDate('created_at', Carbon::today())
             ->orderBy('created_at', 'desc')
             ->first();
+
 
         $patient = Patient::query()->where('id', '=', $patientVisit->patient_id)->first();
 
         $this->done($stt);
         $this->registerPatientVisit($patient->id, $trieu_chung, $department_id, $stt);
-
     }
 
     public function registerPatientVisit($patient_id, $trieu_chung, $department_id, $stt = null)
@@ -207,6 +219,7 @@ class PatientController extends Controller
         $patientVisit = PatientVisit::query()->whereDate('created_at', Carbon::toDay())->orderBy('created_at', 'desc')->first();
         // Không có bệnh nhân mà có stt -> bác sĩ chuyển khoa hoặc khám sktq
         $department = Department::query()->where('id', '=', $department_id)->first();
+
         if ($stt) {
             PatientVisit::query()->create([
                 'patient_id' => $patient_id,
@@ -217,9 +230,7 @@ class PatientController extends Controller
             ]);
 
             return $stt;
-
-        }
-        else if (!$stt && !$patientVisit) {
+        } else if (!$stt && !$patientVisit) {
             PatientVisit::query()->create([
                 'patient_id' => $patient_id,
                 'stt' => 1,
@@ -229,9 +240,7 @@ class PatientController extends Controller
             ]);
 
             return 1;
-        }
-
-        else {
+        } else {
             $stt = PatientVisit::query()->whereDate('created_at', Carbon::toDay())->orderBy('created_at', 'desc')->first()->stt + 1;
             PatientVisit::query()->create([
                 'patient_id' => $patient_id,
@@ -243,14 +252,58 @@ class PatientController extends Controller
 
             return $stt;
         }
+    }
 
+    // Dành cho bệnh nhân khám tổng quát
+    public function registerPatientGeneral(Request $request)
+    {
+        $trieu_chung = $request->trieu_chung;
+        $patient_visit = PatientVisit::query()
+            ->where('id', '=', $request->id)
+            ->first();
+        $stt = $request->stt;
+        $department_id = 0;
+        switch ($patient_visit->department_id) {
+            case 10:
+                $department_id = 4;
+                break;
+            case 4:
+                $department_id = 5;
+                break;
+            case 5:
+                PatientVisit::query()
+                    ->where('id', '=', $request->id)
+                    ->update([
+                        'status' => 1,
+                        'trieu_chung' => $trieu_chung
+                    ]);
+                break;
+            default:
+                # code...
+                break;
+        }
+        $this->done($stt);
+
+        if ($patient_visit->department_id != 5) {
+
+            $department = Department::query()->where('id', '=', $department_id)->first();
+
+            PatientVisit::query()->create([
+                'patient_id' => $patient_visit->patient_id,
+                'stt' => $stt,
+                'department_id' => $department_id,
+                'kham_tq' => 1,
+                'trieu_chung' => $trieu_chung,
+                'arrival_time' => $this->getArrivalTime($department)->toDateTimeString(),
+            ]);
+        }
     }
 
     public function lichHen()
     {
         $result = PatientVisit::query()
             ->join('patients', 'patient_visits.patient_id', '=', 'patients.id')
-            ->select('patients.*','patient_visits.*','patient_visits.stt as stt')
+            ->select('patients.*', 'patient_visits.*', 'patient_visits.stt as stt')
             ->where('department_id', '=', \auth()->user()->department_id ?? 1)
             ->where('status', 0)
             ->whereDate('patient_visits.created_at', '=', Carbon::tomorrow())
@@ -267,13 +320,13 @@ class PatientController extends Controller
 
 
         $result = PatientVisit::query()
-                ->join('patients', 'patient_visits.patient_id', '=', 'patients.id')
-                ->select('patients.*','patient_visits.*','patient_visits.stt as stt')
-                ->where('department_id', '=', \auth()->user()->department_id ?? 1)
-                ->where('status', 0)
-                ->whereDate('patient_visits.created_at', '=', $date)
-                ->orderBy('patient_visits.created_at')
-                ->get();
+            ->join('patients', 'patient_visits.patient_id', '=', 'patients.id')
+            ->select('patients.*', 'patient_visits.*', 'patient_visits.stt as stt')
+            ->where('department_id', '=', \auth()->user()->department_id ?? 1)
+            ->where('status', 0)
+            ->whereDate('patient_visits.created_at', '=', $date)
+            ->orderBy('patient_visits.created_at')
+            ->get();
 
         return response()->json($result);
     }
