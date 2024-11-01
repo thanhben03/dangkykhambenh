@@ -155,7 +155,7 @@
                                                             <td>{{$history->created_at}}</td>
                                                             <td>
                                                                 @if ($history->kham_tq)
-                                                                    Khám tổng quát
+                                                                    Khám tổng quát({{$history->department->department_name}})
                                                                 @else
                                                                     {{$history->department->department_name}}
                                                                 @endif
