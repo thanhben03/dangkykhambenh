@@ -105,7 +105,9 @@
                             <!-- Card for Patient Info -->
                             <div class="card">
                                 <div class="card-header"
-                                    @if ($patient == reset($patients)) style="background: #ffcccc;" @endif>
+                                    @if ($patient == reset($patients)) 
+                                        style="background: #ffcccc;" 
+                                    @endif>
                                     <h3 class="card-title">
                                         STT Khám Bệnh: {{ $patient['stt'] }} - {{ $patient['name'] }}
 
@@ -120,10 +122,14 @@
                                                 class="btn btn-success" style="float: right">{{ __('Hoàn thành') }}</button>
                                             @else
                                                 <button onclick="step1General({{$patient['stt']}},{{ $patient['id'] }})" type="button"
-                                                class="btn btn-success" style="float: right">{{ __('Chuyển khoa') }}</button>
+                                                class="btn btn-success" style="float: right">{{ __('Tiếp tục') }}</button>
+                                            @endif
+                                            @if($patient['kham_tq'])
+                                                <button style="float: right; font-weight: bold" class="btn">Khám tổng quát</button>
+
                                             @endif
                                         @endif
-
+                                        
                                     </h3>
                                     <button class="btn btn-primary" type="button" data-bs-toggle="collapse"
                                     data-bs-target="#patientInfo-{{ $patient['stt'] }}" aria-expanded="true"

@@ -153,7 +153,13 @@
                                                     @foreach($patient['history'] as $history)
                                                         <tr>
                                                             <td>{{$history->created_at}}</td>
-                                                            <td>{{$history->department->department_name}}</td>
+                                                            <td>
+                                                                @if ($history->kham_tq)
+                                                                    Khám tổng quát
+                                                                @else
+                                                                    {{$history->department->department_name}}
+                                                                @endif
+                                                            </td>
                                                             <td>{{$history->chuan_doan ?? ''}}</td>
                                                             <td>
                                                                 {{ $history->medicines->map(function ($item) {
