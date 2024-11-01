@@ -75,17 +75,17 @@ class PatientController extends Controller
     public function register(Request $request)
     {
         $data = $request->all();
-        if ($data['department'] != 15) {
-            $department = Department::query()->where('id', '=', $data['department'])->first();
-        } else {
-            $department = Department::query()->where('id', '=', 10)->first();
-        }
+
+        $department = Department::query()->where('id', '=', $data['department'])->first();
+        
         // $stt = $this->getSTTOfDepartment($department);
 
         $patientLatest = $this->getPatientLatest();
         $arrival_time = $this->getArrivalTime($department)->toDateTimeString();
 
         $patient = Patient::query()->where('nic', '=', $data['cccd'])->first();
+        $stt = $this->registerPatientVisit($patient->id > 0 ? $patient->id : $patientLatest->id + 1, $data['trieu_chung'], $data['department']);
+
         if (!$patient) {
             $patient = Patient::query()->create([
                 'id' => $patientLatest->stt + 1,
@@ -97,7 +97,6 @@ class PatientController extends Controller
                 'nic' => $data['cccd'],
             ]);
         }
-        $stt = $this->registerPatientVisit($patient->id > 0 ? $patient->id : $patientLatest->id + 1, $data['trieu_chung'], $department->id);
 
 
         $response = Http::post('crow-wondrous-asp.ngrok-free.app/print', [
@@ -228,7 +227,6 @@ class PatientController extends Controller
             $department_id = 10;
             $kham_tq = 1;
         }
-
         if ($stt) {
             PatientVisit::query()->create([
                 'patient_id' => $patient_id,
