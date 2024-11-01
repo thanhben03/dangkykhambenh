@@ -223,9 +223,10 @@ class PatientController extends Controller
         $patientVisit = PatientVisit::query()->whereDate('created_at', Carbon::toDay())->orderBy('created_at', 'desc')->first();
         // Không có bệnh nhân mà có stt -> bác sĩ chuyển khoa hoặc khám sktq
         $department = Department::query()->where('id', '=', $department_id)->first();
-
+        $kham_tq = 0;
         if ($department_id == 15) {
             $department_id = 10;
+            $kham_tq = 1;
         }
 
         if ($stt) {
@@ -234,6 +235,7 @@ class PatientController extends Controller
                 'stt' => $stt,
                 'department_id' => $department_id,
                 'trieu_chung' => $trieu_chung,
+                'kham_tq' => $kham_tq,
                 'arrival_time' => $this->getArrivalTime($department)->toDateTimeString(),
             ]);
 
@@ -244,6 +246,7 @@ class PatientController extends Controller
                 'stt' => 1,
                 'department_id' => $department_id,
                 'trieu_chung' => $trieu_chung,
+                'kham_tq' => $kham_tq,
                 'arrival_time' => $this->getArrivalTime($department)->toDateTimeString(),
             ]);
 
@@ -255,6 +258,7 @@ class PatientController extends Controller
                 'stt' => $stt,
                 'department_id' => $department_id,
                 'trieu_chung' => $trieu_chung,
+                'kham_tq' => $kham_tq,
                 'arrival_time' => $this->getArrivalTime($department)->toDateTimeString(),
             ]);
 
