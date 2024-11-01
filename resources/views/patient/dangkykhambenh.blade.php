@@ -42,7 +42,7 @@
                 <div class="col mb-3">
                     <label for="appointmentDate" class="form-label">Chọn khoa khám</label>
                     <select name="department" class="form-select" id="appointmentDate" required>
-                        @foreach(DB::table('departments')->get() as $item)
+                        @foreach(DB::table('departments')->where('status', 0)->get() as $item)
                             <option value="{{$item->id}}">{{$item->department_name}}</option>
                         @endforeach
 
