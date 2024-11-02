@@ -140,26 +140,26 @@ class PatientController extends Controller
 
 
 
-        // $response = Http::post('crow-wondrous-asp.ngrok-free.app/print', [
-        //     'stt' => $stt,
-        //     'fullname' => $this->removeVietnameseAccents($data['fullname']),
-        //     'cccd' => $this->removeVietnameseAccents($data['cccd']),
-        //     'gender' => $this->removeVietnameseAccents($data['gender']),
-        //     'birthday' => $this->removeVietnameseAccents($data['birthday']),
-        //     'address' => $this->removeVietnameseAccents($data['address']),
-        //     //            'email' => $this->removeVietnameseAccents($data['email']),
-        //     'phone' => $this->removeVietnameseAccents($data['phone']),
-        //     'arrival_time' => $arrival_time,
-        //     'department' => $this->removeVietnameseAccents($department->department_name),
-        //     'trieu_chung' => $this->removeVietnameseAccents($data['trieu_chung']),
-        // ]);
+        $response = Http::post('crow-wondrous-asp.ngrok-free.app/print', [
+            'stt' => $stt,
+            'fullname' => $this->removeVietnameseAccents($data['fullname']),
+            'cccd' => $this->removeVietnameseAccents($data['cccd']),
+            'gender' => $this->removeVietnameseAccents($data['gender']),
+            'birthday' => $this->removeVietnameseAccents($data['birthday']),
+            'address' => $this->removeVietnameseAccents($data['address']),
+            //            'email' => $this->removeVietnameseAccents($data['email']),
+            'phone' => $this->removeVietnameseAccents($data['phone']),
+            'arrival_time' => $arrival_time,
+            'department' => $this->removeVietnameseAccents($department->department_name),
+            'trieu_chung' => $this->removeVietnameseAccents($data['trieu_chung']),
+        ]);
 
 
-        // if ($response->successful()) {
-        //     return $response->json();
-        // } else {
-        //     return response()->json(['error' => 'API request failed'], 500);
-        // }
+        if ($response->successful()) {
+            return $response->json();
+        } else {
+            return response()->json(['error' => 'API request failed'], 500);
+        }
     }
 
     public function remoteRegister(Request $request)
