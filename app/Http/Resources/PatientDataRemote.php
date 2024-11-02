@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class PatientResource extends ResourceCollection
+class PatientDataRemote extends ResourceCollection
 {
     /**
      * Transform the resource into an array.
@@ -24,7 +24,9 @@ class PatientResource extends ResourceCollection
                 'bod' => $item->bod,
                 'telephone' => $item->telephone,
                 'nic' => $item->nic,
-                'history' => $item->visits,
+                'kham_tq' => $item->kham_tq,
+                'arrival_time' => $item->arrival_time,
+                'department' => $item->department
             ];
         });
     }

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\PatientPendingResource;
+use App\Http\Resources\PatientResource;
 use App\Models\Department;
 use App\Models\Medicine;
 use App\Models\MedicinePrescription;
@@ -12,9 +14,44 @@ use Illuminate\Support\Facades\DB;
 use App\Models\PatientVisit;
 use App\Models\CurrentPatient;
 use App\Models\Patient;
+use Illuminate\Support\Facades\Hash;
 
 class PatientController extends Controller
 {
+
+
+    public function index()
+    {
+        return view('patient.dashboard');
+    }
+
+    public function lichHenPatient()
+    {
+        $patients = PatientVisit::query()
+            ->join('patients', 'patient_visits.patient_id', '=', 'patients.id')
+            ->select('patients.*', 'patient_visits.*', 'patient_visits.stt as stt')
+            ->where('patient_id', '=', \auth()->guard('patient')->user()->id)
+            ->where('status', 0)
+            ->whereDate('patient_visits.created_at', '>=', Carbon::toDay())
+            ->orderBy('patient_visits.created_at')
+            ->get();
+
+        $patients = PatientPendingResource::make($patients)->resolve();
+
+        return view('patient.dashboard', [
+            'patients' => $patients
+        ]);
+    }
+
+    public function khamBenh()
+    {
+        $patient = Patient::query()
+            ->where('id', '=', auth()->guard('patient')->user()->id)
+            ->get();
+        $patient = PatientResource::make($patient)->resolve()[0];
+        return view('patient.lich-su-kham-benh', compact('patient'));
+    }
+
     public function scan()
     {
         $response = Http::withHeaders([
@@ -75,24 +112,21 @@ class PatientController extends Controller
     public function register(Request $request)
     {
         $data = $request->all();
-
         if ($data['department'] != 15) {
             $department = Department::query()->where('id', '=', $data['department'])->first();
         } else {
             $department = Department::query()->where('id', '=', 10)->first();
         }
-        
+
         // $stt = $this->getSTTOfDepartment($department);
 
         $patientLatest = $this->getPatientLatest();
         $arrival_time = $this->getArrivalTime($department)->toDateTimeString();
 
         $patient = Patient::query()->where('nic', '=', $data['cccd'])->first();
-        $stt = $this->registerPatientVisit($patient->id > 0 ? $patient->id : $patientLatest->id + 1, $data['trieu_chung'], $data['department']);
-
         if (!$patient) {
             $patient = Patient::query()->create([
-                'id' => $patientLatest->stt + 1,
+                'id' => $patientLatest->id + 1,
                 'name' => $data['fullname'],
                 'address' => $data['address'],
                 'sex' => $data['gender'] == 'Nam' ? 'Male' : 'Female',
@@ -101,28 +135,60 @@ class PatientController extends Controller
                 'nic' => $data['cccd'],
             ]);
         }
+        $stt = $this->registerPatientVisit($patient->id > 0 ? $patient->id : $patientLatest->id + 1, $data['trieu_chung'], $data['department']);
 
 
-        $response = Http::post('crow-wondrous-asp.ngrok-free.app/print', [
-            'stt' => $stt,
-            'fullname' => $this->removeVietnameseAccents($data['fullname']),
-            'cccd' => $this->removeVietnameseAccents($data['cccd']),
-            'gender' => $this->removeVietnameseAccents($data['gender']),
-            'birthday' => $this->removeVietnameseAccents($data['birthday']),
-            'address' => $this->removeVietnameseAccents($data['address']),
-            //            'email' => $this->removeVietnameseAccents($data['email']),
-            'phone' => $this->removeVietnameseAccents($data['phone']),
-            'arrival_time' => $arrival_time,
-            'department' => $this->removeVietnameseAccents($department->department_name),
-            'trieu_chung' => $this->removeVietnameseAccents($data['trieu_chung']),
-        ]);
 
 
-        if ($response->successful()) {
-            return $response->json();
+        // $response = Http::post('crow-wondrous-asp.ngrok-free.app/print', [
+        //     'stt' => $stt,
+        //     'fullname' => $this->removeVietnameseAccents($data['fullname']),
+        //     'cccd' => $this->removeVietnameseAccents($data['cccd']),
+        //     'gender' => $this->removeVietnameseAccents($data['gender']),
+        //     'birthday' => $this->removeVietnameseAccents($data['birthday']),
+        //     'address' => $this->removeVietnameseAccents($data['address']),
+        //     //            'email' => $this->removeVietnameseAccents($data['email']),
+        //     'phone' => $this->removeVietnameseAccents($data['phone']),
+        //     'arrival_time' => $arrival_time,
+        //     'department' => $this->removeVietnameseAccents($department->department_name),
+        //     'trieu_chung' => $this->removeVietnameseAccents($data['trieu_chung']),
+        // ]);
+
+
+        // if ($response->successful()) {
+        //     return $response->json();
+        // } else {
+        //     return response()->json(['error' => 'API request failed'], 500);
+        // }
+    }
+
+    public function remoteRegister(Request $request)
+    {
+        $data = $request->all();
+
+        if ($data['department'] != 15) {
+            $department = Department::query()->where('id', '=', $data['department'])->first();
         } else {
-            return response()->json(['error' => 'API request failed'], 500);
+            $department = Department::query()->where('id', '=', 10)->first();
         }
+
+        $ngaykham = $data['ngaykham'];
+        $patientLatest = $this->getPatientLatest();
+
+        $patient = Patient::query()->where('nic', '=', $data['cccd'])->first();
+        if (!$patient) {
+            $patient = Patient::query()->create([
+                'id' => $patientLatest->id + 1,
+                'name' => $data['fullname'],
+                'address' => $data['address'],
+                'sex' => $data['gender'] == 'Nam' ? 'Male' : 'Female',
+                'bod' => $data['birthday'],
+                'telephone' => $data['phone'],
+                'nic' => $data['cccd'],
+                'password' => Hash::make($data['cccd']),
+            ]);
+        }
+        $stt = $this->registerPatientVisit($patient->id > 0 ? $patient->id : $patientLatest->id + 1, $data['trieu_chung'], $data['department'], null, $ngaykham);
     }
 
     public function getSTTOfDepartment(Department $department)
@@ -139,6 +205,7 @@ class PatientController extends Controller
 
     public function getPatientLatest()
     {
+
         return Patient::query()->orderBy('id', 'desc')->first();
     }
 
@@ -146,17 +213,29 @@ class PatientController extends Controller
     {
         return PatientVisit::query()
             ->where('department_id', $department->id)
-            ->whereDate('created_at', Carbon::today())
-            ->orderBy('created_at', 'desc')
+            ->whereDate('arrival_time', Carbon::today())
+            ->orderBy('arrival_time', 'desc')
             ->first();
     }
 
-    public function getArrivalTime(Department $department)
+    public function getArrivalTime(Department $department, $ngaykham = null)
     {
-        $patientVisit = $this->getPatientVisitLatest($department);
+        $patientVisit = null;
+        if ($ngaykham) {
+            $patientVisit = PatientVisit::query()
+                ->where('department_id', $department->id)
+                ->whereDate('arrival_time', Carbon::parse($ngaykham))
+                ->orderBy('arrival_time', 'desc')
+                ->first();
+        } else {
+            $patientVisit = $this->getPatientVisitLatest($department);
+        }
         $currentNow = Carbon::now('Asia/Ho_Chi_Minh');
 
         if (!$patientVisit || $currentNow > Carbon::parse($patientVisit->arrival_time)->addMinutes(10)) {
+            if ($ngaykham && $currentNow < Carbon::parse($ngaykham)) {
+                return Carbon::parse($ngaykham . ' 07:00:00');
+            }
             return Carbon::now('Asia/Ho_Chi_Minh');
         }
 
@@ -221,9 +300,12 @@ class PatientController extends Controller
         $this->registerPatientVisit($patient->id, $trieu_chung, $department_id, $stt);
     }
 
-    public function registerPatientVisit($patient_id, $trieu_chung, $department_id, $stt = null)
+    public function registerPatientVisit($patient_id, $trieu_chung, $department_id, $stt = null, $ngaykham = null)
     {
-        $patientVisit = PatientVisit::query()->whereDate('created_at', Carbon::toDay())->orderBy('created_at', 'desc')->first();
+        $patientVisit = PatientVisit::query()
+            ->whereDate($ngaykham ? 'arrival_time' : 'created_at', $ngaykham ? $ngaykham : Carbon::toDay())
+            ->orderBy('created_at', 'desc')
+            ->first();
         // Không có bệnh nhân mà có stt -> bác sĩ chuyển khoa hoặc khám sktq
         $department = Department::query()->where('id', '=', $department_id)->first();
         $kham_tq = 0;
@@ -238,9 +320,8 @@ class PatientController extends Controller
                 'department_id' => $department_id,
                 'trieu_chung' => $trieu_chung,
                 'kham_tq' => $kham_tq,
-                'arrival_time' => $this->getArrivalTime($department)->toDateTimeString(),
+                'arrival_time' => $this->getArrivalTime($department, $ngaykham)->toDateTimeString(),
             ]);
-
             return $stt;
         } else if (!$stt && !$patientVisit) {
             PatientVisit::query()->create([
@@ -249,21 +330,21 @@ class PatientController extends Controller
                 'department_id' => $department_id,
                 'trieu_chung' => $trieu_chung,
                 'kham_tq' => $kham_tq,
-                'arrival_time' => $this->getArrivalTime($department)->toDateTimeString(),
+                'arrival_time' => $this->getArrivalTime($department, $ngaykham)->toDateTimeString(),
             ]);
-
             return 1;
         } else {
-            $stt = PatientVisit::query()->whereDate('created_at', Carbon::toDay())->orderBy('created_at', 'desc')->first()->stt + 1;
+            $stt = PatientVisit::query()
+                ->whereDate($ngaykham ? 'arrival_time' : 'created_at', $ngaykham ? $ngaykham : Carbon::toDay())
+                ->max('stt');
             PatientVisit::query()->create([
                 'patient_id' => $patient_id,
-                'stt' => $stt,
+                'stt' => $stt + 1,
                 'department_id' => $department_id,
                 'trieu_chung' => $trieu_chung,
                 'kham_tq' => $kham_tq,
-                'arrival_time' => $this->getArrivalTime($department)->toDateTimeString(),
+                'arrival_time' => $this->getArrivalTime($department, $ngaykham)->toDateTimeString(),
             ]);
-
             return $stt;
         }
     }

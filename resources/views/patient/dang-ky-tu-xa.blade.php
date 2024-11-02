@@ -33,6 +33,7 @@
                     <label for="phone" class="form-label">Số điện thoại</label>
                     <input type="tel" name="phone" class="form-control" id="phone" placeholder="Nhập số điện thoại" required>
                 </div>
+                
             </div>
             <div class="row">
                 <div class="col mb-3">
@@ -58,13 +59,17 @@
                     <label for="appointmentType" class="form-label">Số CCCD</label>
                     <input type="text" name="cccd" id="cccd-number" class="form-control" placeholder="Nhập số CCCD">
                 </div>
+                <div class="col mb-3">
+                    <label for="phone" class="form-label">Ngày khám</label>
+                    <input type="date" name="ngaykham" class="form-control" id="phone" required>
+                </div>
             </div>
             <div class="mb-3">
                 <textarea name="trieu_chung" class="form-control" rows="6" placeholder="Triệu chứng"></textarea>
             </div>
             <div class="d-flex">
                 <button type="submit" class="btn btn-primary">Đăng ký</button>
-                <button onclick="scan()" class="mx-2 btn btn-success">Scan CCCD</button>
+                <a href="{{route('patient.login')}}" class="mx-2 btn btn-success">Đăng nhập</a>
             </div>
         </form>
     </div>
@@ -107,7 +112,7 @@
 
             $.ajax({
                 type: 'POST',
-                url: '{{route('patient.register')}}',
+                url: '{{route('patient.remote.register')}}',
                 data: form,
                 success: function (res) {
                     alert('ok')

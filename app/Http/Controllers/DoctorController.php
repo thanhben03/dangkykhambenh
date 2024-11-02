@@ -41,8 +41,8 @@ class DoctorController extends Controller
             })
             ->where('department_id', '=', \auth()->user()->department_id ?? 1)
             ->where('status', 0)
-            ->whereDate('patient_visits.created_at', Carbon::today())
-            ->orderBy('patient_visits.created_at')
+            ->whereDate('patient_visits.arrival_time', Carbon::today())
+            ->orderBy('patient_visits.arrival_time')
             ->get();
 
         $result = PatientPendingResource::make($result)->resolve();

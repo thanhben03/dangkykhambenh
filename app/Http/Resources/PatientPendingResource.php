@@ -30,6 +30,8 @@ class PatientPendingResource extends ResourceCollection
                 'nic' => $item->nic,
                 'info' => $item->patient,
                 'kham_tq' => $item->kham_tq,
+                'department' => $item->department,
+                'arrival_time' => $item->arrival_time,
                 'department_id' => $item->department_id,
                 'history_medicine' => $item->medicines,
                 'history' => PatientVisit::query()

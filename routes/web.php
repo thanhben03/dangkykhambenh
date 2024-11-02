@@ -3,10 +3,15 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\DoctorController;
+use App\Models\Patient;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('patient.dangkykhambenh');
+    return view('patient.dang-ky-kham-benh');
+});
+
+Route::get('/dang-ky-tu-xa', function () {
+    return view('patient.dang-ky-tu-xa');
 });
 
 Route::group(['middleware' => 'auth'], function () {
@@ -27,13 +32,14 @@ Route::group(['middleware' => 'auth'], function () {
 
 
 Route::post('/scan-cccd', [PatientController::class, 'scan'])->name('patient.scan');
-Route::post('/patient-register', [PatientController::class, 'register'])->name('patient.register');
+Route::post('/patient-register', [PatientController::class, 'register'])->name('patient.process.register');
+Route::post('/patient-remote-register', [PatientController::class, 'remoteRegister'])->name('patient.remote.register');
 
-Route::get('/a', function () {
-    dd(1);
+Route::prefix('patients')->as('patient.')->group(function () {
+    Route::get('/dashboard', [PatientController::class, 'lichHenPatient'])->name('dashboard');
+    // Route::get('/lich-hen', [PatientController::class, 'lichHenPatient'])->name('dashboard');
+    Route::get('/lich-su-kham-benh', [PatientController::class, 'khamBenh'])->name('history');
 });
-
-
 
 
 Route::middleware('auth')->group(function () {
@@ -43,3 +49,5 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__ . '/auth.php';
+require __DIR__ . '/auth-patient.php';
+
