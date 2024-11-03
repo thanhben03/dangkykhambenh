@@ -5,15 +5,13 @@ namespace App\Http\Controllers;
 use App\Http\Resources\PatientPendingResource;
 use App\Http\Resources\PatientResource;
 use App\Models\Department;
-use App\Models\Medicine;
 use App\Models\MedicinePrescription;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\DB;
 use App\Models\PatientVisit;
-use App\Models\CurrentPatient;
 use App\Models\Patient;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class PatientController extends Controller
@@ -23,6 +21,69 @@ class PatientController extends Controller
     public function index()
     {
         return view('patient.dashboard');
+    }
+
+    public function showProfile()
+    {
+        $user = auth()->guard('patient')->user();
+        return view('patient.profile', compact('user'));
+    }
+
+    public function changePassword (Request $request) {
+        $password = $request->current_password;
+        $newPassword = $request->new_password;
+        $user = auth()->guard('patient')->user();
+
+        if (!Hash::check($password, $user->password)) {
+            return redirect()->back()->withErrors(['password' => 'Mật khẩu hiện tại không đúng !']);
+        }
+
+        $user->password = Hash::make($newPassword);
+        $user->save();
+
+        return redirect()->back()->with('msg', 'Cập nhật mật khẩu thành công !');
+        
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'address' => 'required|string|max:255',
+            'telephone' => 'required|digits_between:10,15',
+            'bod' => 'required|date',
+            'sex' => 'required|in:Male,Female,other', // Adjust the options based on your requirements
+            'nic' => 'required|string|max:20',
+            'current_password' => 'nullable|string',
+            'password' => 'nullable|string',
+        ]);
+        $data = $request->all();
+
+        
+
+        try {
+            DB::beginTransaction();
+
+            $user = auth()->guard('patient')->user();
+            $user->update($data);
+            $user->save();
+
+            DB::commit();
+
+            
+            return redirect()->back()->with('msg', 'Cập nhật thành công !');
+
+
+        } catch (\Throwable $th) {
+
+
+            DB::rollBack();
+
+            return redirect()->back()->withErrors(['msg' => $th->getMessage()]);
+
+        }
+
+
     }
 
     public function lichHenPatient()

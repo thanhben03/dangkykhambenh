@@ -39,6 +39,9 @@ Route::prefix('patients')->as('patient.')->group(function () {
     Route::get('/dashboard', [PatientController::class, 'lichHenPatient'])->name('dashboard');
     // Route::get('/lich-hen', [PatientController::class, 'lichHenPatient'])->name('dashboard');
     Route::get('/lich-su-kham-benh', [PatientController::class, 'khamBenh'])->name('history');
+    Route::get('/profile', [PatientController::class, 'showProfile'])->name('show.profile');
+    Route::post('/profile', [PatientController::class, 'updateProfile'])->name('profile.update');
+    Route::post('/profile/change-password', [PatientController::class, 'changePassword'])->name('profile.change.password');
 });
 
 

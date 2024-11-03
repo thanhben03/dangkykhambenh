@@ -72,27 +72,6 @@
                         </div>
                     </div>
                 </div>
-{{-- 
-                <form id="search-form" class="mb-3" action="/dashboard" method="GET">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <input type="text" class="form-control" id="searchName" placeholder="Nhập tên bệnh nhân"
-                                name="name">
-                        </div>
-                        <div class="col-md-3">
-                            <input type="text" class="form-control" id="searchSTT" placeholder="Nhập STT khám bệnh"
-                                name="stt">
-                        </div>
-                        <div class="col-md-3">
-                            <input type="text" class="form-control" id="searchCCCD" placeholder="Nhập số CCCD"
-                                name="cccd">
-                        </div>
-                        <div class="col-md-2">
-                            <button type="submit" class="btn btn-primary" onclick="searchPatient()">Tìm kiếm</button>
-                            <a href="/dashboard" class="btn btn-success">Quay lại</a>
-                        </div>
-                    </div>
-                </form> --}}
 
                 @foreach ($patients as $patient)
                     <div class="row">

@@ -38,7 +38,7 @@
             <div class="d-flex">
                 <!-- LOGO -->
                 <div class="navbar-brand-box">
-                    <a href="/dashboard" class="logo logo-dark">
+                    <a href="/patients/dashboard" class="logo logo-dark">
                                 <span class="logo-sm">
                                     <img src="assets/images/logo-sm.svg" alt="" height="24">
                                 </span>
@@ -47,7 +47,7 @@
                                 </span>
                     </a>
 
-                    <a href="/dashboard" class="logo logo-light">
+                    <a href="/patients/dashboard" class="logo logo-light">
                                 <span class="logo-sm">
                                     <img src="assets/images/logo-sm.svg" alt="" height="24">
                                 </span>
@@ -115,6 +115,13 @@
                             <i class="bx bx-history"></i>
 
                             <span data-key="t-lich-su-kham-benh">Lịch Sử Khám Bệnh</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/patients/profile">
+                            <i class="bx bxs-user-rectangle"></i>
+
+                            <span data-key="t-profile">Cá Nhân</span>
                         </a>
                     </li>
 

@@ -33,7 +33,7 @@ class LoginPatientController extends Controller
         }
         Auth::guard('patient')->login($patient);
         session(['patient' => $patient]);
-        return redirect()->intended('/patients/dashboard');
+        return redirect()->route('patient.dashboard');
     }
 
     /**
