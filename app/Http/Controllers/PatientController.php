@@ -239,7 +239,7 @@ class PatientController extends Controller
         $patient = Patient::query()->where('nic', '=', $data['cccd'])->first();
         if (!$patient) {
             $patient = Patient::query()->create([
-                'id' => $patientLatest->id + 1,
+                'id' => $patientLatest ? $patientLatest->id + 1 : 1,
                 'name' => $data['fullname'],
                 'address' => $data['address'],
                 'sex' => $data['gender'] == 'Nam' ? 'Male' : 'Female',
@@ -249,7 +249,7 @@ class PatientController extends Controller
                 'password' => Hash::make($data['cccd']),
             ]);
         }
-        $stt = $this->registerPatientVisit($patient->id > 0 ? $patient->id : $patientLatest->id + 1, $data['trieu_chung'], $data['department'], null, $ngaykham);
+        $stt = $this->registerPatientVisit($patient->id, $data['trieu_chung'], $data['department'], null, $ngaykham);
     }
 
     public function getSTTOfDepartment(Department $department)

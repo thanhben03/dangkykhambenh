@@ -67,9 +67,9 @@
             <div class="mb-3">
                 <textarea name="trieu_chung" class="form-control" rows="6" placeholder="Triệu chứng"></textarea>
             </div>
-            <div class="d-flex">
-                <button type="submit" class="btn btn-primary">Đăng ký</button>
-                <a href="{{route('patient.login')}}" class="mx-2 btn btn-success">Đăng nhập</a>
+            <div class="d-flex justify-content-between">
+                <button style="font-size: 20px" type="submit" class="btn btn-primary">Đăng ký</button>
+                <a style="font-size: 20px" href="{{route('patient.login')}}" class="mx-2 btn btn-success">Đăng nhập</a>
             </div>
         </form>
     </div>

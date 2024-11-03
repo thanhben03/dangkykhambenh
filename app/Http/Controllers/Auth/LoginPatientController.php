@@ -30,7 +30,7 @@ class LoginPatientController extends Controller
         $patient = Patient::query()->where('nic', '=', $data['cccd'])->first();
 
         if (!$patient) {
-            return redirect()->back()->withErrors(['Patient not found']);
+            return redirect()->back()->withErrors(['not-found' => 'Patient not found']);
         }
 
         if (!Hash::check($data['password'], $patient->password)) {
