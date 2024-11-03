@@ -28,11 +28,15 @@ class LoginPatientController extends Controller
     {
         $data = $request->all();
         $patient = Patient::query()->where('nic', '=', $data['cccd'])->first();
+
+        if (!$patient) {
+            return redirect()->back()->withErrors(['Patient not found']);
+        }
+
         if (!Hash::check($data['password'], $patient->password)) {
             return back()->withErrors(['password' => 'The provided credentials are incorrect.']);
         }
         Auth::guard('patient')->login($patient);
-        session(['patient' => $patient]);
         return redirect()->route('patient.dashboard');
     }
 
