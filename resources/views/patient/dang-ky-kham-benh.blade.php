@@ -93,6 +93,8 @@
                 },
                 error: function (xhr) {
                     console.log(xhr.responseJSON)
+                    $(".loading").css('display', 'none')
+
                 }
             })
         }
@@ -109,12 +111,18 @@
                 type: 'POST',
                 url: '{{route('patient.process.register')}}',
                 data: form,
+                beforeSend: function () {
+                  $(".loading").css('display', 'flex')
+                },
                 success: function (res) {
                     alert('ok')
-                    // window.location.reload()
+                    $(".loading").css('display', 'none')
+                    window.location.reload()
                 },
                 error: function (xhr) {
                     console.log(xhr.responseJSON)
+                    $(".loading").css('display', 'none')
+
                 }
             })
         }

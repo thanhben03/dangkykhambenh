@@ -125,13 +125,13 @@
                                                             name="reg_pbd">
                                                     </div>
                                                     <div class="col-sm-3 text-end">
-                                                        <div class="btn-group">
+                                                        {{-- <div class="btn-group">
                                                             <button type="button" onclick="go('9')"
                                                                 class="btn btn-info"><i class="far fa-id-card"></i>
                                                                 Profile</button>
                                                             <button type="button" class="btn btn-warning"><i
                                                                     class="fas fa-edit"></i> Edit</button>
-                                                        </div>
+                                                        </div> --}}
                                                     </div>
                                                 </div>
                                             </form>

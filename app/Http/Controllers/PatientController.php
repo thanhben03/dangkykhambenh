@@ -191,6 +191,8 @@ class PatientController extends Controller
                 'bod' => $data['birthday'],
                 'telephone' => $data['phone'],
                 'nic' => $data['cccd'],
+                'password' => Hash::make($data['cccd']),
+
             ]);
         }
         $stt = $this->registerPatientVisit($patient->id > 0 ? $patient->id : $patientLatest->id + 1, $data['trieu_chung'], $data['department']);

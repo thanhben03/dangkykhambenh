@@ -14,12 +14,16 @@
                         <label for="">Khoa</label>
                         <select class="form-control" name="department_id" id="department_id">
                             @foreach ($departments as $item)
-                                <option value="{{$item->id}}">{{$item->department_name}}</option>
+                                <option value="{{ $item->id }}">{{ $item->department_name }}</option>
                             @endforeach
                         </select>
                     </div>
-                    <input id="email" name="email" class="mb-3 form-control" type="text" placeholder="Email đăng nhập">
+                    <input id="email" name="email" class="mb-3 form-control" type="text"
+                        placeholder="Email đăng nhập">
                     <input id="password" name="password" class="mb-3 form-control" type="password" placeholder="Mật khẩu">
+
+                    <!-- An element to toggle between password visibility -->
+                    <input type="checkbox" onclick="showPass()">Hiển thị mật khẩu
                 </div>
                 <div class="modal-footer">
                     <button onclick="createDoctor()" type="button" class="btn btn-primary">Tạo tài khoản</button>
@@ -75,7 +79,8 @@
                                                 <td>{{ $doctor->email }}</td>
                                                 <td>{{ $doctor->department->department_name }}</td>
                                                 <td>
-                                                    <button onclick="deleteDoctor({{$doctor->id}})" class="btn btn-danger">
+                                                    <button onclick="deleteDoctor({{ $doctor->id }})"
+                                                        class="btn btn-danger">
                                                         Xóa
                                                     </button>
                                                 </td>
@@ -127,18 +132,18 @@
         function createDoctor() {
             $.ajax({
                 type: "POST",
-                url: "{{route('crateDoctor')}}",
+                url: "{{ route('crateDoctor') }}",
                 data: {
                     'email': $("#email").val(),
                     'password': $("#password").val(),
                     'department_id': $("#department_id").val(),
-                    '_token': "{{csrf_token()}}",
+                    '_token': "{{ csrf_token() }}",
                 },
-                success: function (res) {
+                success: function(res) {
                     alert('Tạo tài khoản thành công !')
                     window.location.reload();
                 },
-                error: function (xhr) {
+                error: function(xhr) {
                     alert("Đã xảy ra lỗi !")
                 }
             })
@@ -152,14 +157,23 @@
             $.ajax({
                 type: "GET",
                 url: "/delete-doctor/" + doctor_id,
-                success: function (res) {
+                success: function(res) {
                     alert('Xóa thành công !')
                     window.location.reload()
                 },
-                error: function (xhr) {
+                error: function(xhr) {
                     alert('Đã xảy ra lỗi !')
                 }
             })
+        }
+
+        function showPass() {
+            let x = document.getElementById("password");
+            if (x.type === "password") {
+                x.type = "text";
+            } else {
+                x.type = "password";
+            }
         }
     </script>
 @endpush
