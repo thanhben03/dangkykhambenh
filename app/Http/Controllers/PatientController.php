@@ -11,12 +11,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use App\Models\PatientVisit;
 use App\Models\Patient;
+use Closure;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class PatientController extends Controller
 {
-
 
     public function index()
     {
@@ -29,7 +31,8 @@ class PatientController extends Controller
         return view('patient.profile', compact('user'));
     }
 
-    public function changePassword (Request $request) {
+    public function changePassword(Request $request)
+    {
         $password = $request->current_password;
         $newPassword = $request->new_password;
         $user = auth()->guard('patient')->user();
@@ -42,7 +45,6 @@ class PatientController extends Controller
         $user->save();
 
         return redirect()->back()->with('msg', 'Cập nhật mật khẩu thành công !');
-        
     }
 
     public function updateProfile(Request $request)
@@ -59,7 +61,7 @@ class PatientController extends Controller
         ]);
         $data = $request->all();
 
-        
+
 
         try {
             DB::beginTransaction();
@@ -70,20 +72,15 @@ class PatientController extends Controller
 
             DB::commit();
 
-            
+
             return redirect()->back()->with('msg', 'Cập nhật thành công !');
-
-
         } catch (\Throwable $th) {
 
 
             DB::rollBack();
 
             return redirect()->back()->withErrors(['msg' => $th->getMessage()]);
-
         }
-
-
     }
 
     public function lichHenPatient()
@@ -454,33 +451,35 @@ class PatientController extends Controller
         }
     }
 
-    public function lichHen()
+    public function lichHen(Request $request)
     {
+        $date = $request->has('date') ? $request->get('date') : null;
+        
         $result = PatientVisit::query()
             ->join('patients', 'patient_visits.patient_id', '=', 'patients.id')
             ->select('patients.*', 'patient_visits.*', 'patient_visits.stt as stt')
-            ->where('department_id', '=', \auth()->user()->department_id ?? 1)
+            ->where('department_id', '=', \auth()->user()->department_id)
             ->where('status', 0)
-            ->whereDate('patient_visits.created_at', '=', Carbon::tomorrow())
+            ->whereDate('patient_visits.created_at', $date ? $date : Carbon::tomorrow())
             ->orderBy('patient_visits.created_at')
             ->get();
         return view('doctor.lich-hen', [
-            'appointments' => $result
+            'appointments' => $result,
+            'date' => $date
         ]);
     }
 
     public function getAppointments(Request $request)
     {
-        $date = $request->query('date') ?? Carbon::tomorrow();
-
+        $date = Carbon::parse($request->query('date')) ?? Carbon::tomorrow();
 
         $result = PatientVisit::query()
             ->join('patients', 'patient_visits.patient_id', '=', 'patients.id')
             ->select('patients.*', 'patient_visits.*', 'patient_visits.stt as stt')
             ->where('department_id', '=', \auth()->user()->department_id ?? 1)
             ->where('status', 0)
-            ->whereDate('patient_visits.created_at', '=', $date)
-            ->orderBy('patient_visits.created_at')
+            ->whereDate('patient_visits.created_at', $date)
+            // ->orderBy('patient_visits.created_at')
             ->get();
 
         return response()->json($result);

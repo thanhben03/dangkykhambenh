@@ -11,22 +11,24 @@
                         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
                             <h4 class="mb-sm-0 font-size-18">Lịch hẹn</h4>
 
-                         
+
 
                         </div>
                     </div>
                 </div>
-                <!-- Chọn lịch -->
-                <div class="form-group col-3">
-                    <label for="appointment-date">Chọn ngày hẹn:</label>
-                    <input type="date" id="appointment-date" class="form-control">
-                </div>
+                <form action="">
+                    <!-- Chọn lịch -->
+                    <div class="form-group col-3">
+                        <label for="appointment-date">Chọn ngày hẹn:</label>
+                        <input name="date" value="{{$date}}" type="date" id="appointment-date" class="form-control">
+                    </div>
 
-                <!-- Nút tìm kiếm -->
-                <div class="form-group mt-3">
-                    <button id="search-appointments" class="btn btn-primary">Tìm lịch hẹn</button>
-                    <a href="/lich-hen" class="btn btn-warning">Xóa bộ lọc</a>
-                </div>
+                    <!-- Nút tìm kiếm -->
+                    <div class="form-group mt-3">
+                        <button type="submit" class="btn btn-primary">Tìm lịch hẹn</button>
+                        <a href="/lich-hen" class="btn btn-warning">Xóa bộ lọc</a>
+                    </div>
+                </form>
 
                 <!-- Hiển thị danh sách bệnh nhân -->
                 <div class="mt-4">

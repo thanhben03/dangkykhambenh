@@ -11,10 +11,12 @@ use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredPatientController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Http\Middleware\AuthenticatedPatient;
+use App\Http\Middleware\GuestPatient;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('guest:patient')->prefix('patient')->as('patient.')->group(function () {
+Route::middleware(GuestPatient::class)->prefix('patient')->as('patient.')->group(function () {
     Route::get('register', [RegisteredPatientController::class, 'create'])
         ->name('register');
 

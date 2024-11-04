@@ -13,7 +13,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                            <h4 class="mb-sm-0 font-size-18">Lịch sử khám bệnh</h4>
+                            <h4 class="mb-sm-0 font-size-18">Quản lý thông tin bệnh nhân</h4>
 
 
 
@@ -21,7 +21,7 @@
                     </div>
                 </div>
 
-                <form id="search-form" class="mb-3" action="/lich-su-kham-benh" method="GET">
+                <form id="search-form" class="mb-3" action="/quan-ly-benh-nhan" method="GET">
                     <div class="row">
                         <div class="col-md-4">
                             <input type="text" class="form-control" id="searchName" placeholder="Nhập tên bệnh nhân"
@@ -126,11 +126,11 @@
                                                     </div>
                                                     <div class="col-sm-3 text-end">
                                                         <div class="btn-group">
-                                                            <button type="button" onclick="go('9')"
-                                                                class="btn btn-info"><i class="far fa-id-card"></i>
-                                                                Profile</button>
-                                                            <button type="button" class="btn btn-warning"><i
-                                                                    class="fas fa-edit"></i> Edit</button>
+                                                            <button 
+                                                            onclick="deletePatient({{$patient['id']}})"
+                                                            type="button" onclick="go('9')"
+                                                                class="btn btn-danger"><i class="far fa-id-card"></i>
+                                                                Xóa</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -192,80 +192,21 @@
 
 @push('js')
     <script>
-        $(document).ready(function() {
-            // Thêm hàng mới vào bảng khi nút "Thêm Thuốc" được nhấn
-            $('#addRow').click(function() {
-                var newRow = `
-            <tr>
-                <td><input type="text" name="medicine_name[]" class="form-control" placeholder="Nhập tên thuốc..."></td>
-                <td><input type="number" name="medicine_quantity[]" class="form-control" placeholder="Nhập số lượng..."></td>
-                <td><input type="text" name="medicine_usage[]" class="form-control" placeholder="Nhập cách dùng..."></td>
-                <td><button type="button" class="btn btn-danger removeRow">{{ __('Xóa') }}</button></td>
-            </tr>`;
-                $('#prescriptionTable tbody').append(newRow);
-            });
 
-            // Xóa hàng khi nhấn nút "Xóa"
-            $(document).on('click', '.removeRow', function() {
-                $(this).closest('tr').remove();
-            });
-
-
-        });
-
-        function step1(stt) {
-            $("#modal-next-department").modal('toggle')
-            $("#current-stt").val(stt);
-
-        }
-
-        function done() {
-            let stt = $("#current-stt").val();
-
-            $.ajax({
-                type: "GET",
-                url: "{{ route('doctor.done', ':stt') }}".replace(':stt', stt),
-                success: function(res) {
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 1200)
-                }
-            })
-        }
-
-        function skip(patient_visit_id) {
-            if (!confirm('Bạn có chắc chắn muốn bỏ qua bệnh nhân này ?')) {
-                return
+        function deletePatient(patient_id) {
+            if (!confirm('Bạn có chắc chắn muốn xóa ?')) {
+                return;
             }
-
             $.ajax({
                 type: "GET",
-                url: "/skip/" + patient_visit_id,
-                success: function (res) {
-                    alert('Thành công !')
-
-                    window.location.reload()
-                }
-            })
-        }
-
-        function nextDepartment() {
-            let stt = $("#current-stt")
-            let trieu_chung = $("#trieu_chung")
-            let department_id = $("#department_id")
-            $.ajax({
-                type: "POST",
-                url: "/next-department",
-                data: {
-                    stt: stt.val(),
-                    trieu_chung: trieu_chung.val(),
-                    department_id: department_id.val(),
-                    "_token": "{{ csrf_token() }}"
-                },
+                url: "/delete-patient/" + patient_id,
                 success: function(res) {
-                    alert('Chuyển khoa thành công !');
+                    alert('Xóa thành công !');
 
                     window.location.reload()
+                },
+                error: function (xhr) {
+                    alert('Đã xảy ra lỗi !')
                 }
             })
         }

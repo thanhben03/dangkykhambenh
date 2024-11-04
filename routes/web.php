@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\DoctorController;
+use App\Http\Middleware\AuthenticatedPatient;
 use App\Models\Patient;
 use Illuminate\Support\Facades\Route;
 
@@ -30,12 +32,18 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/get-patient-by-stt/{stt}', [PatientController::class, 'getPatientByStt'])->name('doctor.getPatientByStt');
 });
 
+Route::get('/quan-ly-benh-nhan', [AdminController::class, 'showPatient']);
+Route::get('/quan-ly-bac-si', [AdminController::class, 'showDoctor']);
+Route::post('/tao-tai-khoan', [AdminController::class, 'createDoctor'])->name('crateDoctor');
+Route::get('/delete-patient/{id}', [AdminController::class, 'deletePatient'])->name('deletePatient');;
+Route::get('/delete-doctor/{id}', [AdminController::class, 'deleteDoctor'])->name('deleteDoctor');;
+
 
 Route::post('/scan-cccd', [PatientController::class, 'scan'])->name('patient.scan');
 Route::post('/patient-register', [PatientController::class, 'register'])->name('patient.process.register');
 Route::post('/patient-remote-register', [PatientController::class, 'remoteRegister'])->name('patient.remote.register');
 
-Route::prefix('patients')->as('patient.')->group(function () {
+Route::middleware(AuthenticatedPatient::class)->prefix('patients')->as('patient.')->group(function () {
     Route::get('/dashboard', [PatientController::class, 'lichHenPatient'])->name('dashboard');
     // Route::get('/lich-hen', [PatientController::class, 'lichHenPatient'])->name('dashboard');
     Route::get('/lich-su-kham-benh', [PatientController::class, 'khamBenh'])->name('history');
