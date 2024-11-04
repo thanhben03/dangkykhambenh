@@ -32,11 +32,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/get-patient-by-stt/{stt}', [PatientController::class, 'getPatientByStt'])->name('doctor.getPatientByStt');
 });
 
-Route::get('/quan-ly-benh-nhan', [AdminController::class, 'showPatient']);
+Route::get('/quan-ly-benh-nhan', [AdminController::class, 'showPatient'])->name('showPatient');
 Route::get('/quan-ly-bac-si', [AdminController::class, 'showDoctor']);
 Route::post('/tao-tai-khoan', [AdminController::class, 'createDoctor'])->name('crateDoctor');
 Route::get('/delete-patient/{id}', [AdminController::class, 'deletePatient'])->name('deletePatient');;
 Route::get('/delete-doctor/{id}', [AdminController::class, 'deleteDoctor'])->name('deleteDoctor');;
+
 
 
 Route::post('/scan-cccd', [PatientController::class, 'scan'])->name('patient.scan');
@@ -61,4 +62,3 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__ . '/auth.php';
 require __DIR__ . '/auth-patient.php';
-
