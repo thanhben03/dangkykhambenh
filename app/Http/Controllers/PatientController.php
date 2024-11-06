@@ -184,7 +184,6 @@ class PatientController extends Controller
         $patient = Patient::query()->where('nic', '=', $data['cccd'])->first();
         if (!$patient) {
             $patient = Patient::query()->create([
-                'id' => $patientLatest->id + 1,
                 'name' => $data['fullname'],
                 'address' => $data['address'],
                 'sex' => $data['gender'] == 'Nam' ? 'Male' : 'Female',
@@ -238,7 +237,6 @@ class PatientController extends Controller
         $patient = Patient::query()->where('nic', '=', $data['cccd'])->first();
         if (!$patient) {
             $patient = Patient::query()->create([
-                'id' => $patientLatest ? $patientLatest->id + 1 : 1,
                 'name' => $data['fullname'],
                 'address' => $data['address'],
                 'sex' => $data['gender'] == 'Nam' ? 'Male' : 'Female',
