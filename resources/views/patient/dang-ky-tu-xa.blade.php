@@ -118,7 +118,7 @@
                   $(".loading").css('display', 'flex')
                 },
                 success: function (res) {
-                    alert('ok')
+                    alert('Đăng ký thành công !')
                     $(".loading").css('display', 'none')
 
                     window.location.reload()
