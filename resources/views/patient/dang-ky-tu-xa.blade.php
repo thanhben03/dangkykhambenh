@@ -5,8 +5,8 @@
     <div style="display: none" class="loading">
         <img src="{{asset('/icons/spinner.svg')}}" alt="">
     </div>
-    <div class="container mt-5">
-        <h2 class="text-center mb-4">Đăng Ký Khám Bệnh</h2>
+    <div class="container mt-2">
+        <h3 class="text-center mb-4">Đăng Ký Khám Bệnh</h3>
         <form id="formSubmit">
             @csrf
             <div class="row">
@@ -65,7 +65,7 @@
                 </div>
             </div>
             <div class="mb-3">
-                <textarea name="trieu_chung" class="form-control" rows="6" placeholder="Triệu chứng"></textarea>
+                <textarea name="trieu_chung" class="form-control" rows="3" placeholder="Triệu chứng"></textarea>
             </div>
             <div class="d-flex justify-content-between">
                 <button style="font-size: 20px" type="submit" class="btn btn-primary">Đăng ký</button>
