@@ -24,7 +24,7 @@ class PatientResource extends ResourceCollection
                 'bod' => $item->bod,
                 'telephone' => $item->telephone,
                 'nic' => $item->nic,
-                'history' => $item->visits,
+                'history' => $item->visits->where('status', 1),
             ];
         });
     }
