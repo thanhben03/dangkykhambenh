@@ -398,7 +398,7 @@
                 success: function(res) {
                     alert('Chuyển khoa thành công !');
 
-                    // window.location.reload()
+                    window.location.reload()
                 }
             })
         }
