@@ -440,7 +440,7 @@ class PatientController extends Controller
         $this->done($stt);
 
         if ($patient_visit->department_id != 5) {
-
+            // $department = Departments::find
             $department = Department::query()->where('id', '=', $department_id)->first();
             PatientVisit::query()->create([
                 'patient_id' => $patient_visit->patient_id,

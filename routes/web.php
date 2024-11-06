@@ -5,6 +5,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Middleware\AuthenticatedPatient;
+use App\Http\Middleware\CheckAdmin;
+use App\Http\Middleware\CheckDoctor;
 use App\Models\Patient;
 use Illuminate\Support\Facades\Route;
 
@@ -16,7 +18,7 @@ Route::get('/dang-ky-tu-xa', function () {
     return view('patient.dang-ky-tu-xa');
 });
 
-Route::group(['middleware' => 'auth'], function () {
+Route::middleware(CheckDoctor::class)->group(function () {
     Route::get('/dashboard', [DoctorController::class, 'index'])->name('dashboard');
     Route::get('/lich-su-kham-benh', [DoctorController::class, 'history'])->name('history');
     Route::get('/done/{stt}', [PatientController::class, 'done'])->name('doctor.done');
@@ -32,12 +34,13 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/get-patient-by-stt/{stt}', [PatientController::class, 'getPatientByStt'])->name('doctor.getPatientByStt');
 });
 
-Route::get('/quan-ly-benh-nhan', [AdminController::class, 'showPatient'])->name('showPatient');
-Route::get('/quan-ly-bac-si', [AdminController::class, 'showDoctor']);
-Route::post('/tao-tai-khoan', [AdminController::class, 'createDoctor'])->name('crateDoctor');
-Route::get('/delete-patient/{id}', [AdminController::class, 'deletePatient'])->name('deletePatient');;
-Route::get('/delete-doctor/{id}', [AdminController::class, 'deleteDoctor'])->name('deleteDoctor');;
-
+Route::middleware(CheckAdmin::class)->group(function () {
+    Route::get('/quan-ly-benh-nhan', [AdminController::class, 'showPatient'])->name('showPatient');
+    Route::get('/quan-ly-bac-si', [AdminController::class, 'showDoctor']);
+    Route::post('/tao-tai-khoan', [AdminController::class, 'createDoctor'])->name('crateDoctor');
+    Route::get('/delete-patient/{id}', [AdminController::class, 'deletePatient'])->name('deletePatient');;
+    Route::get('/delete-doctor/{id}', [AdminController::class, 'deleteDoctor'])->name('deleteDoctor');;
+});
 
 
 Route::post('/scan-cccd', [PatientController::class, 'scan'])->name('patient.scan');

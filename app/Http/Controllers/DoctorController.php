@@ -9,9 +9,11 @@ use App\Models\CurrentPatient;
 use App\Http\Resources\PatientPendingResource;
 use App\Http\Resources\PatientResource;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class DoctorController extends Controller
 {
+
 
     public function stt($department_id)
     {

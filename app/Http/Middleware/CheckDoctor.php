@@ -7,22 +7,21 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class CheckAdmin
+class CheckDoctor
 {
     /**
      * Handle an incoming request.
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-
     public function handle(Request $request, Closure $next): Response
     {
         if (!Auth::check()) {
             return redirect()->route('login');
-            
         }
-        if (Auth::user()->user_type != 'admin') {
-            return redirect()->route('dashboard');
+
+        if (optional(Auth::user())->user_type != 'doctor') {
+            return redirect()->route('showPatient');
         }
         return $next($request);
     }
