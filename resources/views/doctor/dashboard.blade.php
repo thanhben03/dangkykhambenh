@@ -1,6 +1,8 @@
 @extends('layouts.master')
 
-
+@section('title')
+Danh Sách Chờ
+@endsection
 @section('content')
     <input type="text" hidden id="current-stt">
     <input type="text" hidden id="current-patient-visit">

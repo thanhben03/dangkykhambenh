@@ -1,5 +1,8 @@
 @extends('layouts.master')
 
+@section('title')
+Quản Lý Bác Sĩ
+@endsection
 @section('content')
     <!-- Modal -->
     <div class="modal fade" id="modal-create-doctor" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

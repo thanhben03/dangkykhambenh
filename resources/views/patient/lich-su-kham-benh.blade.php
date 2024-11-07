@@ -1,5 +1,7 @@
 @extends('layouts.app2')
-
+@section('title')
+Lịch Sử Khám Bệnh
+@endsection
 
 @section('content')
     <div class="main-content">

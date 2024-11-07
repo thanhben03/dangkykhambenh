@@ -1,16 +1,19 @@
 @extends('layouts.app2')
 
+@section('title')
+    Lịch Khám Bệnh
+@endsection
 
 @section('content')
     <input type="text" hidden id="current-stt">
     <input type="text" hidden id="current-patient-visit">
 
     <!-- The modal chuyen khoa -->
-    <div class="modal fade" id="modal-next-department" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal fade" id="modal-create-appointment" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalLabel">Chuyển Khoa</h5>
+                    <h5 class="modal-title" id="modalLabel">Đăng ký lịch khám bệnh</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -23,41 +26,23 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Ghi Chú: </label>
+                        <label>Chọn ngày khám: </label>
+                        <input type="date" id="ngaykham" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Triệu chứng: </label>
                         <textarea class="form-control" id="trieu_chung"></textarea>
                     </div>
 
                 </div>
                 <div class="modal-footer">
-                    <button onclick="nextDepartment()" type="button" class="btn btn-primary">Chuyển khoa</button>
-                    <button onclick="done()" type="button" class="btn btn-success" data-bs-dismiss="modal">Kết
-                        Thúc</button>
+                    <button onclick="createAppointment()" type="button" class="btn btn-success" data-bs-dismiss="modal">Đăng ký</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- The modal chuyen khoa khám tq -->
-    <div class="modal fade" id="modal-next-department-general" tabindex="-1" aria-labelledby="modalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalLabel">Chuyển Khoa Tiếp Theo</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="alert alert-warning">
-                        Xác nhận đã hoàn thành cho bệnh nhân này ?
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button onclick="nextDepartmentGeneral()" type="button" class="btn btn-primary">Xác nhận</button>
 
-                </div>
-            </div>
-        </div>
-    </div>
     <div class="main-content">
 
         <div class="page-content">
@@ -69,6 +54,8 @@
                         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
                             <h4 class="mb-sm-0 font-size-18">Lịch khám bệnh</h4>
 
+                            <button onclick="showModalCreateAppointment()" style="float: right" class="btn btn-success">Đăng
+                                ký</button>
                         </div>
                     </div>
                 </div>
@@ -78,9 +65,7 @@
                         <div class="col-md-12">
                             <!-- Card for Patient Info -->
                             <div class="card">
-                                <div class="card-header"
-                                    {{-- @if ($patient == reset($patients)) style="background: #ffcccc;" @endif --}}
-                                >
+                                <div class="card-header" {{-- @if ($patient == reset($patients)) style="background: #ffcccc;" @endif --}}>
                                     <h3 class="card-title">
                                         STT Khám Bệnh: {{ $patient['stt'] }} - {{ $patient['name'] }}
 
@@ -110,14 +95,18 @@
 
                                     </h3>
                                     <button class="btn btn-primary" type="button" data-bs-toggle="collapse"
-                                        data-bs-target="#patientInfo-{{ $patient['stt'] }}" aria-expanded="true"
+                                        data-bs-target="#patientInfo-{{ $patient['id'] }}" aria-expanded="true"
                                         aria-controls="patientInfo-3">
                                         Xem chi tiết
+                                    </button>
+                                    <button onclick="huyLichHen({{ $patient['id'] }})" class="btn btn-danger"
+                                        type="button">
+                                        Hủy lịch
                                     </button>
 
                                 </div>
 
-                                <div class="collapse" id="patientInfo-{{ $patient['stt'] }}" aria-expanded="true">
+                                <div class="collapse" id="patientInfo-{{ $patient['id'] }}" aria-expanded="true">
                                     <!-- Nav tabs -->
                                     <ul class="nav nav-tabs" role="tablist">
                                         <li class="nav-item">
@@ -146,17 +135,21 @@
                                                 <input type="hidden" name="_token"
                                                     value="N3aCZEQBBHtMdURn9NrkZvXMdfVtQUf9WKa0L0fQ">
                                                 <div class="mb-3 row">
-                                                    <label for="patientID" class="col-sm-2 col-form-label">Thời gian dự kiến</label>
+                                                    <label for="patientID" class="col-sm-2 col-form-label">Thời gian dự
+                                                        kiến</label>
                                                     <div class="col-sm-10">
-                                                        <input readonly value="{{ $patient['arrival_time'] }}" type="text"
-                                                            class="form-control" id="patientID" name="reg_pname">
+                                                        <input readonly value="{{ $patient['arrival_time'] }}"
+                                                            type="text" class="form-control" id="patientID"
+                                                            name="reg_pname">
                                                     </div>
                                                 </div>
                                                 <div class="mb-3 row">
                                                     <label for="patientID" class="col-sm-2 col-form-label">Khoa khám</label>
                                                     <div class="col-sm-10">
-                                                        <input readonly value="{{ $patient['department']->department_name }}" type="text"
-                                                            class="form-control" id="patientID" name="reg_pname">
+                                                        <input readonly
+                                                            value="{{ $patient['department']->department_name }}"
+                                                            type="text" class="form-control" id="patientID"
+                                                            name="reg_pname">
                                                     </div>
                                                 </div>
                                                 <div class="mb-3 row">
@@ -317,7 +310,7 @@
         <!-- End Page-content -->
 
 
-        
+
     </div>
     <!-- end main content-->
 @endsection
@@ -387,47 +380,50 @@
             })
         }
 
-        function nextDepartment(stt) {
-            let currentSTT = stt ? stt : $("#current-stt").val();
-            let trieu_chung = $("#trieu_chung")
-            let department_id = $("#department_id")
-            $.ajax({
-                type: "POST",
-                url: "/next-department",
-                data: {
-                    stt: currentSTT,
-                    trieu_chung: trieu_chung.val(),
-                    department_id: department_id.val(),
-                    "_token": "{{ csrf_token() }}"
-                },
-                success: function(res) {
-                    alert('Chuyển khoa thành công !');
 
-                    // window.location.reload()
+        function huyLichHen(patientVisitId) {
+            if (!confirm('Bạn có chắc chắn muốn hủy lịch ?')) {
+                return;
+            }
+            $.ajax({
+                type: "GET",
+                url: "/patients/cancle-appointment/" + patientVisitId,
+                success: function(res) {
+                    alert('Hủy lịch hẹn thành công !');
+
+                    window.location.reload();
+                },
+                error: function(xhr) {
+                    alert('Đã xảy ra lỗi !')
                 }
             })
         }
 
-        function nextDepartmentGeneral() {
-            let currentSTT = $("#current-stt").val();
-            let currentPatientVisit = $("#current-patient-visit").val();
-            let trieu_chung = $("#trieu_chung_general")
+        function createAppointment() {
             $.ajax({
                 type: "POST",
-                url: "/next-department-general",
+                url: "/patients/create-appointment",
                 data: {
-                    id: currentPatientVisit,
-                    stt: currentSTT,
-                    trieu_chung: trieu_chung.val(),
-                    // department_id: department_id.val(),
-                    "_token": "{{ csrf_token() }}"
+                    'department_id': $("#department_id").val(),
+                    'trieu_chung': $("#trieu_chung").val(),
+                    'ngaykham': $("#ngaykham").val(),
+                    '_token': '{{csrf_token()}}',
                 },
                 success: function(res) {
-                    alert('Chuyển khoa thành công !');
+                    alert('Đăng ký thành công !');
 
-                    // window.location.reload()
+                    window.location.reload();
+                },
+                error: function(xhr) {
+                    console.log(xhr);
+
                 }
+
             })
+        }
+
+        function showModalCreateAppointment() {
+            $("#modal-create-appointment").modal('toggle');
         }
     </script>
 @endpush

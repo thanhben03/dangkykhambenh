@@ -1,5 +1,7 @@
 @extends('layouts.master')
-
+@section('title')
+Quản Lý Bệnh Nhân
+@endsection
 
 @section('content')
 

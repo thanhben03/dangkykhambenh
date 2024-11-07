@@ -25,6 +25,32 @@ class PatientController extends Controller
         return view('patient.dashboard');
     }
 
+    public function createAppointment(Request $request)
+    {
+        try {
+
+            $trieu_chung = $request->trieu_chung;
+            $department_id = $request->department_id;
+            $patient = Auth::guard('patient')->user();
+            $ngaykham = $request->ngaykham;
+            $this->registerPatientVisit($patient->id, $trieu_chung, $department_id, null, $ngaykham);
+            return response()->json([]);
+        } catch (\Throwable $th) {
+            return response()->json($th->getMessage(), 400);
+        }
+    }
+
+    public function cancleAppointment($patient_visit_id)
+    {
+        try {
+            PatientVisit::query()->where('id', $patient_visit_id)->delete();
+
+            return response()->json([]);
+        } catch (\Throwable $th) {
+            return response()->json($th->getMessage(), 400);
+        }
+    }
+
     public function showProfile()
     {
         $user = auth()->guard('patient')->user();
@@ -90,12 +116,11 @@ class PatientController extends Controller
             ->select('patients.*', 'patient_visits.*', 'patient_visits.stt as stt')
             ->where('patient_id', '=', \auth()->guard('patient')->user()->id)
             ->where('status', 0)
-            ->whereDate('patient_visits.created_at', '>=', Carbon::toDay())
-            ->orderBy('patient_visits.created_at')
+            ->whereDate('patient_visits.arrival_time', '>=', Carbon::toDay())
+            ->orderBy('patient_visits.arrival_time')
             ->get();
 
         $patients = PatientPendingResource::make($patients)->resolve();
-
         return view('patient.dashboard', [
             'patients' => $patients
         ]);
@@ -454,7 +479,7 @@ class PatientController extends Controller
     public function lichHen(Request $request)
     {
         $date = $request->has('date') ? $request->get('date') : null;
-        
+
         $result = PatientVisit::query()
             ->join('patients', 'patient_visits.patient_id', '=', 'patients.id')
             ->select('patients.*', 'patient_visits.*', 'patient_visits.stt as stt')

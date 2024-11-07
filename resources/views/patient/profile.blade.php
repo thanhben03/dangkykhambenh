@@ -1,5 +1,7 @@
 @extends('layouts.app2')
-
+@section('title')
+Thông Tin Cá Nhân
+@endsection
 @section('content')
     <div class="main-content">
 

@@ -1,5 +1,8 @@
 @extends('layouts.master')
 
+@section('title')
+Lịch Hẹn Bệnh Nhân
+@endsection
 @section('content')
     <div class="main-content">
 

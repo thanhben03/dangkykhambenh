@@ -1,6 +1,8 @@
 @extends('layouts.master')
 
-
+@section('title')
+Lịch Sử Khám Bệnh
+@endsection
 @section('content')
 
 

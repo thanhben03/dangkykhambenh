@@ -54,6 +54,8 @@ Route::middleware(AuthenticatedPatient::class)->prefix('patients')->as('patient.
     Route::get('/profile', [PatientController::class, 'showProfile'])->name('show.profile');
     Route::post('/profile', [PatientController::class, 'updateProfile'])->name('profile.update');
     Route::post('/profile/change-password', [PatientController::class, 'changePassword'])->name('profile.change.password');
+    Route::get('/cancle-appointment/{id}', [PatientController::class, 'cancleAppointment'])->name('cancle.appointment');
+    Route::post('/create-appointment', [PatientController::class, 'createAppointment'])->name('create.appointment');
 });
 
 
