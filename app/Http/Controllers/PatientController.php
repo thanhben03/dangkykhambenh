@@ -357,7 +357,7 @@ class PatientController extends Controller
     {
         PatientVisit::query()
             ->where('stt', '=', $stt)
-            ->whereDate('created_at', Carbon::today())
+            ->whereDate('arrival_time', Carbon::today())
             ->update(['status' => 1]);
 
         return response()->json([
@@ -373,10 +373,9 @@ class PatientController extends Controller
 
         $patientVisit = PatientVisit::query()
             ->where('stt', '=', $stt)
-            ->whereDate('created_at', Carbon::today())
-            ->orderBy('created_at', 'desc')
+            ->whereDate('arrival_time', Carbon::today())
+            ->orderBy('arrival_time', 'desc')
             ->first();
-
 
         $patient = Patient::query()->where('id', '=', $patientVisit->patient_id)->first();
 

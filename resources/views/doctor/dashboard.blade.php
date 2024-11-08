@@ -24,10 +24,10 @@ Danh Sách Chờ
                             @endforeach
                         </select>
                     </div>
-                    <div class="form-group">
+                    {{-- <div class="form-group">
                         <label>Ghi Chú: </label>
                         <textarea class="form-control" id="trieu_chung"></textarea>
-                    </div>
+                    </div> --}}
                     
                 </div>
                 <div class="modal-footer">
@@ -393,7 +393,7 @@ Danh Sách Chờ
                 url: "/next-department",
                 data: {
                     stt: currentSTT,
-                    trieu_chung: trieu_chung.val(),
+                    // trieu_chung: trieu_chung.val(),
                     department_id: department_id.val(),
                     "_token": "{{ csrf_token() }}"
                 },
