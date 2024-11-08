@@ -108,6 +108,11 @@
         });
 
         function register() {
+            let cccd = document.getElementById("cccd-number").value;
+            if (cccd.length < 12) {
+                alert('Cần nhập đủ 12 số CCCD"')
+                return;
+            }
             let form = $("#formSubmit").serialize();
 
             $.ajax({
