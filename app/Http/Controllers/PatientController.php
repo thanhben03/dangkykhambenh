@@ -429,7 +429,7 @@ class PatientController extends Controller
                 'kham_tq' => $kham_tq,
                 'arrival_time' => $this->getArrivalTime($department, $ngaykham)->toDateTimeString(),
             ]);
-            return $stt;
+            return $stt + 1;
         }
     }
 
