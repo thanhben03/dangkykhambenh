@@ -419,8 +419,8 @@ class PatientController extends Controller
             return 1;
         } else {
             $stt = PatientVisit::query()
-                ->whereDate($ngaykham ? 'arrival_time' : 'created_at', $ngaykham ? $ngaykham : Carbon::toDay())
-                ->max('stt');
+                ->whereDate('created_at', Carbon::toDay())
+                ->latest()->first()->stt;
             PatientVisit::query()->create([
                 'patient_id' => $patient_id,
                 'stt' => $stt + 1,
