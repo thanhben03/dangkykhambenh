@@ -40,7 +40,7 @@ File: Main Css File
 }
 
 .navbar-brand-box {
-  padding: 0 1.5rem;
+  /* padding: 0 1.5rem; */
   width: 250px;
   background: var(--bs-sidebar-bg);
   border-left: 1px solid var(--bs-sidebar-border-color);

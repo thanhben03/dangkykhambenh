@@ -19,7 +19,7 @@
         <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
             <div>
                 <a href="/">
-                    <img style="width: 100px; height: 100px" src="/assets/images/logo.png" alt="">
+                    <img style="width: 160px; height: 160px" src="/assets/images/logo.png" alt="">
                 </a>
             </div>
 

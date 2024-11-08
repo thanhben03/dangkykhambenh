@@ -38,7 +38,7 @@
             <div class="navbar-header">
                 <div class="d-flex">
                     <!-- LOGO -->
-                    <div class="navbar-brand-box">
+                    <div class="navbar-brand-box" style="padding-left: 6px;"> 
                         <a href="/patients/dashboard" class="logo logo-dark">
                             <span class="logo-sm">
                                 <img src="/assets/images/logo.png" style="width: 61px; height: 61px" alt=""
