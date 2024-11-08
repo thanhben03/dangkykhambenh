@@ -50,8 +50,8 @@ Lịch Hẹn Bệnh Nhân
                                 <tr>
                                     <td>{{ $item->stt }}</td>
                                     <td>{{ $item->name }}</td>
-                                    <td>{{ $item->nic }}</td>
-                                    <td>{{ $item->created_at }}</td>
+                                    <td>{{ $item->bod }}</td>
+                                    <td>{{ $item->trieu_chung }}</td>
                                 </tr>
                             @endforeach
                         </tbody>
