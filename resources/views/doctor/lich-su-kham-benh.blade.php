@@ -47,7 +47,7 @@ Lịch Sử Khám Bệnh
                             <div class="card">
                                 <div class="card-header">
                                     <h3 class="card-title">
-                                       {{ $patient['name'] }} - {{$patient['bod']}}
+                                       {{ $patient['name'] }} {{$patient['bod']}}
 
                                     </h3>
                                     <button class="btn btn-primary" type="button" data-bs-toggle="collapse"
@@ -141,7 +141,7 @@ Lịch Sử Khám Bệnh
 
                                         <!-- Tab 2: Lịch sử khám bệnh -->
                                         <div role="tabpanel" class="tab-pane fade" id="history-{{$patient['id']}}">
-                                            <h4>Lịch sử khám bệnh của bệnh nhân</h4>
+                                            {{-- <h4>Lịch sử khám bệnh của bệnh nhân</h4> --}}
                                             <table class="table table-bordered">
                                                 <thead>
                                                     <tr>

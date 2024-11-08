@@ -141,7 +141,7 @@ Quản Lý Bệnh Nhân
 
                                         <!-- Tab 2: Lịch sử khám bệnh -->
                                         <div role="tabpanel" class="tab-pane fade" id="history-{{$patient['id']}}">
-                                            <h4>Lịch sử khám bệnh của bệnh nhân</h4>
+                                            {{-- <h4>Lịch sử khám bệnh của bệnh nhân</h4> --}}
                                             <table class="table table-bordered">
                                                 <thead>
                                                     <tr>

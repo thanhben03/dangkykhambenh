@@ -36,7 +36,8 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button onclick="createAppointment()" type="button" class="btn btn-success" data-bs-dismiss="modal">Đăng ký</button>
+                    <button onclick="createAppointment()" type="button" class="btn btn-success"
+                        data-bs-dismiss="modal">Đăng ký</button>
                 </div>
             </div>
         </div>
@@ -67,7 +68,7 @@
                             <div class="card">
                                 <div class="card-header" {{-- @if ($patient == reset($patients)) style="background: #ffcccc;" @endif --}}>
                                     <h3 class="card-title">
-                                        STT Khám Bệnh: {{ $patient['stt'] }} - {{ $patient['name'] }}
+                                        STT Khám Bệnh: {{ $patient['stt'] }} - {{ $patient['arrival_time'] }}
 
                                         {{-- @if ($patient == reset($patients))
                                             <button class="btn btn-warning">Đang tới lượt</button>
@@ -111,8 +112,7 @@
                                     <ul class="nav nav-tabs" role="tablist">
                                         <li class="nav-item">
                                             <a class="nav-link active" href="#info-{{ $patient['stt'] }}"
-                                                aria-controls="info" role="tab" data-bs-toggle="tab">Thông Tin Bệnh
-                                                Nhân</a>
+                                                aria-controls="info" role="tab" data-bs-toggle="tab">Thông Tin Khám</a>
                                         </li>
                                         {{-- <li class="nav-item">
                                             <a class="nav-link" href="#diagnosis-{{ $patient['stt'] }}"
@@ -135,15 +135,6 @@
                                                 <input type="hidden" name="_token"
                                                     value="N3aCZEQBBHtMdURn9NrkZvXMdfVtQUf9WKa0L0fQ">
                                                 <div class="mb-3 row">
-                                                    <label for="patientID" class="col-sm-2 col-form-label">Thời gian dự
-                                                        kiến</label>
-                                                    <div class="col-sm-10">
-                                                        <input readonly value="{{ $patient['arrival_time'] }}"
-                                                            type="text" class="form-control" id="patientID"
-                                                            name="reg_pname">
-                                                    </div>
-                                                </div>
-                                                <div class="mb-3 row">
                                                     <label for="patientID" class="col-sm-2 col-form-label">Khoa khám</label>
                                                     <div class="col-sm-10">
                                                         <input readonly
@@ -153,62 +144,23 @@
                                                     </div>
                                                 </div>
                                                 <div class="mb-3 row">
-                                                    <label for="fullName" class="col-sm-2 col-form-label">Full
-                                                        Name</label>
+                                                    <label for="patientID" class="col-sm-2 col-form-label">Thời gian</label>
                                                     <div class="col-sm-10">
-                                                        <input readonly value="{{ $patient['info']->name }}"
-                                                            type="text" class="form-control" id="fullName"
+                                                        <input readonly value="{{ $patient['arrival_time'] }}"
+                                                            type="text" class="form-control" id="patientID"
                                                             name="reg_pname">
-                                                    </div>
-                                                </div>
-                                                <div class="mb-3 row">
-                                                    <label for="nicNumber" class="col-sm-2 col-form-label">CCCD</label>
-                                                    <div class="col-sm-10">
-                                                        <input readonly value="{{ $patient['info']->nic }}"
-                                                            type="text" class="form-control" id="nicNumber"
-                                                            name="reg_pnic">
-                                                    </div>
-                                                </div>
-                                                <div class="mb-3 row">
-                                                    <label for="address" class="col-sm-2 col-form-label">Address</label>
-                                                    <div class="col-sm-10">
-                                                        <input readonly value="{{ $patient['info']->address }}"
-                                                            type="text" class="form-control" id="address"
-                                                            name="reg_paddress">
-                                                    </div>
-                                                </div>
-                                                <div class="mb-3 row">
-                                                    <label for="telephone"
-                                                        class="col-sm-2 col-form-label">Telephone</label>
-                                                    <div class="col-sm-10">
-                                                        <input readonly value="{{ $patient['info']->telephone }}"
-                                                            type="tel" class="form-control" id="telephone"
-                                                            name="reg_ptel">
                                                     </div>
                                                 </div>
 
                                                 <div class="mb-3 row">
-                                                    <label for="sex" class="col-sm-2 col-form-label">Sex</label>
-                                                    <div class="col-sm-2">
-                                                        <input readonly value="{{ $patient['info']->sex }}"
-                                                            type="text" class="form-control" id="sex"
-                                                            name="reg_poccupation">
+                                                    <label for="fullName" class="col-sm-2 col-form-label">Địa chỉ</label>
+                                                    <div class="col-sm-10">
+                                                        <input readonly value="123 456 789"
+                                                            type="text" class="form-control" id="fullName"
+                                                            name="reg_pname">
                                                     </div>
-                                                    <label for="dob" class="col-sm-2 col-form-label">DOB</label>
-                                                    <div class="col-sm-3">
-                                                        <input readonly value="{{ $patient['info']->bod }}"
-                                                            type="text" class="form-control" id="dob"
-                                                            name="reg_pbd">
-                                                    </div>
-                                                    {{-- <div class="col-sm-3 text-end">
-                                                        <div class="btn-group">
-                                                            <button type="button" onclick="go('9')"
-                                                                class="btn btn-info"><i class="far fa-id-card"></i>
-                                                                Profile</button>
-                                                            <button type="button" class="btn btn-warning"><i
-                                                                    class="fas fa-edit"></i> Edit</button>
-                                                        </div>
-                                                    </div> --}}
+                                                </div>
+                                                
                                                 </div>
                                             </form>
                                         </div>
@@ -407,7 +359,7 @@
                     'department_id': $("#department_id").val(),
                     'trieu_chung': $("#trieu_chung").val(),
                     'ngaykham': $("#ngaykham").val(),
-                    '_token': '{{csrf_token()}}',
+                    '_token': '{{ csrf_token() }}',
                 },
                 success: function(res) {
                     alert('Đăng ký thành công !');

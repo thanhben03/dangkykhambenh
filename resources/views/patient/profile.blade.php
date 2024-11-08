@@ -36,7 +36,7 @@ Thông Tin Cá Nhân
                                         <div class="row">
                                             <div class="col mb-3">
                                                 <label for="fullname" class="form-label">Họ tên</label>
-                                                <input type="text" class="form-control" id="fullname" name="name"
+                                                <input readonly type="text" class="form-control" id="fullname" name="name"
                                                     value="{{ $user->name }}">
                                             </div>
                                             <div class="col mb-3">
@@ -55,7 +55,7 @@ Thông Tin Cá Nhân
                                             </div>
                                             <div class="col mb-3">
                                                 <label for="phone" class="form-label">Ngày sinh</label>
-                                                <input type="date" class="form-control" id="phone" name="bod"
+                                                <input readonly type="date" class="form-control" id="phone" name="bod"
                                                     value="{{ $user->bod }}">
                                             </div>
                                         </div>
@@ -71,8 +71,18 @@ Thông Tin Cá Nhân
                                             </div>
                                             <div class="col mb-3">
                                                 <label for="phone" class="form-label">Số CCCD</label>
-                                                <input type="text" class="form-control" id="phone" name="nic"
+                                                <input readonly type="text" class="form-control" id="phone" name="nic"
                                                     value="{{ $user->nic }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                        
+                                            <div class="col-6 mb-3">
+                                                <label for="email" class="form-label">Email</label>
+                                                <input type="text" class="form-control" id="email" name="email"
+                                                    value="{{ $user->email }}">
                                             </div>
                                         </div>
                                     </div>

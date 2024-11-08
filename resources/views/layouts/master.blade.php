@@ -9,7 +9,7 @@
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
     <meta content="Themesbrand" name="author" />
     <!-- App favicon -->
-    <link rel="shortcut icon" href="assets/images/favicon.ico">
+    <link rel="shortcut icon" href="/assets/images/favicon.ico">
 
     <!-- plugin css -->
     <link href="assets/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.css" rel="stylesheet"
@@ -41,21 +41,23 @@
                     <div class="navbar-brand-box">
                         <a href="/dashboard" class="logo logo-dark">
                             <span class="logo-sm">
-                                <img src="assets/images/logo-sm.svg" alt="" height="24">
+                                <img src="/assets/images/logo.png" style="width: 61px; height: 61px" alt=""
+                                    height="24">
                             </span>
                             <span class="logo-lg">
-                                <img src="assets/images/logo-sm.svg" alt="" height="24"> <span
-                                    class="logo-txt">Smart Hopital</span>
+                                <img src="/assets/images/logo.png" style="width: 61px; height: 61px" alt=""
+                                    height="24"> <span class="logo-txt">eCare</span>
                             </span>
                         </a>
 
                         <a href="/dashboard" class="logo logo-light">
                             <span class="logo-sm">
-                                <img src="assets/images/logo-sm.svg" alt="" height="24">
+                                <img src="/assets/images/logo.png" style="width: 61px; height: 61px" alt=""
+                                    height="24">
                             </span>
                             <span class="logo-lg">
-                                <img src="assets/images/logo-sm.svg" alt="" height="24"> <span
-                                    class="logo-txt">Minia</span>
+                                <img src="/assets/images/logo.png" style="width: 61px; height: 61px" alt=""
+                                    height="24"> <span class="logo-txt">Minia</span>
                             </span>
                         </a>
                     </div>
@@ -77,7 +79,7 @@
                                     @if (auth()->user()->user_type == 'admin')
                                         Quản trị viên
                                     @else
-                                    Khoa {{ Auth::user()->department->department_name }}
+                                        Khoa {{ Auth::user()->department->department_name }}
                                     @endif
                                 </span>
 
@@ -332,9 +334,31 @@
     <script>
         function showDateTime() {
             const now = new Date();
-            const formattedDateTime = now.toLocaleString(); // Định dạng ngày và giờ
+
+            // Định dạng ngày theo yêu cầu: ngày-tháng-năm
+            const formattedDate = now.toLocaleDateString('vi-VN', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            });
+
+            // Định dạng giờ theo yêu cầu: giờ:phút:giây
+            const formattedTime = now.toLocaleTimeString('vi-VN', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+
+
+            // Gộp ngày và giờ
+            const formattedDateTime = `${formattedDate}, ${formattedTime}`;
+            s = formattedDateTime.replace(/[^0-9 ]/g, " ").split(' ');
+            let d = new Date(s[2], s[1] - 1, s[0], s[3], s[4]);
+            console.log(s);
+            
             document.getElementById('currentDateTime').innerText = formattedDateTime;
         }
+
 
         // Gọi hàm ngay lập tức để hiển thị thời gian ban đầu
         showDateTime();

@@ -84,6 +84,7 @@ class PatientController extends Controller
             'nic' => 'required|string|max:20',
             'current_password' => 'nullable|string',
             'password' => 'nullable|string',
+            'email' => 'nullable|string',
         ]);
         $data = $request->all();
 
@@ -485,8 +486,8 @@ class PatientController extends Controller
             ->select('patients.*', 'patient_visits.*', 'patient_visits.stt as stt')
             ->where('department_id', '=', \auth()->user()->department_id)
             ->where('status', 0)
-            ->whereDate('patient_visits.created_at', $date ? $date : Carbon::tomorrow())
-            ->orderBy('patient_visits.created_at')
+            ->whereDate('patient_visits.arrival_time', $date ? $date : Carbon::tomorrow())
+            ->orderBy('patient_visits.arrival_time')
             ->get();
         return view('doctor.lich-hen', [
             'appointments' => $result,
