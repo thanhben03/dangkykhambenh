@@ -47,7 +47,7 @@
     <div class="main-content">
 
         <div class="page-content">
-            <div class="container-fluid">
+            <div class="container-fluid custom-content">
 
                 <!-- start page title -->
                 <div class="row">
@@ -111,7 +111,7 @@
                                     <!-- Nav tabs -->
                                     <ul class="nav nav-tabs" role="tablist">
                                         <li class="nav-item">
-                                            <a class="nav-link active" href="#info-{{ $patient['stt'] }}"
+                                            <a class="nav-link active" href="#info-{{ $patient['id'] }}"
                                                 aria-controls="info" role="tab" data-bs-toggle="tab">Thông Tin Khám</a>
                                         </li>
                                         {{-- <li class="nav-item">
@@ -130,125 +130,36 @@
                                     <div class="tab-content p-3">
                                         <!-- Tab 1: Thông tin bệnh nhân -->
                                         <div role="tabpanel" class="tab-pane fade show active"
-                                            id="info-{{ $patient['stt'] }}">
-                                            <form action="/editpatient" method="POST">
-                                                <input type="hidden" name="_token"
-                                                    value="N3aCZEQBBHtMdURn9NrkZvXMdfVtQUf9WKa0L0fQ">
-                                                <div class="mb-3 row">
-                                                    <label for="patientID" class="col-sm-2 col-form-label">Khoa khám</label>
-                                                    <div class="col-sm-10">
-                                                        <input readonly
-                                                            value="{{ $patient['department']->department_name }}"
-                                                            type="text" class="form-control" id="patientID"
-                                                            name="reg_pname">
-                                                    </div>
+                                            id="info-{{ $patient['id'] }}">
+                                            <input type="hidden" name="_token"
+                                                value="N3aCZEQBBHtMdURn9NrkZvXMdfVtQUf9WKa0L0fQ">
+                                            <div class="mb-3 row">
+                                                <label for="patientID" class="col-sm-2 col-form-label">Khoa khám</label>
+                                                <div class="col-sm-10">
+                                                    <input readonly value="{{ $patient['department']->department_name }}"
+                                                        type="text" class="form-control" id="patientID" name="reg_pname">
                                                 </div>
-                                                <div class="mb-3 row">
-                                                    <label for="patientID" class="col-sm-2 col-form-label">Thời gian</label>
-                                                    <div class="col-sm-10">
-                                                        <input readonly value="{{ $patient['arrival_time'] }}"
-                                                            type="text" class="form-control" id="patientID"
-                                                            name="reg_pname">
-                                                    </div>
+                                            </div>
+                                            <div class="mb-3 row">
+                                                <label for="patientID" class="col-sm-2 col-form-label">Thời gian</label>
+                                                <div class="col-sm-10">
+                                                    <input readonly value="{{ $patient['arrival_time'] }}" type="text"
+                                                        class="form-control" id="patientID" name="reg_pname">
                                                 </div>
+                                            </div>
 
-                                                <div class="mb-3 row">
-                                                    <label for="fullName" class="col-sm-2 col-form-label">Địa chỉ</label>
-                                                    <div class="col-sm-10">
-                                                        <input readonly value="123 456 789"
-                                                            type="text" class="form-control" id="fullName"
-                                                            name="reg_pname">
-                                                    </div>
+                                            <div class="mb-3 row">
+                                                <label for="fullName" class="col-sm-2 col-form-label">Địa chỉ</label>
+                                                <div class="col-sm-10">
+                                                    <input readonly value="123 456 789" type="text"
+                                                        class="form-control" id="fullName" name="reg_pname">
                                                 </div>
-                                                
-                                                </div>
-                                            </form>
-                                        </div>
+                                            </div>
 
-                                        <!-- Tab 2: Chuẩn đoán -->
-
-                                        <div role="tabpanel" class="tab-pane fade" id="diagnosis-{{ $patient['stt'] }}">
-                                            <form action="/luu-chuan-doan" method="POST">
-                                                @csrf
-                                                <input hidden name="current_patient_visit" value="{{ $patient['id'] }}">
-                                                <div class="mb-3">
-                                                    <label for="symptoms" class="form-label">Triệu Chứng</label>
-                                                    <textarea class="form-control" id="symptoms" name="symptoms" rows="3">{{ $patient['trieu_chung'] }}</textarea>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="diagnosis" class="form-label">Chuẩn Đoán</label>
-                                                    <textarea class="form-control" id="diagnosis" name="diagnosis" rows="3">{{ $patient['chuan_doan'] }}</textarea>
-                                                </div>
-                                                <!-- Prescription Section -->
-                                                <div class="mb-3">
-                                                    <label for="prescription" class="form-label">Kê Đơn Thuốc</label>
-                                                    <table class="table table-bordered" id="prescriptionTable">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>Tên Thuốc</th>
-                                                                <th>Số Lượng</th>
-                                                                <th>Cách Dùng</th>
-                                                                <th></th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            @foreach ($patient['history_medicine'] as $medicine)
-                                                                <tr>
-                                                                    <td><input value="{{ $medicine->medicine_name }}"
-                                                                            type="text" name="medicine_name[]"
-                                                                            class="form-control"
-                                                                            placeholder="Nhập tên thuốc..."></td>
-                                                                    <td><input value="{{ $medicine->qty }}"
-                                                                            type="number" name="medicine_quantity[]"
-                                                                            class="form-control"
-                                                                            placeholder="Nhập số lượng..."></td>
-                                                                    <td><input value="{{ $medicine->use }}"
-                                                                            type="text" name="medicine_usage[]"
-                                                                            class="form-control"
-                                                                            placeholder="Nhập cách dùng..."></td>
-                                                                    <td><button type="button"
-                                                                            class="btn btn-danger removeRow">{{ __('Xóa') }}</button>
-                                                                    </td>
-                                                                </tr>
-                                                            @endforeach
-                                                        </tbody>
-                                                    </table>
-                                                    <button type="button" class="btn btn-primary" id="addRow">Thêm
-                                                        Thuốc</button>
-                                                </div>
-                                                <div class="text-end">
-                                                    <button type="submit" class="btn btn-success">Lưu Chuẩn Đoán</button>
-                                                </div>
-                                            </form>
-                                        </div>
-
-                                        <!-- Tab 3: Lịch sử khám bệnh -->
-                                        <div role="tabpanel" class="tab-pane fade" id="history-{{ $patient['stt'] }}">
-                                            <h4>Lịch sử khám bệnh của bệnh nhân</h4>
-                                            <table class="table table-bordered">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Ngày Khám</th>
-                                                        <th>Chuẩn Đoán</th>
-                                                        <th>Kê Đơn Thuốc</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @foreach ($patient['history'] as $history)
-                                                        <tr>
-                                                            <td>{{ $history->created_at }}</td>
-                                                            <td>{{ $history->chuan_doan ?? '' }}</td>
-                                                            <td>
-                                                                {{ $history->medicines->map(function ($item) {
-                                                                        return $item->medicine_name . ' (' . $item->use . ')';
-                                                                    })->implode(', ') }}
-                                                            </td>
-                                                        </tr>
-                                                    @endforeach
-                                                </tbody>
-                                            </table>
                                         </div>
                                     </div>
+
+
                                 </div>
                             </div>
                         </div>
