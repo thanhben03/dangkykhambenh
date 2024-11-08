@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-Danh Sách Chờ
+    Danh Sách Chờ
 @endsection
 @section('content')
     <input type="text" hidden id="current-stt">
@@ -28,37 +28,37 @@ Danh Sách Chờ
                         <label>Ghi Chú: </label>
                         <textarea class="form-control" id="trieu_chung"></textarea>
                     </div> --}}
-                    
+
                 </div>
                 <div class="modal-footer">
                     <button onclick="nextDepartment()" type="button" class="btn btn-primary">Chuyển khoa</button>
-                    <button onclick="done()" type="button" class="btn btn-success" data-bs-dismiss="modal">Kết
-                        Thúc</button>
+                    
                 </div>
             </div>
         </div>
     </div>
 
-<!-- The modal chuyen khoa khám tq -->
-<div class="modal fade" id="modal-next-department-general" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalLabel">Chuyển Khoa Tiếp Theo</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="alert alert-warning">
-                    Xác nhận đã hoàn thành cho bệnh nhân này ?
+    <!-- The modal chuyen khoa khám tq -->
+    <div class="modal fade" id="modal-next-department-general" tabindex="-1" aria-labelledby="modalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel">Chuyển Khoa Tiếp Theo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button onclick="nextDepartmentGeneral()" type="button" class="btn btn-primary">Xác nhận</button>
-                
+                <div class="modal-body">
+                    <div class="alert alert-warning">
+                        Xác nhận đã hoàn thành cho bệnh nhân này ?
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button onclick="nextDepartmentGeneral()" type="button" class="btn btn-primary">Xác nhận</button>
+
+                </div>
             </div>
         </div>
     </div>
-</div>
     <div class="main-content">
 
         <div class="page-content">
@@ -101,37 +101,43 @@ Danh Sách Chờ
                             <!-- Card for Patient Info -->
                             <div class="card">
                                 <div class="card-header"
-                                    @if ($patient == reset($patients)) 
-                                        style="background: #ffcccc;" 
-                                    @endif>
+                                    @if ($patient == reset($patients)) style="background: #ffcccc;" @endif>
                                     <h3 class="card-title">
                                         STT Khám Bệnh: {{ $patient['stt'] }} - {{ $patient['name'] }}
 
                                         @if ($patient == reset($patients))
                                             <button class="btn btn-warning">Đang tới lượt</button>
-                                            <button onclick="skip({{$patient['id']}})" class="btn btn-danger">Bỏ qua</button>
-                                            @if ($patient['kham_tq'] == 0 )
+                                            <button onclick="skip({{ $patient['id'] }})" class="btn btn-danger">Bỏ
+                                                qua</button>
+                                            @if ($patient['kham_tq'] == 0)
+                                                <button onclick="done({{$patient['stt']}})" type="button"
+                                                    class="btn btn-success"
+                                                    style="float: right">{{ __('Hoàn Thành') }}</button>
                                                 <button onclick="step1({{ $patient['stt'] }})" type="button"
-                                                class="btn btn-success" style="float: right">{{ __('Hoàn Thành') }}</button>
+                                                    class="btn btn-info mx-2"
+                                                    style="float: right">{{ __('Chuyển Khoa') }}</button>
                                             @elseif($patient['kham_tq'] == 1 && $patient['department_id'] == 5)
-                                                <button onclick="step1General({{$patient['stt']}},{{ $patient['id'] }})" type="button"
-                                                class="btn btn-success" style="float: right">{{ __('Hoàn thành') }}</button>
+                                                <button onclick="step1General({{ $patient['stt'] }},{{ $patient['id'] }})"
+                                                    type="button" class="btn btn-success"
+                                                    style="float: right">{{ __('Hoàn thành') }}</button>
                                             @else
-                                                <button onclick="step1General({{$patient['stt']}},{{ $patient['id'] }})" type="button"
-                                                class="btn btn-success" style="float: right">{{ __('Tiếp tục') }}</button>
+                                                <button
+                                                    onclick="step1General({{ $patient['stt'] }},{{ $patient['id'] }})"
+                                                    type="button" class="btn btn-success"
+                                                    style="float: right">{{ __('Tiếp tục') }}</button>
                                             @endif
-                                            @if($patient['kham_tq'])
-                                                <button style="float: right; font-weight: bold" class="btn">Khám tổng quát</button>
-
+                                            @if ($patient['kham_tq'])
+                                                <button style="float: right; font-weight: bold" class="btn">Khám tổng
+                                                    quát</button>
                                             @endif
                                         @endif
-                                        
+
                                     </h3>
                                     <button class="btn btn-primary" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#patientInfo-{{ $patient['stt'] }}" aria-expanded="true"
-                                    aria-controls="patientInfo-3">
-                                    Xem chi tiết
-                                </button>
+                                        data-bs-target="#patientInfo-{{ $patient['stt'] }}" aria-expanded="true"
+                                        aria-controls="patientInfo-3">
+                                        Xem chi tiết
+                                    </button>
 
                                 </div>
 
@@ -139,23 +145,27 @@ Danh Sách Chờ
                                     <!-- Nav tabs -->
                                     <ul class="nav nav-tabs" role="tablist">
                                         <li class="nav-item">
-                                            <a class="nav-link active" href="#info-{{$patient['stt']}}" aria-controls="info" role="tab"
-                                                data-bs-toggle="tab">Thông Tin Bệnh Nhân</a>
+                                            <a class="nav-link active" href="#info-{{ $patient['stt'] }}"
+                                                aria-controls="info" role="tab" data-bs-toggle="tab">Thông Tin Bệnh
+                                                Nhân</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="#diagnosis-{{$patient['stt']}}" aria-controls="diagnosis"
-                                                role="tab" data-bs-toggle="tab">Chuẩn Đoán</a>
+                                            <a class="nav-link" href="#diagnosis-{{ $patient['stt'] }}"
+                                                aria-controls="diagnosis" role="tab" data-bs-toggle="tab">Chuẩn
+                                                Đoán</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="#history-{{$patient['stt']}}" aria-controls="history" role="tab"
-                                                data-bs-toggle="tab">Lịch Sử Khám Bệnh</a>
+                                            <a class="nav-link" href="#history-{{ $patient['stt'] }}"
+                                                aria-controls="history" role="tab" data-bs-toggle="tab">Lịch Sử Khám
+                                                Bệnh</a>
                                         </li>
                                     </ul>
 
                                     <!-- Tab panes -->
                                     <div class="tab-content p-3">
                                         <!-- Tab 1: Thông tin bệnh nhân -->
-                                        <div role="tabpanel" class="tab-pane fade show active" id="info-{{$patient['stt']}}">
+                                        <div role="tabpanel" class="tab-pane fade show active"
+                                            id="info-{{ $patient['stt'] }}">
                                             <form action="/editpatient" method="POST">
                                                 <input type="hidden" name="_token"
                                                     value="N3aCZEQBBHtMdURn9NrkZvXMdfVtQUf9WKa0L0fQ">
@@ -201,7 +211,7 @@ Danh Sách Chờ
                                                             name="reg_ptel">
                                                     </div>
                                                 </div>
-                                                
+
                                                 <div class="mb-3 row">
                                                     <label for="sex" class="col-sm-2 col-form-label">Sex</label>
                                                     <div class="col-sm-2">
@@ -230,52 +240,63 @@ Danh Sách Chờ
 
                                         <!-- Tab 2: Chuẩn đoán -->
 
-                                            <div role="tabpanel" class="tab-pane fade" id="diagnosis-{{$patient['stt']}}">
-                                                <form action="/luu-chuan-doan" method="POST">
-                                                    @csrf
-                                                    <input hidden name="current_patient_visit" value="{{$patient['id']}}">
-                                                    <div class="mb-3">
-                                                        <label for="symptoms" class="form-label">Triệu Chứng</label>
-                                                        <textarea class="form-control" id="symptoms" name="symptoms" rows="3">{{$patient['trieu_chung']}}</textarea>
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label for="diagnosis" class="form-label">Chuẩn Đoán</label>
-                                                        <textarea class="form-control" id="diagnosis" name="diagnosis" rows="3">{{$patient['chuan_doan']}}</textarea>
-                                                    </div>
-                                                    <!-- Prescription Section -->
-                                                    <div class="mb-3">
-                                                        <label for="prescription" class="form-label">Kê Đơn Thuốc</label>
-                                                        <table class="table table-bordered" id="prescriptionTable">
-                                                            <thead>
+                                        <div role="tabpanel" class="tab-pane fade" id="diagnosis-{{ $patient['stt'] }}">
+                                            <form action="/luu-chuan-doan" method="POST">
+                                                @csrf
+                                                <input hidden name="current_patient_visit" value="{{ $patient['id'] }}">
+                                                <div class="mb-3">
+                                                    <label for="symptoms" class="form-label">Triệu Chứng</label>
+                                                    <textarea class="form-control" id="symptoms" name="symptoms" rows="3">{{ $patient['trieu_chung'] }}</textarea>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="diagnosis" class="form-label">Chuẩn Đoán</label>
+                                                    <textarea class="form-control" id="diagnosis" name="diagnosis" rows="3">{{ $patient['chuan_doan'] }}</textarea>
+                                                </div>
+                                                <!-- Prescription Section -->
+                                                <div class="mb-3">
+                                                    <label for="prescription" class="form-label">Kê Đơn Thuốc</label>
+                                                    <table class="table table-bordered" id="prescriptionTable">
+                                                        <thead>
                                                             <tr>
                                                                 <th>Tên Thuốc</th>
                                                                 <th>Số Lượng</th>
                                                                 <th>Cách Dùng</th>
                                                                 <th></th>
                                                             </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                @foreach($patient['history_medicine'] as $medicine)
-                                                                    <tr>
-                                                                        <td><input value="{{$medicine->medicine_name}}" type="text" name="medicine_name[]" class="form-control" placeholder="Nhập tên thuốc..."></td>
-                                                                        <td><input value="{{$medicine->qty}}" type="number" name="medicine_quantity[]" class="form-control" placeholder="Nhập số lượng..."></td>
-                                                                        <td><input value="{{$medicine->use}}" type="text" name="medicine_usage[]" class="form-control" placeholder="Nhập cách dùng..."></td>
-                                                                        <td><button type="button" class="btn btn-danger removeRow">{{ __('Xóa') }}</button></td>
-                                                                    </tr>
-                                                                @endforeach
-                                                            </tbody>
-                                                        </table>
-                                                        <button type="button" class="btn btn-primary" id="addRow">Thêm
-                                                            Thuốc</button>
-                                                    </div>
-                                                    <div class="text-end">
-                                                        <button type="submit" class="btn btn-success">Lưu Chuẩn Đoán</button>
-                                                    </div>
-                                                </form>
-                                            </div>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach ($patient['history_medicine'] as $medicine)
+                                                                <tr>
+                                                                    <td><input value="{{ $medicine->medicine_name }}"
+                                                                            type="text" name="medicine_name[]"
+                                                                            class="form-control"
+                                                                            placeholder="Nhập tên thuốc..."></td>
+                                                                    <td><input value="{{ $medicine->qty }}"
+                                                                            type="number" name="medicine_quantity[]"
+                                                                            class="form-control"
+                                                                            placeholder="Nhập số lượng..."></td>
+                                                                    <td><input value="{{ $medicine->use }}"
+                                                                            type="text" name="medicine_usage[]"
+                                                                            class="form-control"
+                                                                            placeholder="Nhập cách dùng..."></td>
+                                                                    <td><button type="button"
+                                                                            class="btn btn-danger removeRow">{{ __('Xóa') }}</button>
+                                                                    </td>
+                                                                </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                    <button type="button" class="btn btn-primary" id="addRow">Thêm
+                                                        Thuốc</button>
+                                                </div>
+                                                <div class="text-end">
+                                                    <button type="submit" class="btn btn-success">Lưu Chuẩn Đoán</button>
+                                                </div>
+                                            </form>
+                                        </div>
 
                                         <!-- Tab 3: Lịch sử khám bệnh -->
-                                        <div role="tabpanel" class="tab-pane fade" id="history-{{$patient['stt']}}">
+                                        <div role="tabpanel" class="tab-pane fade" id="history-{{ $patient['stt'] }}">
                                             <h4>Lịch sử khám bệnh của bệnh nhân</h4>
                                             <table class="table table-bordered">
                                                 <thead>
@@ -286,14 +307,14 @@ Danh Sách Chờ
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    @foreach($patient['history'] as $history)
+                                                    @foreach ($patient['history'] as $history)
                                                         <tr>
-                                                            <td>{{$history->created_at}}</td>
-                                                            <td>{{$history->chuan_doan ?? ''}}</td>
+                                                            <td>{{ $history->created_at }}</td>
+                                                            <td>{{ $history->chuan_doan ?? '' }}</td>
                                                             <td>
                                                                 {{ $history->medicines->map(function ($item) {
-                                                                    return $item->medicine_name . ' (' . $item->use . ')';
-                                                                })->implode(', ') }}
+                                                                        return $item->medicine_name . ' (' . $item->use . ')';
+                                                                    })->implode(', ') }}
                                                             </td>
                                                         </tr>
                                                     @endforeach
@@ -314,7 +335,7 @@ Danh Sách Chờ
         <!-- End Page-content -->
 
 
-        
+
     </div>
     <!-- end main content-->
 @endsection
@@ -347,23 +368,27 @@ Danh Sách Chờ
             $("#current-stt").val(stt);
         }
 
-        function step1General(stt,id) {
+        function step1General(stt, id) {
             $("#modal-next-department-general").modal('toggle')
             $("#current-patient-visit").val(id);
             $("#current-stt").val(stt);
 
         }
 
-        function done() {
-            let stt = $("#current-stt").val();
+        function done(stt) {
 
             $.ajax({
                 type: "GET",
                 url: "{{ route('doctor.done', ':stt') }}".replace(':stt', stt),
                 success: function(res) {
+                    alert('Hoàn tất !');
                     setTimeout(() => {
                         window.location.reload();
                     }, 1200)
+                },
+                error: function (xhr, textStatus, errorThrown) {    
+                    alert('Đã xảy ra lỗi !')
+                    
                 }
             })
         }
@@ -376,7 +401,7 @@ Danh Sách Chờ
             $.ajax({
                 type: "GET",
                 url: "/skip/" + patient_visit_id,
-                success: function (res) {
+                success: function(res) {
                     alert('Thành công !')
 
                     window.location.reload()

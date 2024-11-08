@@ -357,6 +357,7 @@ class PatientController extends Controller
     {
         PatientVisit::query()
             ->where('stt', '=', $stt)
+            ->where('department_id', '=', auth()->user()->department_id)
             ->whereDate('arrival_time', Carbon::today())
             ->update(['status' => 1]);
 
