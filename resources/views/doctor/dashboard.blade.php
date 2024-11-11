@@ -100,7 +100,6 @@
                         </div>
                     </div>
                 </form>
-
                 @foreach ($patients as $patient)
                     <div class="row">
                         <div class="col-md-12">
@@ -333,14 +332,11 @@
                         </div>
                     </div>
                 @endforeach
-
                 <!-- end page title -->
 
             </div> <!-- container-fluid -->
         </div>
         <!-- End Page-content -->
-
-
 
     </div>
     <!-- end main content-->
