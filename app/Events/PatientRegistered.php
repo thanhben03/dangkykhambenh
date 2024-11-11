@@ -25,6 +25,6 @@ class PatientRegistered implements ShouldBroadcastNow
 
     public function broadcastOn()
     {
-        return new Channel("department.{$this->departmentId}");
+        return new PrivateChannel("department.{$this->departmentId}");
     }
 }

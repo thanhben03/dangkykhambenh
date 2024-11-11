@@ -377,7 +377,7 @@
                 alert(JSON.stringify(data));
             });
 
-            window.Echo.channel(`department.{{ auth()->user()->department_id }}`)
+            window.Echo.private(`department.{{ auth()->user()->department_id }}`)
                 .listen('PatientRegistered', (event) => {
                     let wrapCurrentPatient = $("#wrap-number-patient");
                     let currentPatient = $("#number-patient");
