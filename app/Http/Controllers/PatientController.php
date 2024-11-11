@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\PatientRegistered;
 use App\Http\Resources\PatientPendingResource;
 use App\Http\Resources\PatientResource;
 use App\Models\Department;
@@ -224,7 +225,6 @@ class PatientController extends Controller
 
 
 
-
         $response = Http::post('crow-wondrous-asp.ngrok-free.app/print', [
             'stt' => $stt,
             'fullname' => $this->removeVietnameseAccents($data['fullname']),
@@ -393,12 +393,14 @@ class PatientController extends Controller
         // Không có bệnh nhân mà có stt -> bác sĩ chuyển khoa hoặc khám sktq
         $department = Department::query()->where('id', '=', $department_id)->first();
         $kham_tq = 0;
+        $newSTT = 0;
+        $newPatientVisit = null;
         if ($department_id == 15) {
             $department_id = 10;
             $kham_tq = 1;
         }
         if ($stt) {
-            PatientVisit::query()->create([
+            $newPatientVisit = PatientVisit::query()->create([
                 'patient_id' => $patient_id,
                 'stt' => $stt,
                 'department_id' => $department_id,
@@ -406,9 +408,9 @@ class PatientController extends Controller
                 'kham_tq' => $kham_tq,
                 'arrival_time' => $this->getArrivalTime($department, $ngaykham)->toDateTimeString(),
             ]);
-            return $stt;
+            $newSTT = $stt;
         } else if (!$stt && !$patientVisit) {
-            PatientVisit::query()->create([
+            $newPatientVisit = PatientVisit::query()->create([
                 'patient_id' => $patient_id,
                 'stt' => 1,
                 'department_id' => $department_id,
@@ -416,12 +418,12 @@ class PatientController extends Controller
                 'kham_tq' => $kham_tq,
                 'arrival_time' => $this->getArrivalTime($department, $ngaykham)->toDateTimeString(),
             ]);
-            return 1;
+            $newSTT = 1;
         } else {
             $stt = PatientVisit::query()
-                ->whereDate('created_at', Carbon::toDay())
+                ->whereDate('arrival_time', Carbon::toDay())
                 ->latest()->first()->stt;
-            PatientVisit::query()->create([
+            $newPatientVisit = PatientVisit::query()->create([
                 'patient_id' => $patient_id,
                 'stt' => $stt + 1,
                 'department_id' => $department_id,
@@ -429,8 +431,20 @@ class PatientController extends Controller
                 'kham_tq' => $kham_tq,
                 'arrival_time' => $this->getArrivalTime($department, $ngaykham)->toDateTimeString(),
             ]);
-            return $stt + 1;
+            $newSTT = $stt + 1;
         }
+
+        $result = PatientVisit::query()
+        ->join('patients', 'patient_visits.patient_id', '=', 'patients.id')
+        ->select('patients.*','patient_visits.*','patient_visits.stt as stt')
+        ->where('patient_visits.id', $newPatientVisit->id)
+        ->get();
+
+        $result = PatientPendingResource::make($result)->resolve();
+        broadcast(new PatientRegistered($department_id, $result))->toOthers();
+
+
+        return $newSTT;
     }
 
     // Dành cho bệnh nhân khám tổng quát

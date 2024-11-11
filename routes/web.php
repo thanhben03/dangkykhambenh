@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\PatientRegistered;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PatientController;
@@ -57,6 +58,12 @@ Route::middleware(AuthenticatedPatient::class)->prefix('patients')->as('patient.
     Route::get('/cancle-appointment/{id}', [PatientController::class, 'cancleAppointment'])->name('cancle.appointment');
     Route::post('/create-appointment', [PatientController::class, 'createAppointment'])->name('create.appointment');
 });
+
+// Route::get('test', function () {
+    
+//     broadcast(new PatientRegistered(2, $patient))->toOthers();
+    
+// });
 
 
 Route::middleware('auth')->group(function () {

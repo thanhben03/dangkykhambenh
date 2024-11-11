@@ -20,7 +20,7 @@
                     <div class="form-group">
                         <label>Chọn khoa: </label>
                         <select class="form-control" name="" id="department_id">
-                            @foreach (DB::table('departments')->get() as $item)
+                            @foreach (DB::table('departments')->where('status', 0)->get() as $item)
                                 <option value="{{ $item->id }}">{{ $item->department_name }}</option>
                             @endforeach
                         </select>

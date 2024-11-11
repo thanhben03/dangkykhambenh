@@ -1,6 +1,6 @@
 @extends('layouts.app2')
 @section('title')
-Thông Tin Cá Nhân
+    Thông Tin Cá Nhân
 @endsection
 @section('content')
     <div class="main-content">
@@ -27,8 +27,7 @@ Thông Tin Cá Nhân
                                     <div class="alert alert-danger">{{ $errors->first() }}</div>
                                 @endif
                                 @if (session()->has('msg'))
-                                <div class="alert alert-success">{{session()->get('msg')}}</div>
-                                    
+                                    <div class="alert alert-success">{{ session()->get('msg') }}</div>
                                 @endif
                                 <form action="{{ route('patient.profile.update') }}" method="post">
                                     @csrf
@@ -36,8 +35,8 @@ Thông Tin Cá Nhân
                                         <div class="row">
                                             <div class="col mb-3">
                                                 <label for="fullname" class="form-label">Họ tên</label>
-                                                <input readonly type="text" class="form-control" id="fullname" name="name"
-                                                    value="{{ $user->name }}">
+                                                <input readonly type="text" class="form-control" id="fullname"
+                                                    name="name" value="{{ $user->name }}">
                                             </div>
                                             <div class="col mb-3">
                                                 <label for="address" class="form-label">Địa chỉ</label>
@@ -55,8 +54,8 @@ Thông Tin Cá Nhân
                                             </div>
                                             <div class="col mb-3">
                                                 <label for="phone" class="form-label">Ngày sinh</label>
-                                                <input readonly type="date" class="form-control" id="phone" name="bod"
-                                                    value="{{ $user->bod }}">
+                                                <input readonly type="date" class="form-control" id="phone"
+                                                    name="bod" value="{{ $user->bod }}">
                                             </div>
                                         </div>
                                     </div>
@@ -71,14 +70,14 @@ Thông Tin Cá Nhân
                                             </div>
                                             <div class="col mb-3">
                                                 <label for="phone" class="form-label">Số CCCD</label>
-                                                <input readonly type="text" class="form-control" id="phone" name="nic"
-                                                    value="{{ $user->nic }}">
+                                                <input readonly type="text" class="form-control" id="phone"
+                                                    name="nic" value="{{ $user->nic }}">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <div class="row">
-                                        
+
                                             <div class="col-6 mb-3">
                                                 <label for="email" class="form-label">Email</label>
                                                 <input type="text" class="form-control" id="email" name="email"
@@ -111,12 +110,17 @@ Thông Tin Cá Nhân
                                         <div class="row">
                                             <div class="col mb-3">
                                                 <label for="phone" class="form-label">Mật khẩu hiện tại</label>
-                                                <input type="password" class="form-control" id="phone"
+                                                <input type="password" class="form-control" id="current_password"
                                                     name="current_password">
+                                                <!-- An element to toggle between password visibility -->
+                                                <input type="checkbox" onclick="showCurrentPass()">Hiển thị mật khẩu
                                             </div>
                                             <div class="col mb-3">
                                                 <label for="phone" class="form-label">Mật khẩu mới</label>
-                                                <input type="password" class="form-control" id="phone" name="new_password">
+                                                <input type="password" class="form-control" id="new_password"
+                                                    name="new_password">
+                                                <!-- An element to toggle between password visibility -->
+                                                <input type="checkbox" onclick="showNewPass()">Hiển thị mật khẩu
                                             </div>
                                         </div>
                                     </div>
@@ -135,3 +139,23 @@ Thông Tin Cá Nhân
 
     </div>
 @endsection
+@push('js')
+    <script>
+        function showCurrentPass() {
+            let x = document.getElementById("current_password");
+            if (x.type === "password") {
+                x.type = "text";
+            } else {
+                x.type = "password";
+            }
+        }
+        function showNewPass() {
+            let x = document.getElementById("new_password");
+            if (x.type === "password") {
+                x.type = "text";
+            } else {
+                x.type = "password";
+            }
+        }
+    </script>
+@endpush

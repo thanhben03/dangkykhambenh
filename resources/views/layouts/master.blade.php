@@ -26,6 +26,8 @@
     <!-- App Css-->
     <link href="assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="//cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css">
+    @vite('resources/js/bootstrap.js')
+
 </head>
 
 <body>
@@ -333,6 +335,8 @@
 
     @stack('js')
     <script>
+        
+
         function showDateTime() {
             const now = new Date();
 
@@ -355,8 +359,7 @@
             const formattedDateTime = `${formattedDate}, ${formattedTime}`;
             s = formattedDateTime.replace(/[^0-9 ]/g, " ").split(' ');
             let d = new Date(s[2], s[1] - 1, s[0], s[3], s[4]);
-            console.log(s);
-            
+
             document.getElementById('currentDateTime').innerText = formattedDateTime;
         }
 

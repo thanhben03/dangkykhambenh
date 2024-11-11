@@ -32,7 +32,7 @@
                 </div>
                 <div class="modal-footer">
                     <button onclick="nextDepartment()" type="button" class="btn btn-primary">Chuyển khoa</button>
-                    
+
                 </div>
             </div>
         </div>
@@ -67,6 +67,12 @@
                 <!-- start page title -->
                 <div class="row">
                     <div class="col-12">
+                        <div id="wrap-number-patient" class="d-none alert alert-warning d-flex flex-row align-items-center justify-content-between">
+                            <div class="">
+                                Bạn có <span id="number-patient"></span> bệnh nhân mới
+                            </div>
+                            <button onclick="window.location.reload()" class="btn btn-primary">Cập nhật</button>
+                        </div>
                         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
                             <h4 class="mb-sm-0 font-size-18">Danh sách chờ</h4>
 
@@ -110,7 +116,7 @@
                                             <button onclick="skip({{ $patient['id'] }})" class="btn btn-danger">Bỏ
                                                 qua</button>
                                             @if ($patient['kham_tq'] == 0)
-                                                <button onclick="done({{$patient['stt']}})" type="button"
+                                                <button onclick="done({{ $patient['stt'] }})" type="button"
                                                     class="btn btn-success"
                                                     style="float: right">{{ __('Hoàn Thành') }}</button>
                                                 <button onclick="step1({{ $patient['stt'] }})" type="button"
@@ -361,6 +367,30 @@
             });
 
 
+            // Enable pusher logging - don't include this in production
+
+
+            window.Echo.channel(`department.{{ auth()->user()->department_id }}`)
+                .listen('PatientRegistered', (event) => {
+                    let wrapCurrentPatient = $("#wrap-number-patient");
+                    let currentPatient = $("#number-patient");
+                    wrapCurrentPatient.removeClass('d-none')
+                    if (currentPatient.text() == '') {
+                        currentPatient.text(1);
+
+                    }
+                    else {
+                        currentPatient.text(parseInt(currentPatient.text()) + 1);
+
+                    }
+                    console.log(currentPatient.text());
+                    
+                    console.log('Thông tin đăng ký mới:', event.patientInfo);
+                    // Thực hiện logic hiển thị thông báo hoặc cập nhật giao diện
+                });
+
+
+
         });
 
         function step1(stt) {
@@ -386,9 +416,9 @@
                         window.location.reload();
                     }, 1200)
                 },
-                error: function (xhr, textStatus, errorThrown) {    
+                error: function(xhr, textStatus, errorThrown) {
                     alert('Đã xảy ra lỗi !')
-                    
+
                 }
             })
         }
@@ -423,7 +453,6 @@
                     "_token": "{{ csrf_token() }}"
                 },
                 success: function(res) {
-                    alert('Chuyển khoa thành công !');
 
                     window.location.reload()
                 }
