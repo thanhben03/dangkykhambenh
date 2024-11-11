@@ -67,7 +67,8 @@
                 <!-- start page title -->
                 <div class="row">
                     <div class="col-12">
-                        <div id="wrap-number-patient" class="d-none alert alert-warning d-flex flex-row align-items-center justify-content-between">
+                        <div id="wrap-number-patient"
+                            class="d-none alert alert-warning d-flex flex-row align-items-center justify-content-between">
                             <div class="">
                                 Bạn có <span id="number-patient"></span> bệnh nhân mới
                             </div>
@@ -364,7 +365,17 @@
 
 
             // Enable pusher logging - don't include this in production
+            // Enable pusher logging - don't include this in production
+            Pusher.logToConsole = true;
 
+            var pusher = new Pusher('fd867c95fcf23f864c2e', {
+                cluster: 'ap1'
+            });
+
+            var channel = pusher.subscribe('my-channel');
+            channel.bind('my-event', function(data) {
+                alert(JSON.stringify(data));
+            });
 
             window.Echo.channel(`department.{{ auth()->user()->department_id }}`)
                 .listen('PatientRegistered', (event) => {
@@ -374,13 +385,12 @@
                     if (currentPatient.text() == '') {
                         currentPatient.text(1);
 
-                    }
-                    else {
+                    } else {
                         currentPatient.text(parseInt(currentPatient.text()) + 1);
 
                     }
                     console.log(currentPatient.text());
-                    
+
                     console.log('Thông tin đăng ký mới:', event.patientInfo);
                     // Thực hiện logic hiển thị thông báo hoặc cập nhật giao diện
                 });
