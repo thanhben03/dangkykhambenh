@@ -55,9 +55,8 @@
                     </select>
                 </div>
                 <div class="col mb-3">
-                    <label for="phone" class="form-label">Số điện thoại</label>
-                    <input type="tel" name="phone" class="form-control" id="phone"
-                        placeholder="Nhập số điện thoại" required>
+                    <label for="appointmentType" class="form-label">Số CCCD</label>
+                    <input type="text" name="cccd" id="cccd-number" class="form-control" placeholder="Nhập số CCCD">
                 </div>
 
             </div>
@@ -81,9 +80,11 @@
                     <label for="appointmentType" class="form-label">Địa chỉ</label>
                     <input type="text" name="address" id="address" class="form-control" placeholder="Nhập địa chỉ">
                 </div>
+                
                 <div class="col mb-3">
-                    <label for="appointmentType" class="form-label">Số CCCD</label>
-                    <input type="text" name="cccd" id="cccd-number" class="form-control" placeholder="Nhập số CCCD">
+                    <label for="phone" class="form-label">Số điện thoại</label>
+                    <input type="tel" name="phone" class="form-control" id="phone"
+                        placeholder="Nhập số điện thoại" required>
                 </div>
                 <div class="col mb-3">
                     <label for="phone" class="form-label">Ngày khám</label>

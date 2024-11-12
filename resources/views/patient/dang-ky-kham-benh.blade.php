@@ -3,7 +3,7 @@
 
 @section('content')
     <div style="display: none" class="loading">
-        <img src="{{asset('/icons/spinner.svg')}}" alt="">
+        <img src="{{ asset('/icons/spinner.svg') }}" alt="">
     </div>
     <div class="modal fade" id="img-map-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" style="max-width: 93% !important">
@@ -13,14 +13,12 @@
                     <button onclick="window.location.reload()" class="my-btn">X</button>
                 </div>
                 <div class="modal-body">
-                    <img 
-                    style="
+                    <img style="
                         display: block;
                         margin-left: auto;
                         margin-right: auto;
-                        width: 50%;" 
-                    src=""
-                    id="img_map" alt="">
+                        width: 50%;"
+                        src="" id="img_map" alt="">
                 </div>
                 <div class="modal-footer">
                     {{-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -36,11 +34,13 @@
             <div class="row">
                 <div class="col mb-3">
                     <label for="fullName" class="form-label">Họ và tên</label>
-                    <input type="text" name="fullname" class="form-control" id="fullname" placeholder="Nhập họ và tên" required>
+                    <input type="text" name="fullname" class="form-control" id="fullname" placeholder="Nhập họ và tên"
+                        required>
                 </div>
                 <div class="col mb-3">
                     <label for="age" class="form-label">Ngày sinh</label>
-                    <input type="date" name="birthday" class="form-control" id="birthday" placeholder="dd-MM-YYYY" required>
+                    <input type="date" name="birthday" class="form-control" id="birthday" placeholder="dd-MM-YYYY"
+                        required>
                 </div>
             </div>
             <div class="row">
@@ -53,9 +53,10 @@
                         <option value="other">Khác</option>
                     </select>
                 </div>
+
                 <div class="col mb-3">
-                    <label for="phone" class="form-label">Số điện thoại</label>
-                    <input type="tel" name="phone" class="form-control" id="phone" placeholder="Nhập số điện thoại" required>
+                    <label for="appointmentType" class="form-label">Số CCCD</label>
+                    <input type="text" name="cccd" id="cccd-number" class="form-control" placeholder="Nhập số CCCD">
                 </div>
             </div>
             <div class="row">
@@ -66,8 +67,8 @@
                 <div class="col mb-3">
                     <label for="appointmentDate" class="form-label">Chọn khoa khám</label>
                     <select name="department" class="form-select" id="appointmentDate" required>
-                        @foreach(DB::table('departments')->where('status', 0)->get() as $item)
-                            <option value="{{$item->id}}">{{$item->department_name}}</option>
+                        @foreach (DB::table('departments')->where('status', 0)->get() as $item)
+                            <option value="{{ $item->id }}">{{ $item->department_name }}</option>
                         @endforeach
 
                     </select>
@@ -79,8 +80,9 @@
                     <input type="text" name="address" id="address" class="form-control" placeholder="Nhập địa chỉ">
                 </div>
                 <div class="col mb-3">
-                    <label for="appointmentType" class="form-label">Số CCCD</label>
-                    <input type="text" name="cccd" id="cccd-number" class="form-control" placeholder="Nhập số CCCD">
+                    <label for="phone" class="form-label">Số điện thoại</label>
+                    <input type="tel" name="phone" class="form-control" id="phone"
+                        placeholder="Nhập số điện thoại" required>
                 </div>
             </div>
             <div class="mb-3">
@@ -102,14 +104,14 @@
         function scan() {
             $.ajax({
                 type: "POST",
-                url: "{{route('patient.scan')}}",
+                url: "{{ route('patient.scan') }}",
                 data: {
-                  "_token": "{{csrf_token()}}"
+                    "_token": "{{ csrf_token() }}"
                 },
-                beforeSend: function () {
-                  $(".loading").css('display', 'flex')
+                beforeSend: function() {
+                    $(".loading").css('display', 'flex')
                 },
-                success: function (res) {
+                success: function(res) {
                     $("#fullname").val(res.bn_name)
                     $("#birthday").val(res.dob)
                     $("#address").val(res.birthplace)
@@ -118,7 +120,7 @@
                     $(".loading").css('display', 'none')
 
                 },
-                error: function (xhr) {
+                error: function(xhr) {
                     console.log(xhr.responseJSON)
                     $(".loading").css('display', 'none')
 
@@ -126,7 +128,7 @@
             })
         }
 
-        document.getElementById("formSubmit").addEventListener("submit", function(event){
+        document.getElementById("formSubmit").addEventListener("submit", function(event) {
             event.preventDefault()
             register()
         });
@@ -141,19 +143,19 @@
 
             $.ajax({
                 type: 'POST',
-                url: '{{route('patient.process.register')}}',
+                url: '{{ route('patient.process.register') }}',
                 data: form,
-                beforeSend: function () {
-                  $(".loading").css('display', 'flex')
+                beforeSend: function() {
+                    $(".loading").css('display', 'flex')
                 },
-                success: function (res) {
+                success: function(res) {
                     alert('Đăng ký thành công !')
                     $(".loading").css('display', 'none')
                     $("#img_map").attr('src', res.img)
                     $("#img-map-modal").modal('toggle');
                     // window.location.reload()
                 },
-                error: function (xhr) {
+                error: function(xhr) {
                     console.log(xhr.responseJSON)
                     $(".loading").css('display', 'none')
 
