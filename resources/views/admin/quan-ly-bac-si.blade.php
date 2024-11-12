@@ -64,7 +64,7 @@ Quản Lý Bác Sĩ
 
                             <div class="card-body">
 
-                                <table id="myTable" class="table table-bordered dt-responsive  nowrap w-100">
+                                <table id="" class="table table-bordered dt-responsive  nowrap w-100">
                                     <thead>
                                         <tr>
                                             {{-- <th>Họ tên</th> --}}
