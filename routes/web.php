@@ -5,10 +5,12 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\DoctorController;
+use App\Http\Controllers\HomeController;
 use App\Http\Middleware\AuthenticatedPatient;
 use App\Http\Middleware\CheckAdmin;
 use App\Http\Middleware\CheckDoctor;
 use App\Models\Patient;
+use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -19,7 +21,16 @@ Route::get('/dang-ky-tu-xa', function () {
     return view('patient.dang-ky-tu-xa');
 });
 
+
+Route::get('/send', function () {
+    Broadcast::on('standby-screen')->send();
+});
+
+Route::get('/in-phieu-kham-benh/{id}', [DoctorController::class, 'printMedicalRecord']);
+// Route::get('/in-phieu-kham-benh/{id}', [DoctorController::class, 'printInfoPatient']);
+
 Route::middleware(CheckDoctor::class)->group(function () {
+    Route::get('/man-hinh-cho', [HomeController::class, 'manHinhCho']);
     Route::get('/dashboard', [DoctorController::class, 'index'])->name('dashboard');
     Route::get('/lich-su-kham-benh', [DoctorController::class, 'history'])->name('history');
     Route::get('/done/{stt}', [PatientController::class, 'done'])->name('doctor.done');

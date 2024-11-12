@@ -2,12 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\PatientRegistered;
+use App\Events\StandbyScreenEvent;
 use App\Models\Patient;
 use Illuminate\Http\Request;
 use App\Models\PatientVisit;
 use App\Models\CurrentPatient;
 use App\Http\Resources\PatientPendingResource;
 use App\Http\Resources\PatientResource;
+use App\Http\Resources\PrintInfoResource;
+use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
+use Barryvdh\DomPDF\PDF;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
@@ -21,17 +26,22 @@ class DoctorController extends Controller
             ->where('department_id', $department_id)
             ->where('status', 0)
             ->whereDate('created_at', Carbon::today())
-            ->first()
-        ;
+            ->first();
 
         dd($patientVisit);
+    }
+
+    public function printInfoPatient($id)
+    {
+        $patient = Patient::find($id);
+        return view('doctor.mau-phieu', compact('patient'));
     }
 
     public function index(Request $request)
     {
         $result = PatientVisit::query()
             ->join('patients', 'patient_visits.patient_id', '=', 'patients.id')
-            ->select('patients.*','patient_visits.*','patient_visits.stt as stt')
+            ->select('patients.*', 'patient_visits.*', 'patient_visits.stt as stt')
             ->when($request->name, function ($query) use ($request) {
                 return $query->where('patients.name', 'LIKE', '%' . $request->name . '%');
             })
@@ -97,7 +107,7 @@ class DoctorController extends Controller
     // Khi bac si an nut hoan thanh
     public function done($stt)
     {
-        PatientVisit::query()->where('stt','=', $stt)->update(['status' => 1]);
+        PatientVisit::query()->where('stt', '=', $stt)->update(['status' => 1]);
 
         $currentPatient = CurrentPatient::query()
             ->where('department_id', \auth()->user()->department_id ?? 1)
@@ -108,6 +118,10 @@ class DoctorController extends Controller
         $currentSTT = intval($currentPatient->stt);
         $currentPatient->stt = $currentSTT + 1;
         $currentPatient->save();
+
+        broadcast(new StandbyScreenEvent())->toOthers();
+
+
 
         return response()->json([
             'msg' => 'Ok'
@@ -121,7 +135,7 @@ class DoctorController extends Controller
         $department_id = $request->department_id;
 
         $patientVisit = PatientVisit::query()
-            ->where('stt','=', $stt)
+            ->where('stt', '=', $stt)
             ->whereDate('created_at', Carbon::today())
             ->orderBy('created_at', 'desc')
             ->first();
@@ -130,7 +144,6 @@ class DoctorController extends Controller
 
         $this->done($stt);
         $this->registerPatientVisit($patient->id, $trieu_chung, $department_id);
-
     }
 
     public function registerPatientVisit($patient_id, $trieu_chung, $department_id, $stt = null)
@@ -147,7 +160,7 @@ class DoctorController extends Controller
     {
         $result = PatientVisit::query()
             ->join('patients', 'patient_visits.patient_id', '=', 'patients.id')
-            ->select('patients.*','patient_visits.*','patient_visits.stt as stt')
+            ->select('patients.*', 'patient_visits.*', 'patient_visits.stt as stt')
             ->where('department_id', '=', \auth()->user()->department_id ?? 1)
             ->where('status', 0)
             ->whereDate('patient_visits.created_at', '=', Carbon::tomorrow())
@@ -159,20 +172,35 @@ class DoctorController extends Controller
     }
 
     public function getAppointments(Request $request)
-{
-    $date = $request->query('date') ?? Carbon::tomorrow();
+    {
+        $date = $request->query('date') ?? Carbon::tomorrow();
 
 
-    $result = PatientVisit::query()
+        $result = PatientVisit::query()
             ->join('patients', 'patient_visits.patient_id', '=', 'patients.id')
-            ->select('patients.*','patient_visits.*','patient_visits.stt as stt')
+            ->select('patients.*', 'patient_visits.*', 'patient_visits.stt as stt')
             ->where('department_id', '=', \auth()->user()->department_id ?? 1)
             ->where('status', 0)
             ->whereDate('patient_visits.created_at', '=', $date)
             ->orderBy('patient_visits.created_at')
             ->get();
 
-    return response()->json($result);
-}
+        return response()->json($result);
+    }
 
+    public function printMedicalRecord($id)
+    {
+        // dd(1);
+        $patient_visit = PatientVisit::findOrFail($id);
+        // $patient = Patient::query()->where('$patient_visit->patient_id);
+        $patient = PrintInfoResource::make($patient_visit)->resolve();
+        // Gửi dữ liệu sang view 'medical_record'
+        $pdf = FacadePdf::loadView('doctor.mau-phieu', compact('patient'));
+
+        // Đặt khổ giấy A5 và hướng dọc
+        $pdf->setPaper('A5', 'portrait');
+
+        // Xuất file PDF
+        return $pdf->stream("medical_record.pdf"); // Hoặc dùng ->download() nếu muốn tải về
+    }
 }

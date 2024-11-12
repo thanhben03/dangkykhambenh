@@ -5,6 +5,30 @@
     <div style="display: none" class="loading">
         <img src="{{asset('/icons/spinner.svg')}}" alt="">
     </div>
+    <div class="modal fade" id="img-map-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="max-width: 93% !important">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Bản đồ hướng dẫn đến khoa khám</h5>
+                    <button onclick="window.location.reload()" class="my-btn">X</button>
+                </div>
+                <div class="modal-body">
+                    <img 
+                    style="
+                        display: block;
+                        margin-left: auto;
+                        margin-right: auto;
+                        width: 50%;" 
+                    src=""
+                    id="img_map" alt="">
+                </div>
+                <div class="modal-footer">
+                    {{-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button> --}}
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="container mt-2">
         <h3 class="text-center mb-4">Đăng Ký Khám Bệnh</h3>
         <form id="formSubmit">
@@ -72,6 +96,9 @@
 
 @push('js')
     <script>
+        // $(document).ready(function() {
+        //     $("#img-map-modal").modal('toggle')
+        // })
         function scan() {
             $.ajax({
                 type: "POST",
@@ -122,7 +149,9 @@
                 success: function (res) {
                     alert('Đăng ký thành công !')
                     $(".loading").css('display', 'none')
-                    window.location.reload()
+                    $("#img_map").attr('src', res.img)
+                    $("#img-map-modal").modal('toggle');
+                    // window.location.reload()
                 },
                 error: function (xhr) {
                     console.log(xhr.responseJSON)

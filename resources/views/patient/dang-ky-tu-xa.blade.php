@@ -3,7 +3,30 @@
 
 @section('content')
     <div style="display: none" class="loading">
-        <img src="{{asset('/icons/spinner.svg')}}" alt="">
+        <img src="{{ asset('/icons/spinner.svg') }}" alt="">
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="img-map-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="max-width: 93% !important">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Bản đồ hướng dẫn đến khoa khám</h5>
+                    <button onclick="window.location.reload()" class="my-btn">X</button>
+                </div>
+                <div class="modal-body">
+                    <img style="
+                        display: block;
+                        margin-left: auto;
+                        margin-right: auto;
+                        width: 50%;"
+                        src="" id="img_map" alt="">
+                </div>
+                <div class="modal-footer">
+                    {{-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button> --}}
+                </div>
+            </div>
+        </div>
     </div>
     <div class="container mt-2">
         <h3 class="text-center mb-4">Đăng Ký Khám Bệnh</h3>
@@ -12,11 +35,13 @@
             <div class="row">
                 <div class="col mb-3">
                     <label for="fullName" class="form-label">Họ và tên</label>
-                    <input type="text" name="fullname" class="form-control" id="fullname" placeholder="Nhập họ và tên" required>
+                    <input type="text" name="fullname" class="form-control" id="fullname" placeholder="Nhập họ và tên"
+                        required>
                 </div>
                 <div class="col mb-3">
                     <label for="age" class="form-label">Ngày sinh</label>
-                    <input type="date" name="birthday" class="form-control" id="birthday" placeholder="dd-MM-YYYY" required>
+                    <input type="date" name="birthday" class="form-control" id="birthday" placeholder="dd-MM-YYYY"
+                        required>
                 </div>
             </div>
             <div class="row">
@@ -31,9 +56,10 @@
                 </div>
                 <div class="col mb-3">
                     <label for="phone" class="form-label">Số điện thoại</label>
-                    <input type="tel" name="phone" class="form-control" id="phone" placeholder="Nhập số điện thoại" required>
+                    <input type="tel" name="phone" class="form-control" id="phone"
+                        placeholder="Nhập số điện thoại" required>
                 </div>
-                
+
             </div>
             <div class="row">
                 <div class="col mb-3">
@@ -43,8 +69,8 @@
                 <div class="col mb-3">
                     <label for="appointmentDate" class="form-label">Chọn khoa khám</label>
                     <select name="department" class="form-select" id="appointmentDate" required>
-                        @foreach(DB::table('departments')->where('status', 0)->get() as $item)
-                            <option value="{{$item->id}}">{{$item->department_name}}</option>
+                        @foreach (DB::table('departments')->where('status', 0)->get() as $item)
+                            <option value="{{ $item->id }}">{{ $item->department_name }}</option>
                         @endforeach
 
                     </select>
@@ -69,25 +95,27 @@
             </div>
             <div class="d-flex justify-content-between">
                 <button style="font-size: 20px" type="submit" class="btn btn-primary">Đăng ký</button>
-                <a style="font-size: 20px" href="{{route('patient.login')}}" class="mx-2 btn btn-success">Đăng nhập</a>
+                <a style="font-size: 20px" href="{{ route('patient.login') }}" class="mx-2 btn btn-success">Đăng nhập</a>
             </div>
         </form>
     </div>
 @endsection
 
 @push('js')
+    {{-- <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+        crossorigin="anonymous"></script> --}}
     <script>
         function scan() {
             $.ajax({
                 type: "POST",
-                url: "{{route('patient.scan')}}",
+                url: "{{ route('patient.scan') }}",
                 data: {
-                  "_token": "{{csrf_token()}}"
+                    "_token": "{{ csrf_token() }}"
                 },
-                beforeSend: function () {
-                  $(".loading").css('display', 'flex')
+                beforeSend: function() {
+                    $(".loading").css('display', 'flex')
                 },
-                success: function (res) {
+                success: function(res) {
                     $("#fullname").val(res.bn_name)
                     $("#birthday").val(res.dob)
                     $("#address").val(res.birthplace)
@@ -96,13 +124,13 @@
                     $(".loading").css('display', 'none')
 
                 },
-                error: function (xhr) {
+                error: function(xhr) {
                     console.log(xhr.responseJSON)
                 }
             })
         }
 
-        document.getElementById("formSubmit").addEventListener("submit", function(event){
+        document.getElementById("formSubmit").addEventListener("submit", function(event) {
             event.preventDefault()
             register()
         });
@@ -117,18 +145,19 @@
 
             $.ajax({
                 type: 'POST',
-                url: '{{route('patient.remote.register')}}',
+                url: '{{ route('patient.remote.register') }}',
                 data: form,
-                beforeSend: function () {
-                  $(".loading").css('display', 'flex')
+                beforeSend: function() {
+                    $(".loading").css('display', 'flex')
                 },
-                success: function (res) {
+                success: function(res) {
                     alert('Đăng ký thành công !')
                     $(".loading").css('display', 'none')
-
-                    window.location.reload()
+                    $("#img_map").attr('src', res.img)
+                    $("#img-map-modal").modal('toggle');
+                    // window.location.reload()
                 },
-                error: function (xhr) {
+                error: function(xhr) {
                     console.log(xhr.responseJSON)
                     $(".loading").css('display', 'none')
 

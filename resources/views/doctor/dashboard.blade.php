@@ -70,7 +70,7 @@
                         <div id="wrap-number-patient"
                             class="d-none alert alert-warning d-flex flex-row align-items-center justify-content-between">
                             <div class="">
-                                Bạn có <span id="number-patient"></span> bệnh nhân mới
+                                Bạn có <span id="number-patient"></span>bệnh nhân mới
                             </div>
                             <button onclick="window.location.reload()" class="btn btn-primary">Cập nhật</button>
                         </div>
@@ -157,7 +157,7 @@
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link" href="#diagnosis-{{ $patient['stt'] }}"
-                                                aria-controls="diagnosis" role="tab" data-bs-toggle="tab">Chuẩn
+                                                aria-controls="diagnosis" role="tab" data-bs-toggle="tab">Chẩn
                                                 Đoán</a>
                                         </li>
                                         <li class="nav-item">
@@ -278,7 +278,7 @@
                                                                             class="form-control"
                                                                             placeholder="Nhập tên thuốc..."></td>
                                                                     <td><input value="{{ $medicine->qty }}"
-                                                                            type="number" name="medicine_quantity[]"
+                                                                            type="text" name="medicine_quantity[]"
                                                                             class="form-control"
                                                                             placeholder="Nhập số lượng..."></td>
                                                                     <td><input value="{{ $medicine->use }}"
@@ -296,19 +296,19 @@
                                                         Thuốc</button>
                                                 </div>
                                                 <div class="text-end">
-                                                    <button type="submit" class="btn btn-success">Lưu Chuẩn Đoán</button>
+                                                    <a href="/in-phieu-kham-benh/{{$patient['id']}}" class="btn btn-info">In Phiếu</a>
+                                                    <button type="submit" class="btn btn-success">Lưu Chẩn Đoán</button>
                                                 </div>
                                             </form>
                                         </div>
 
                                         <!-- Tab 3: Lịch sử khám bệnh -->
                                         <div role="tabpanel" class="tab-pane fade" id="history-{{ $patient['stt'] }}">
-                                            <h4>Lịch sử khám bệnh của bệnh nhân</h4>
                                             <table class="table table-bordered">
                                                 <thead>
                                                     <tr>
                                                         <th>Ngày Khám</th>
-                                                        <th>Chuẩn Đoán</th>
+                                                        <th>Chẩn Đoán</th>
                                                         <th>Kê Đơn Thuốc</th>
                                                     </tr>
                                                 </thead>
@@ -351,7 +351,7 @@
                 var newRow = `
             <tr>
                 <td><input type="text" name="medicine_name[]" class="form-control" placeholder="Nhập tên thuốc..."></td>
-                <td><input type="number" name="medicine_quantity[]" class="form-control" placeholder="Nhập số lượng..."></td>
+                <td><input type="text" name="medicine_quantity[]" class="form-control" placeholder="Nhập số lượng..."></td>
                 <td><input type="text" name="medicine_usage[]" class="form-control" placeholder="Nhập cách dùng..."></td>
                 <td><button type="button" class="btn btn-danger removeRow">{{ __('Xóa') }}</button></td>
             </tr>`;
@@ -483,6 +483,16 @@
                     alert('Chuyển khoa thành công !');
 
                     // window.location.reload()
+                }
+            })
+        }
+
+        function printInfo(patient_visit_id) {
+            $.ajax({
+                url: "/in-phieu-kham-benh",
+                type: "POST",
+                data: {
+                    'patient_visit_id': patient_visit_id
                 }
             })
         }

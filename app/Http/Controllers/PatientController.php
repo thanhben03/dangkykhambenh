@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\PatientRegistered;
+use App\Events\StandbyScreenEvent;
 use App\Http\Resources\PatientPendingResource;
 use App\Http\Resources\PatientResource;
 use App\Models\Department;
@@ -197,6 +198,7 @@ class PatientController extends Controller
     public function register(Request $request)
     {
         $data = $request->all();
+        $department = null;
         if ($data['department'] != 15) {
             $department = Department::query()->where('id', '=', $data['department'])->first();
         } else {
@@ -240,8 +242,10 @@ class PatientController extends Controller
         ]);
 
 
-        if ($response->successful()) {
-            return $response->json();
+        if (true) {
+            return response()->json([
+                'img' => $department->img_map
+            ]);
         } else {
             return response()->json(['error' => 'API request failed'], 500);
         }
@@ -250,7 +254,7 @@ class PatientController extends Controller
     public function remoteRegister(Request $request)
     {
         $data = $request->all();
-
+        $department = null;
         if ($data['department'] != 15) {
             $department = Department::query()->where('id', '=', $data['department'])->first();
         } else {
@@ -273,6 +277,13 @@ class PatientController extends Controller
             ]);
         }
         $stt = $this->registerPatientVisit($patient->id, $data['trieu_chung'], $data['department'], null, $ngaykham);
+
+        
+
+        return response()->json([
+            'img' => $department->img_map
+        ]);
+
     }
 
     public function getSTTOfDepartment(Department $department)
@@ -360,6 +371,7 @@ class PatientController extends Controller
             ->where('department_id', '=', auth()->user()->department_id)
             ->whereDate('arrival_time', Carbon::today())
             ->update(['status' => 1]);
+        broadcast(new StandbyScreenEvent())->toOthers();
 
         return response()->json([
             'msg' => 'Ok'
@@ -435,10 +447,10 @@ class PatientController extends Controller
         }
 
         $result = PatientVisit::query()
-        ->join('patients', 'patient_visits.patient_id', '=', 'patients.id')
-        ->select('patients.*','patient_visits.*','patient_visits.stt as stt')
-        ->where('patient_visits.id', $newPatientVisit->id)
-        ->get();
+            ->join('patients', 'patient_visits.patient_id', '=', 'patients.id')
+            ->select('patients.*', 'patient_visits.*', 'patient_visits.stt as stt')
+            ->where('patient_visits.id', $newPatientVisit->id)
+            ->get();
 
         $result = PatientPendingResource::make($result)->resolve();
         broadcast(new PatientRegistered($department_id, $result))->toOthers();
