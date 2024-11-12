@@ -175,14 +175,14 @@
                                             <form action="/editpatient" method="POST">
                                                 <input type="hidden" name="_token"
                                                     value="N3aCZEQBBHtMdURn9NrkZvXMdfVtQUf9WKa0L0fQ">
-                                                <div class="mb-3 row">
+                                                {{-- <div class="mb-3 row">
                                                     <label for="patientID" class="col-sm-2 col-form-label">Patient
                                                         ID</label>
                                                     <div class="col-sm-10">
                                                         <input readonly value="{{ $patient['info']->id }}" type="text"
                                                             class="form-control" id="patientID" name="reg_pname">
                                                     </div>
-                                                </div>
+                                                </div> --}}
                                                 <div class="mb-3 row">
                                                     <label for="fullName" class="col-sm-2 col-form-label">Full
                                                         Name</label>
