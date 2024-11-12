@@ -37,6 +37,7 @@ class PatientPendingResource extends ResourceCollection
                 'history' => PatientVisit::query()
                     ->where('patient_id', $item->patient_id)
                     ->whereNot('id', $item->id)
+                    ->take(5)
                     ->get()
                 ,
             ];

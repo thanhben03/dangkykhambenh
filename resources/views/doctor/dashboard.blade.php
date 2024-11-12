@@ -70,7 +70,7 @@
                         <div id="wrap-number-patient"
                             class="d-none alert alert-warning d-flex flex-row align-items-center justify-content-between">
                             <div class="">
-                                Bạn có <span id="number-patient"></span>bệnh nhân mới
+                                Bạn có <span id="number-patient"></span> bệnh nhân mới
                             </div>
                             <button onclick="window.location.reload()" class="btn btn-primary">Cập nhật</button>
                         </div>
@@ -112,7 +112,7 @@
                                         STT Khám Bệnh: {{ $patient['stt'] }} - {{ $patient['name'] }}
 
                                         @if ($patient == reset($patients))
-                                            <button class="btn btn-warning">Đang tới lượt</button>
+                                            {{-- <span style="color: yellow">Đang tới lượt</span> --}}
                                             <button onclick="skip({{ $patient['id'] }})" class="btn btn-danger">Bỏ
                                                 qua</button>
                                             @if ($patient['kham_tq'] == 0)
