@@ -27,6 +27,7 @@ class PatientController extends Controller
         return view('patient.dashboard');
     }
 
+    // tạo lịch hẹn
     public function createAppointment(Request $request)
     {
         try {
@@ -41,6 +42,7 @@ class PatientController extends Controller
             return response()->json($th->getMessage(), 400);
         }
     }
+
 
     public function cancleAppointment($patient_visit_id)
     {
