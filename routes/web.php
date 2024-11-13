@@ -17,29 +17,29 @@ Route::get('/', function () {
     return view('patient.dang-ky-kham-benh');
 });
 
-Route::get('/dang-ky-tu-xa', function () {
-    return view('patient.dang-ky-tu-xa');
-});
+// Route::get('/dang-ky-tu-xa', function () {
+//     return view('patient.dang-ky-tu-xa');
+// });
 
 
 Route::get('/send', function () {
     Broadcast::on('standby-screen')->send();
 });
 
-Route::get('/in-phieu-kham-benh/{id}', [DoctorController::class, 'printMedicalRecord']);
+Route::get('/print-medical-record/{id}', [DoctorController::class, 'printMedicalRecord']);
 // Route::get('/in-phieu-kham-benh/{id}', [DoctorController::class, 'printInfoPatient']);
 
 Route::middleware(CheckDoctor::class)->group(function () {
-    Route::get('/man-hinh-cho', [HomeController::class, 'manHinhCho']);
+    Route::get('/pending-screen', [HomeController::class, 'pendingScreen']);
     Route::get('/dashboard', [DoctorController::class, 'index'])->name('dashboard');
-    Route::get('/lich-su-kham-benh', [DoctorController::class, 'history'])->name('history');
+    Route::get('/medical-history', [DoctorController::class, 'history'])->name('history');
     Route::get('/done/{stt}', [PatientController::class, 'done'])->name('doctor.done');
     Route::get('/skip/{patient_visit_id}', [PatientController::class, 'skip'])->name('doctor.skip');
     Route::get('/lich-hen', [PatientController::class, 'appointment'])->name('doctor.lichHen');
     Route::post('/next-department', [PatientController::class, 'nextDepartment'])->name('doctor.nextDepartment');
     Route::post('/next-department-general', [PatientController::class, 'registerPatientGeneral'])->name('doctor.registerPatientGeneral');
     Route::get('/get-appointments', [PatientController::class, 'getAppointments'])->name('doctor.getAppointments');
-    Route::post('/luu-chuan-doan', [PatientController::class, 'saveDiagnose'])->name('doctor.luuchuandoan');
+    Route::post('/save-diagnose', [PatientController::class, 'saveDiagnose'])->name('doctor.luuchuandoan');
 
 
     Route::get('/stt/{department_id}', [DoctorController::class, 'stt'])->name('doctor.stt');
@@ -47,9 +47,9 @@ Route::middleware(CheckDoctor::class)->group(function () {
 });
 
 Route::middleware(CheckAdmin::class)->group(function () {
-    Route::get('/quan-ly-benh-nhan', [AdminController::class, 'showPatient'])->name('showPatient');
-    Route::get('/quan-ly-bac-si', [AdminController::class, 'showDoctor']);
-    Route::post('/tao-tai-khoan', [AdminController::class, 'createDoctor'])->name('crateDoctor');
+    Route::get('/manage-patient', [AdminController::class, 'showPatient'])->name('showPatient');
+    Route::get('/manage-doctor', [AdminController::class, 'showDoctor']);
+    Route::post('/create-account', [AdminController::class, 'createDoctor'])->name('createDoctor');
     Route::get('/delete-patient/{id}', [AdminController::class, 'deletePatient'])->name('deletePatient');;
     Route::get('/delete-doctor/{id}', [AdminController::class, 'deleteDoctor'])->name('deleteDoctor');;
 });
@@ -62,7 +62,7 @@ Route::post('/patient-remote-register', [PatientController::class, 'remoteRegist
 Route::middleware(AuthenticatedPatient::class)->prefix('patients')->as('patient.')->group(function () {
     Route::get('/dashboard', [PatientController::class, 'appointmentPatient'])->name('dashboard');
     // Route::get('/lich-hen', [PatientController::class, 'lichHenPatient'])->name('dashboard');
-    Route::get('/lich-su-kham-benh', [PatientController::class, 'khamBenh'])->name('history');
+    Route::get('/medical-history', [PatientController::class, 'medicalExaminationHistory'])->name('history');
     Route::get('/profile', [PatientController::class, 'showProfile'])->name('show.profile');
     Route::post('/profile', [PatientController::class, 'updateProfile'])->name('profile.update');
     Route::post('/profile/change-password', [PatientController::class, 'changePassword'])->name('profile.change.password');

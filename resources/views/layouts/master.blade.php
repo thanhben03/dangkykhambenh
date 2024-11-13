@@ -138,17 +138,17 @@
                             </li>
                         @else
                             <li>
-                                <a href="/quan-ly-benh-nhan">
+                                <a href="/manage-patient">
                                     <i class="bx bx-hotel"></i>
 
-                                    <span data-key="t-quan-ly-benh-nhan">Quản lý bệnh nhân</span>
+                                    <span data-key="t-manage-patient">Quản lý bệnh nhân</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="/quan-ly-bac-si">
+                                <a href="/manage-doctor">
                                     <i class="bx bx-user"></i>
 
-                                    <span data-key="t-quan-ly-bac-si">Quản lý bác sĩ</span>
+                                    <span data-key="t-manage-doctor">Quản lý bác sĩ</span>
                                 </a>
                             </li>
                         @endif

@@ -247,7 +247,7 @@
                                         <!-- Tab 2: Chuẩn đoán -->
 
                                         <div role="tabpanel" class="tab-pane fade" id="diagnosis-{{ $patient['stt'] }}">
-                                            <form action="/luu-chuan-doan" method="POST">
+                                            <form action="/save-diagnose" method="POST">
                                                 @csrf
                                                 <input hidden name="current_patient_visit" value="{{ $patient['id'] }}">
                                                 <div class="mb-3">

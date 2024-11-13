@@ -115,7 +115,7 @@ Quản Lý Bác Sĩ
         function createDoctor() {
             $.ajax({
                 type: "POST",
-                url: "{{ route('crateDoctor') }}",
+                url: "{{ route('createDoctor') }}",
                 data: {
                     'email': $("#email").val(),
                     'password': $("#password").val(),

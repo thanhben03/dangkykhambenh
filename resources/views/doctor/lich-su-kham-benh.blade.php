@@ -23,7 +23,7 @@ Lịch Sử Khám Bệnh
                     </div>
                 </div>
 
-                <form id="search-form" class="mb-3" action="/lich-su-kham-benh" method="GET">
+                <form id="search-form" class="mb-3" action="/medical-history" method="GET">
                     <div class="row">
                         <div class="col-md-4">
                             <input type="text" class="form-control" id="searchName" placeholder="Nhập tên bệnh nhân"

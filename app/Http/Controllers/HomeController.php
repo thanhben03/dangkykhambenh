@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    public function manHinhCho () {
+    public function pendingScreen () {
         $department = Department::query()->where('id', auth()->user()->department_id)->first();
         $patientVisits = PatientVisit::query()
         ->join('patients', 'patients.id', '=', 'patient_visits.patient_id')
