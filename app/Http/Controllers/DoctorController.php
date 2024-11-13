@@ -19,24 +19,7 @@ use Illuminate\Support\Facades\Auth;
 class DoctorController extends Controller
 {
 
-
-    public function stt($department_id)
-    {
-        $patientVisit = PatientVisit::query()
-            ->where('department_id', $department_id)
-            ->where('status', 0)
-            ->whereDate('created_at', Carbon::today())
-            ->first();
-
-        dd($patientVisit);
-    }
-
-    public function printInfoPatient($id)
-    {
-        $patient = Patient::find($id);
-        return view('doctor.mau-phieu', compact('patient'));
-    }
-
+    // Danh sách chờ khám bệnh
     public function index(Request $request)
     {
         $result = PatientVisit::query()
@@ -63,6 +46,7 @@ class DoctorController extends Controller
         ]);
     }
 
+    // Xem lịch sử khám bệnh của bệnh nhân bất kỳ
     public function history(Request $request)
     {
         $result = Patient::query()
@@ -84,6 +68,7 @@ class DoctorController extends Controller
         ]);
     }
 
+    // Lấy bệnh nhân đang khám theo tài khoản bác sĩ đã đăng nhập
     public function getCurrentPatientVisit()
     {
         $currentPatient = CurrentPatient::query()
@@ -128,66 +113,7 @@ class DoctorController extends Controller
         ]);
     }
 
-    public function nextDepartment(Request $request)
-    {
-        $stt = $request->stt;
-        $trieu_chung = $request->trieu_chung;
-        $department_id = $request->department_id;
-
-        $patientVisit = PatientVisit::query()
-            ->where('stt', '=', $stt)
-            ->whereDate('created_at', Carbon::today())
-            ->orderBy('created_at', 'desc')
-            ->first();
-
-        $patient = Patient::query()->where('id', '=', $patientVisit->patient_id)->first();
-
-        $this->done($stt);
-        $this->registerPatientVisit($patient->id, $trieu_chung, $department_id);
-    }
-
-    public function registerPatientVisit($patient_id, $trieu_chung, $department_id, $stt = null)
-    {
-        PatientVisit::query()->create([
-            'patient_id' => $patient_id,
-            'stt' => $stt ?? PatientVisit::query()->orderBy('created_at', 'desc')->first()->stt + 1,
-            'department_id' => $department_id,
-            'trieu_chung' => $trieu_chung,
-        ]);
-    }
-
-    public function lichHen()
-    {
-        $result = PatientVisit::query()
-            ->join('patients', 'patient_visits.patient_id', '=', 'patients.id')
-            ->select('patients.*', 'patient_visits.*', 'patient_visits.stt as stt')
-            ->where('department_id', '=', \auth()->user()->department_id ?? 1)
-            ->where('status', 0)
-            ->whereDate('patient_visits.created_at', '=', Carbon::tomorrow())
-            ->orderBy('patient_visits.created_at')
-            ->get();
-        return view('doctor.lich-hen', [
-            'appointments' => $result
-        ]);
-    }
-
-    public function getAppointments(Request $request)
-    {
-        $date = $request->query('date') ?? Carbon::tomorrow();
-
-
-        $result = PatientVisit::query()
-            ->join('patients', 'patient_visits.patient_id', '=', 'patients.id')
-            ->select('patients.*', 'patient_visits.*', 'patient_visits.stt as stt')
-            ->where('department_id', '=', \auth()->user()->department_id ?? 1)
-            ->where('status', 0)
-            ->whereDate('patient_visits.created_at', '=', $date)
-            ->orderBy('patient_visits.created_at')
-            ->get();
-
-        return response()->json($result);
-    }
-
+    // In phiếu khám bệnh
     public function printMedicalRecord($id)
     {
         // dd(1);

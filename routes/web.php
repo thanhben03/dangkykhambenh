@@ -35,11 +35,11 @@ Route::middleware(CheckDoctor::class)->group(function () {
     Route::get('/lich-su-kham-benh', [DoctorController::class, 'history'])->name('history');
     Route::get('/done/{stt}', [PatientController::class, 'done'])->name('doctor.done');
     Route::get('/skip/{patient_visit_id}', [PatientController::class, 'skip'])->name('doctor.skip');
-    Route::get('/lich-hen', [PatientController::class, 'lichHen'])->name('doctor.lichHen');
+    Route::get('/lich-hen', [PatientController::class, 'appointment'])->name('doctor.lichHen');
     Route::post('/next-department', [PatientController::class, 'nextDepartment'])->name('doctor.nextDepartment');
     Route::post('/next-department-general', [PatientController::class, 'registerPatientGeneral'])->name('doctor.registerPatientGeneral');
     Route::get('/get-appointments', [PatientController::class, 'getAppointments'])->name('doctor.getAppointments');
-    Route::post('/luu-chuan-doan', [PatientController::class, 'luuChuanDoan'])->name('doctor.luuchuandoan');
+    Route::post('/luu-chuan-doan', [PatientController::class, 'saveDiagnose'])->name('doctor.luuchuandoan');
 
 
     Route::get('/stt/{department_id}', [DoctorController::class, 'stt'])->name('doctor.stt');
@@ -60,7 +60,7 @@ Route::post('/patient-register', [PatientController::class, 'register'])->name('
 Route::post('/patient-remote-register', [PatientController::class, 'remoteRegister'])->name('patient.remote.register');
 
 Route::middleware(AuthenticatedPatient::class)->prefix('patients')->as('patient.')->group(function () {
-    Route::get('/dashboard', [PatientController::class, 'lichHenPatient'])->name('dashboard');
+    Route::get('/dashboard', [PatientController::class, 'appointmentPatient'])->name('dashboard');
     // Route::get('/lich-hen', [PatientController::class, 'lichHenPatient'])->name('dashboard');
     Route::get('/lich-su-kham-benh', [PatientController::class, 'khamBenh'])->name('history');
     Route::get('/profile', [PatientController::class, 'showProfile'])->name('show.profile');
