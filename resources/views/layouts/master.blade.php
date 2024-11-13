@@ -124,16 +124,16 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="/lich-hen">
+                                <a href="/appointment">
                                     <i data-feather="calendar"></i>
-                                    <span data-key="t-lichhen">Lịch Hẹn</span>
+                                    <span data-key="t-appointment">Lịch Hẹn</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="/lich-su-kham-benh">
+                                <a href="/medical-history">
                                     <i class="bx bx-history"></i>
 
-                                    <span data-key="t-lich-su-kham-benh">Lịch Sử Khám Bệnh</span>
+                                    <span data-key="t-medical-history">Lịch Sử Khám Bệnh</span>
                                 </a>
                             </li>
                         @else

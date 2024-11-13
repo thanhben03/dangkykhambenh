@@ -113,15 +113,15 @@
                             <a href="/patients/dashboard">
                                 <i class="bx bx-calendar"></i>
 
-                                <span data-key="t-lich-su-kham-benh">Lịch Khám Bệnh</span>
+                                <span data-key="t-/patients/dashboard">Lịch Khám Bệnh</span>
                             </a>
                         </li>
 
                         <li>
-                            <a href="/patients/lich-su-kham-benh">
+                            <a href="/patients/medical-history">
                                 <i class="bx bx-history"></i>
 
-                                <span data-key="t-lich-su-kham-benh">Lịch Sử Khám Bệnh</span>
+                                <span data-key="t/medical-history">Lịch Sử Khám Bệnh</span>
                             </a>
                         </li>
                         <li>

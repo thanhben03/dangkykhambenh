@@ -35,7 +35,7 @@ Route::middleware(CheckDoctor::class)->group(function () {
     Route::get('/medical-history', [DoctorController::class, 'history'])->name('history');
     Route::get('/done/{stt}', [PatientController::class, 'done'])->name('doctor.done');
     Route::get('/skip/{patient_visit_id}', [PatientController::class, 'skip'])->name('doctor.skip');
-    Route::get('/lich-hen', [PatientController::class, 'appointment'])->name('doctor.lichHen');
+    Route::get('/appointment', [PatientController::class, 'appointment'])->name('doctor.lichHen');
     Route::post('/next-department', [PatientController::class, 'nextDepartment'])->name('doctor.nextDepartment');
     Route::post('/next-department-general', [PatientController::class, 'registerPatientGeneral'])->name('doctor.registerPatientGeneral');
     Route::get('/get-appointments', [PatientController::class, 'getAppointments'])->name('doctor.getAppointments');

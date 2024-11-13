@@ -29,7 +29,7 @@ Lịch Hẹn Bệnh Nhân
                     <!-- Nút tìm kiếm -->
                     <div class="form-group mt-3">
                         <button type="submit" class="btn btn-primary">Tìm lịch hẹn</button>
-                        <a href="/lich-hen" class="btn btn-warning">Xóa bộ lọc</a>
+                        <a href="/appointment" class="btn btn-warning">Xóa bộ lọc</a>
                     </div>
                 </form>
 
