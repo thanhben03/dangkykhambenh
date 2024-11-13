@@ -47,7 +47,7 @@ Quản Lý Bệnh Nhân
                             <div class="card">
                                 <div class="card-header">
                                     <h3 class="card-title">
-                                       {{ $patient['name'] }} - {{$patient['bod']}}
+                                       {{ $patient['name'] }} {{$patient['bod']}}
 
                                     </h3>
                                     <button class="btn btn-primary" type="button" data-bs-toggle="collapse"
