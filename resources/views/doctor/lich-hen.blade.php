@@ -63,35 +63,5 @@ Lịch Hẹn Bệnh Nhân
 @endsection
 
 @push('js')
-    <script>
-        document.getElementById('search-appointments').addEventListener('click', function() {
-            var date = document.getElementById('appointment-date').value;
 
-            if (date) {
-                // Gọi AJAX để lấy danh sách bệnh nhân
-                fetch('/get-appointments?date=' + date)
-                    .then(response => response.json())
-                    .then(data => {
-                        // Xóa danh sách cũ
-                        var appointmentList = document.getElementById('appointment-list');
-                        appointmentList.innerHTML = '';
-
-                        // Hiển thị danh sách mới
-                        data.forEach((appointment, index) => {
-                            console.log(appointment);
-                            appointmentList.innerHTML += `
-                        <tr>
-                            <td>${index + 1}</td>
-                            <td>${appointment.name}</td>
-                            <td>${appointment.nic}</td>
-                            <td>${appointment.created_at}</td>
-                        </tr>
-                    `;
-                        });
-                    });
-            } else {
-                alert('Vui lòng chọn ngày hẹn!');
-            }
-        });
-    </script>
 @endpush

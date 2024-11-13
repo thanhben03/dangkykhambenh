@@ -147,6 +147,7 @@ class PatientController extends Controller
     // Quét CCCD
     public function scan()
     {
+        // Gọi đến api của ras để lấy dữ liệu từ CCCD
         $response = Http::withHeaders([
             'Content-Type' => 'application/json',
         ])->timeout(0)->post('crow-wondrous-asp.ngrok-free.app/command', [
@@ -178,18 +179,15 @@ class PatientController extends Controller
     // Chuyển chuỗi CCCD thành 1 mảng dữ liệu
     public function getDataFromCCCD(string $data)
     {
-        $arrData = explode("|", $data);
+        $arrData = explode("|", $data); // chuyển chuỗi thành mảng phân cách bởi dấu |
         $strBirthday = $arrData[3];
-        //        $birthday = substr($strBirthday, 0, 2).'-'. substr($strBirthday, 2,2). '-'. substr($strBirthday, 4);
+        //$birthday = substr($strBirthday, 0, 2).'-'. substr($strBirthday, 2,2). '-'. substr($strBirthday, 4);
         $birthday = substr($strBirthday, 4) . '-' . substr($strBirthday, 2, 2) . '-' . substr($strBirthday, 0, 2);
         return [
-            'stt' => rand(0, 1000),
             'bn_name' => $arrData[2],
             'dob' => $birthday,
             'gender' => $arrData[4],
             'birthplace' => $arrData[5],
-            'arrival_time' => Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString(),
-            'department' => 'Khoa CNTT',
             'cccd' => $arrData[0],
         ];
     }
@@ -199,6 +197,8 @@ class PatientController extends Controller
     {
         $data = $request->all();
         $department = null;
+
+        // nếu người dùng không chọn khám tổng quát
         if ($data['department'] != 15) {
             $department = Department::query()->where('id', '=', $data['department'])->first();
         } else {
@@ -208,7 +208,10 @@ class PatientController extends Controller
 
         $arrival_time = $this->getArrivalTime($department)->toDateTimeString();
 
+        // lấy dữ liệu của bệnh nhân theo cccd
         $patient = Patient::query()->where('nic', '=', $data['cccd'])->first();
+
+        // nếu ko có thì đăng ký mới
         if (!$patient) {
             $patient = Patient::query()->create([
                 'name' => $data['fullname'],
@@ -240,7 +243,8 @@ class PatientController extends Controller
         ]);
 
 
-        if (true) {
+        if ($response->successful()) {
+            // Khi đăng ký khám thành công sẽ trả về bản đồ đến khoa khám đó
             return response()->json([
                 'img' => $department->img_map
             ]);
@@ -261,7 +265,7 @@ class PatientController extends Controller
         }
 
         $ngaykham = $data['ngaykham'];
-        
+
 
         $patient = Patient::query()->where('nic', '=', $data['cccd'])->first();
         if (!$patient) {
@@ -277,12 +281,11 @@ class PatientController extends Controller
         }
         $stt = $this->registerPatientVisit($patient->id, $data['trieu_chung'], $data['department'], null, $ngaykham);
 
-        
+
 
         return response()->json([
             'img' => $department->img_map
         ]);
-
     }
 
     // Hàm lấy STT hiện tại của một khoa
@@ -313,16 +316,22 @@ class PatientController extends Controller
     {
         $patientVisit = null;
         if ($ngaykham) {
+            // Lấy bệnh nhân mới nhất nếu có truyền vào ngày đến khám
             $patientVisit = PatientVisit::query()
                 ->where('department_id', $department->id)
                 ->whereDate('arrival_time', Carbon::parse($ngaykham))
                 ->orderBy('arrival_time', 'desc')
                 ->first();
         } else {
+            // Lấy bệnh nhân mới nhất theo khoa của ngày hôm đó
             $patientVisit = $this->getPatientVisitLatest($department);
         }
+
+        // Lấy thời gian hiện tại
         $currentNow = Carbon::now('Asia/Ho_Chi_Minh');
 
+        // Nếu không có bệnh nhân đến khám hoặc thời gian hiện tại lớn hơn
+        // thời gian dự kiến đến khám của bệnh nhân đó
         if (!$patientVisit || $currentNow > Carbon::parse($patientVisit->arrival_time)->addMinutes(10)) {
             if ($ngaykham && $currentNow < Carbon::parse($ngaykham)) {
                 return Carbon::parse($ngaykham . ' 07:00:00');
@@ -365,32 +374,54 @@ class PatientController extends Controller
     {
         $stt = $request->stt;
         $trieu_chung = $request->trieu_chung;
-        $department_id = $request->department_id;
+        $department_id = $request->department_id; // khoa kế tiếp
 
+        // lấy dữ liệu khám của bệnh nhân
         $patientVisit = PatientVisit::query()
             ->where('stt', '=', $stt)
             ->whereDate('arrival_time', Carbon::today())
             ->orderBy('arrival_time', 'desc')
             ->first();
 
+        // lấy thông bệnh nhân đến khám
         $patient = Patient::query()->where('id', '=', $patientVisit->patient_id)->first();
 
         $this->done($stt);
         $this->registerPatientVisit($patient->id, $trieu_chung, $department_id, $stt);
     }
 
+    // Khi bac si an nut hoan thanh
+    public function done($stt)
+    {
+        PatientVisit::query()
+            ->where('stt', '=', $stt)
+            ->where('department_id', '=', auth()->user()->department_id)
+            ->whereDate('arrival_time', Carbon::today())
+            ->update(['status' => 1]);
+
+        // gửi dữ liệu ra màn hình chờ khi khám xong để hiển thị stt tiếp theo
+        broadcast(new StandbyScreenEvent())->toOthers();
+
+        return response()->json([
+            'msg' => 'Ok'
+        ]);
+    }
+
     // Xử lý đăng ký stt cho bệnh nhân
     public function registerPatientVisit($patient_id, $trieu_chung, $department_id, $stt = null, $ngaykham = null)
     {
         $patientVisit = PatientVisit::query()
-            ->whereDate($ngaykham ? 'arrival_time' : 'created_at', $ngaykham ? $ngaykham : Carbon::toDay())
-            ->orderBy('created_at', 'desc')
+            // ->whereDate($ngaykham ? 'arrival_time' : 'created_at', $ngaykham ? $ngaykham : Carbon::toDay())
+            ->whereDate('arrival_time', $ngaykham ? $ngaykham : Carbon::toDay())
+            ->orderBy('arrival_time', 'desc')
             ->first();
         // Không có bệnh nhân mà có stt -> bác sĩ chuyển khoa hoặc khám sktq
         $department = Department::query()->where('id', '=', $department_id)->first();
         $kham_tq = 0;
         $newSTT = 0;
         $newPatientVisit = null;
+
+        // nếu là khám tổng quát thì chuyển đến khoa chẩn đoán hình ảnh
         if ($department_id == 15) {
             $department_id = 10;
             $kham_tq = 1;
@@ -416,27 +447,35 @@ class PatientController extends Controller
             ]);
             $newSTT = 1;
         } else {
+            // lấy số tt mới nhất theo ngày hôm nay
             $stt = PatientVisit::query()
                 ->whereDate('arrival_time', Carbon::toDay())
                 ->latest()->first()->stt;
+            $newSTT = $stt + 1;
+
             $newPatientVisit = PatientVisit::query()->create([
                 'patient_id' => $patient_id,
-                'stt' => $stt + 1,
+                'stt' => $newSTT,
                 'department_id' => $department_id,
                 'trieu_chung' => $trieu_chung,
                 'kham_tq' => $kham_tq,
                 'arrival_time' => $this->getArrivalTime($department, $ngaykham)->toDateTimeString(),
             ]);
-            $newSTT = $stt + 1;
+
+            
         }
 
+        // thông báo cho bác sĩ khi có bệnh nhân đăng ký mới
         $result = PatientVisit::query()
             ->join('patients', 'patient_visits.patient_id', '=', 'patients.id')
             ->select('patients.*', 'patient_visits.*', 'patient_visits.stt as stt')
             ->where('patient_visits.id', $newPatientVisit->id)
             ->get();
 
+        // format lại dữ liệu trả về
         $result = PatientPendingResource::make($result)->resolve();
+
+        // gửi sự kiện đăng ký mới cho bác sĩ
         broadcast(new PatientRegistered($department_id, $result))->toOthers();
 
 
@@ -506,22 +545,6 @@ class PatientController extends Controller
         ]);
     }
 
-    // API lấy lịch hẹn
-    public function getAppointments(Request $request)
-    {
-        $date = Carbon::parse($request->query('date')) ?? Carbon::tomorrow();
-
-        $result = PatientVisit::query()
-            ->join('patients', 'patient_visits.patient_id', '=', 'patients.id')
-            ->select('patients.*', 'patient_visits.*', 'patient_visits.stt as stt')
-            ->where('department_id', '=', \auth()->user()->department_id ?? 1)
-            ->where('status', 0)
-            ->whereDate('patient_visits.created_at', $date)
-            // ->orderBy('patient_visits.created_at')
-            ->get();
-
-        return response()->json($result);
-    }
 
     // Lưu chẩn đoán
     public function saveDiagnose(Request $request)
@@ -530,6 +553,7 @@ class PatientController extends Controller
         $medicineData = [];
         $patientVisit = PatientVisit::query()->find($data['current_patient_visit']);
 
+        // kiểm tra nếu bác sĩ có thêm thuốc
         if (isset($data['medicine_name']) && count($data['medicine_name']) > 0) {
             for ($i = 0; $i < count($data['medicine_name']); $i++) {
                 $medicineData[] = [

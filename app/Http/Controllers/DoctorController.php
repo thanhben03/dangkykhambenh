@@ -12,9 +12,9 @@ use App\Http\Resources\PatientPendingResource;
 use App\Http\Resources\PatientResource;
 use App\Http\Resources\PrintInfoResource;
 use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
-use Barryvdh\DomPDF\PDF;
+
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
+
 
 class DoctorController extends Controller
 {
@@ -69,49 +69,25 @@ class DoctorController extends Controller
     }
 
     // Lấy bệnh nhân đang khám theo tài khoản bác sĩ đã đăng nhập
-    public function getCurrentPatientVisit()
-    {
-        $currentPatient = CurrentPatient::query()
-            ->where('department_id', \auth()->user()->department_id ?? 1)
-            ->whereDate('created_at', Carbon::today())
-            ->orderBy('created_at', 'desc')
-            ->first();
+    // public function getCurrentPatientVisit()
+    // {
+    //     $currentPatient = CurrentPatient::query()
+    //         ->where('department_id', \auth()->user()->department_id ?? 1)
+    //         ->whereDate('created_at', Carbon::today())
+    //         ->orderBy('created_at', 'desc')
+    //         ->first();
 
-        if (!$currentPatient) {
-            $currentPatient = CurrentPatient::create([
-                'department_id' => \auth()->user()->department_id ?? 1,
-                'stt' => 1,
-                'created_at' => now(),
-                // Các giá trị khác cần thiết
-            ]);
-        }
+    //     if (!$currentPatient) {
+    //         $currentPatient = CurrentPatient::create([
+    //             'department_id' => \auth()->user()->department_id ?? 1,
+    //             'stt' => 1,
+    //             'created_at' => now(),
+    //             // Các giá trị khác cần thiết
+    //         ]);
+    //     }
 
-        return $currentPatient;
-    }
-
-    // Khi bac si an nut hoan thanh
-    public function done($stt)
-    {
-        PatientVisit::query()->where('stt', '=', $stt)->update(['status' => 1]);
-
-        $currentPatient = CurrentPatient::query()
-            ->where('department_id', \auth()->user()->department_id ?? 1)
-            ->whereDate('created_at', Carbon::today())
-            ->orderBy('created_at', 'desc')
-            ->first();
-
-        $currentSTT = intval($currentPatient->stt);
-        $currentPatient->stt = $currentSTT + 1;
-        $currentPatient->save();
-
-        broadcast(new StandbyScreenEvent())->toOthers();
-
-
-
-        return response()->json([
-            'msg' => 'Ok'
-        ]);
-    }
+    //     return $currentPatient;
+    // }
 
     // In phiếu khám bệnh
     public function printMedicalRecord($id)
