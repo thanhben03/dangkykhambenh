@@ -137,7 +137,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="/pending-screen">
+                                <a target="_blank" href="/pending-screen">
                                     <i class="bx bx-fullscreen"></i>
 
                                     <span data-key="t-manage-doctor">Màn hình chờ</span>
