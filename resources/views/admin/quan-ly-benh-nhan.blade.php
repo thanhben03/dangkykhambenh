@@ -182,7 +182,7 @@
                         </div>
                     @endforeach
                 @else
-                    <h1>Không có bệnh nhân nào được tìm thấy </h1>
+                    <h4>Không có bệnh nhân nào được tìm thấy </h4>
                 @endif
 
                 <!-- end page title -->
