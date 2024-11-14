@@ -151,6 +151,13 @@
                                     <span data-key="t-manage-doctor">Quản lý bác sĩ</span>
                                 </a>
                             </li>
+                            <li>
+                                <a href="/pending-screen">
+                                    <i class="bx bx-fullscreen"></i>
+
+                                    <span data-key="t-manage-doctor">Màn hình chờ</span>
+                                </a>
+                            </li>
                         @endif
 
 
