@@ -23,7 +23,7 @@ Quản Lý Bệnh Nhân
                     </div>
                 </div>
 
-                <form id="search-form" class="mb-3" action="/quamanage-patient" method="GET">
+                <form id="search-form" class="mb-3" action="/manage-patient" method="GET">
                     <div class="row">
                         <div class="col-md-4">
                             <input type="text" class="form-control" id="searchName" placeholder="Nhập tên bệnh nhân"
