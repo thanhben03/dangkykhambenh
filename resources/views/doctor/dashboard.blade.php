@@ -296,7 +296,7 @@
                                                         Thuốc</button>
                                                 </div>
                                                 <div class="text-end">
-                                                    <a href="/in-phieu-kham-benh/{{$patient['id']}}" class="btn btn-info">In Phiếu</a>
+                                                    <a href="/print-medical-record/{{$patient['id']}}" class="btn btn-info">In Phiếu</a>
                                                     <button type="submit" class="btn btn-success">Lưu Chẩn Đoán</button>
                                                 </div>
                                             </form>
