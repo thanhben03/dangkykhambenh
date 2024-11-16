@@ -10,7 +10,8 @@
 
     <style>
         table>* {
-            font-size: 30px
+            font-size: 30px;
+            text-align: center
         }
     </style>
 
@@ -22,8 +23,8 @@
         <table class="table table-bordered">
             <thead>
                 <tr class="table-primary">
-                    <th scope="col">LOGO</th>
-                    <th style="text-align: center" colspan="3">Khoa {{ $department->department_name }}</th>
+                    <th style="text-align: center" scope="col"><img style="width: 100px" src="/assets/images/logo.png" alt=""></th>
+                    <th style="text-align: center;vertical-align: middle;" colspan="3">Khoa {{ $department->department_name }}</th>
                 </tr>
                 <tr class="table-primary">
                     <th scope="col">STT</th>
