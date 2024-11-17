@@ -174,6 +174,8 @@ class PatientController extends Controller
     public function skip($patient_visit_id)
     {
         PatientVisit::query()->where('id', $patient_visit_id)->delete();
+        broadcast(new StandbyScreenEvent())->toOthers();
+
     }
 
     // Chuyển chuỗi CCCD thành 1 mảng dữ liệu
@@ -477,6 +479,8 @@ class PatientController extends Controller
 
         // gửi sự kiện đăng ký mới cho bác sĩ
         broadcast(new PatientRegistered($department_id, $result))->toOthers();
+        // gửi sự kiện để màn hình tự load ở màn hình chờ
+        broadcast(new StandbyScreenEvent())->toOthers();
 
 
         return $newSTT;
