@@ -10,3 +10,8 @@
     left: 0;
     z-index: 999;
 }
+
+
+.main-content {
+    margin-left: 210px !important;
+}
