@@ -46,9 +46,9 @@
                                     height="24">
                                 <img src="/assets/images/logo_ktys.png"
                                     style="width: 42px;
-    height: 42px;
-    margin-bottom: 5px;
-}" alt=""
+                                                height: 42px;
+                                                margin-bottom: 5px;
+                                            " alt=""
                                     height="24">
                             </span>
                             <span class="logo-lg">
@@ -58,7 +58,7 @@
                                     style="width: 42px;
                                             height: 42px;
                                             margin-bottom: 5px;
-}" alt=""
+                                        " alt=""
                                     height="24">
                             </span>
                         </a>
