@@ -46,6 +46,8 @@
                             <span class="logo-sm">
                                 <img src="/assets/images/logo.png" style="width: 61px; height: 61px" alt=""
                                     height="24">
+                                <img src="/assets/images/logo_ktys.png" style="width: 61px; height: 61px" alt=""
+                                    height="24">
                             </span>
                             <span class="logo-lg">
                                 <img src="/assets/images/logo.png" style="width: 61px; height: 61px" alt=""
@@ -65,9 +67,6 @@
                         </a>
                     </div>
 
-                    <button type="button" class="btn btn-sm px-3 font-size-16 header-item" id="vertical-menu-btn">
-                        <i class="fa fa-fw fa-bars"></i>
-                    </button>
 
 
                 </div>
@@ -158,7 +157,6 @@
                                     <span data-key="t-manage-doctor">Quản lý bác sĩ</span>
                                 </a>
                             </li>
-                            
                         @endif
 
 
@@ -343,8 +341,6 @@
 
     @stack('js')
     <script>
-        
-
         function showDateTime() {
             const now = new Date();
 

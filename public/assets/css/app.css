@@ -444,7 +444,7 @@ body[data-layout=horizontal] .footer {
 }
 
 .vertical-menu {
-  width: 250px;
+  width: 207px;
   z-index: 1001;
   background: var(--bs-sidebar-bg);
   bottom: 0;
