@@ -41,31 +41,19 @@
             <div class="navbar-header">
                 <div class="d-flex">
                     <!-- LOGO -->
-                    <div class="navbar-brand-box" style="padding-left: 6px; width: 207px;">
-                        <a href="/patients/dashboard" class="logo logo-dark">
+                    <div class="navbar-brand-box" style="padding-left: 6px;">
+                        <a href="/dashboard" class="logo logo-dark">
                             <span class="logo-sm">
                                 <img src="/assets/images/logo.png" style="width: 61px; height: 61px" alt=""
                                     height="24">
-                                <img src="/assets/images/logo_ktys.png"
-                                    style="width: 42px;
-                                                height: 42px;
-                                                margin-bottom: 5px;
-                                            "
-                                    alt="" height="24">
                             </span>
                             <span class="logo-lg">
                                 <img src="/assets/images/logo.png" style="width: 61px; height: 61px" alt=""
                                     height="24">
-                                <img src="/assets/images/logo_ktys.png"
-                                    style="width: 42px;
-                                            height: 42px;
-                                            margin-bottom: 5px;
-                                        "
-                                    alt="" height="24">
                             </span>
                         </a>
 
-                        <a href="/patients/dashboard" class="logo logo-light">
+                        <a href="/dashboard" class="logo logo-light">
                             <span class="logo-sm">
                                 <img src="/assets/images/logo.png" style="width: 61px; height: 61px" alt=""
                                     height="24">
@@ -77,10 +65,18 @@
                         </a>
                     </div>
 
+                    <button type="button" class="btn btn-sm px-3 font-size-16 header-item" id="vertical-menu-btn">
+                        <i class="fa fa-fw fa-bars"></i>
+                    </button>
+
 
                 </div>
-
-                <div class="d-flex align-items-center">
+                <div class="">
+                    <img width="50px" src="/assets/images/logo_hcmute.png" alt="">
+                    <img width="43px" src="/assets/images/logo_ktys.png" alt="">
+                    <img width="50px" src="/assets/images/logo_115.png" alt="">
+                </div>
+                <div class="d-flex align-items-center" style="margin-left: auto">
 
                     <div class="dropdown d-none d-lg-inline-block ms-1 mx-3">
                         <div class="d-flex align-items-center">
@@ -114,7 +110,7 @@
         </header>
 
         <!-- ========== Left Sidebar Start ========== -->
-        <div class="vertical-menu" style="width: 207px;">
+        <div class="vertical-menu">
 
             <div data-simplebar class="h-100">
 

@@ -129,6 +129,7 @@ class PatientController extends Controller
             ->get();
 
         $patients = PatientPendingResource::make($patients)->resolve();
+        
         return view('patient.dashboard', [
             'patients' => $patients
         ]);

@@ -43,6 +43,29 @@
         </div>
     </div>
 
+    <div class="modal fade" id="img-map-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="max-width: 93% !important">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Bản đồ hướng dẫn đến khoa khám</h5>
+                    <button onclick="window.location.reload()" class="my-btn">X</button>
+                </div>
+                <div class="modal-body">
+                    <img style="
+                        display: block;
+                        margin-left: auto;
+                        margin-right: auto;
+                        width: 50%;"
+                        src="" id="img_map" alt="">
+                </div>
+                <div class="modal-footer">
+                    {{-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button> --}}
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <div class="main-content">
 
@@ -99,6 +122,11 @@
                                         data-bs-target="#patientInfo-{{ $patient['id'] }}" aria-expanded="true"
                                         aria-controls="patientInfo-3">
                                         Xem chi tiết
+                                    </button>
+                                    <button onclick="showMap({{$patient['department']}})" class="btn btn-info" type="button"
+                                        
+                                        aria-controls="patientInfo-3">
+                                        Bản đồ
                                     </button>
                                     <button onclick="huyLichHen({{ $patient['id'] }})" class="btn btn-danger"
                                         type="button">
@@ -287,6 +315,13 @@
 
         function showModalCreateAppointment() {
             $("#modal-create-appointment").modal('toggle');
+        }
+
+        function showMap(img_map) {
+            console.log(img_map.img_map);
+            
+            $("#img_map").attr('src', img_map.img_map);
+            $("#img-map-modal").modal('toggle')
         }
     </script>
 @endpush

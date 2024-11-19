@@ -3,6 +3,6 @@
     overflow-y: scroll;
 }
 
-.main-content {
-    margin-left: 210px !important;
+.navbar-header {
+    justify-content: unset !important;
 }
