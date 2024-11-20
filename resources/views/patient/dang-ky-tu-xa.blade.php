@@ -80,7 +80,7 @@
                     <label for="appointmentType" class="form-label">Địa chỉ</label>
                     <input type="text" name="address" id="address" class="form-control" placeholder="Nhập địa chỉ">
                 </div>
-                
+
                 <div class="col mb-3">
                     <label for="phone" class="form-label">Số điện thoại</label>
                     <input type="tel" name="phone" class="form-control" id="phone"
@@ -94,9 +94,36 @@
             <div class="mb-3">
                 <textarea name="trieu_chung" class="form-control" rows="3" placeholder="Triệu chứng"></textarea>
             </div>
-            <div class="d-flex justify-content-between">
+            <div class="d-flex">
                 <button style="font-size: 20px" type="submit" class="btn btn-primary">Đăng ký</button>
-                <a style="font-size: 20px" href="{{ route('patient.login') }}" class="mx-2 btn btn-success">Đăng nhập</a>
+
+                <div
+                    style="
+                        display: flex;
+                        align-items: center;
+                        margin-left: auto;
+                    ">
+                    <select
+                        style="    
+                        border: 1px solid #d4d4d4;
+                        background: cadetblue;
+                        color: white;
+                        text-align: center;
+                        border-radius: 4px;
+                        height: 45px;
+                        font-size: 18px;
+                    
+                        "
+                        onchange="showMap(this)" name="" id="select-map">
+                        <option selected value="">Xem Bản Đồ</option>
+                        @foreach (DB::table('departments')->where('status', 0)->get() as $item)
+                            <option value="{{ $item->id }}">{{ $item->department_name }}</option>
+                        @endforeach
+                    </select>
+                    <a style="font-size: 20px" href="{{ route('patient.login') }}" class="mx-2 btn btn-success">Đăng
+                        nhập</a>
+                </div>
+
             </div>
         </form>
     </div>
@@ -135,6 +162,21 @@
             event.preventDefault()
             register()
         });
+
+        function showMap(department) {
+            
+            $.ajax({
+                type: "GET",
+                url: "/get-map/" + department.value,
+                success: function(res) {
+                    $("#img_map").attr('src', res.img)
+                    $("#img-map-modal").modal('toggle');
+                },
+                error: function(xhr) {
+
+                }
+            })
+        }
 
         function register() {
             let cccd = document.getElementById("cccd-number").value;

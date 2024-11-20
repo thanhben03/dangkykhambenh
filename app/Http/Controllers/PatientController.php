@@ -25,6 +25,15 @@ class PatientController extends Controller
         return view('patient.dashboard');
     }
 
+    // Lấy hình ảnh bản đồ
+    public function getMap ($department_id) {
+        $department = Department::query()->findOrFail($department_id);
+
+        return response()->json([
+            'img' => $department->img_map
+        ]);
+    }
+
     // tạo lịch hẹn
     public function createAppointment(Request $request)
     {

@@ -27,6 +27,7 @@ Route::get('/send', function () {
 });
 
 Route::get('/print-medical-record/{id}', [DoctorController::class, 'printMedicalRecord']);
+Route::get('/get-map/{department_id}', [PatientController::class, 'getMap']);
 // Route::get('/in-phieu-kham-benh/{id}', [DoctorController::class, 'printInfoPatient']);
 
 Route::middleware(CheckDoctor::class)->group(function () {
