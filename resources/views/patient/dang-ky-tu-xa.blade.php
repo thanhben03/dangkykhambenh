@@ -76,7 +76,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col mb-3">
+                <div class="col-lg-4 col-sm-12 mb-3 mb-3">
                     <label for="appointmentType" class="form-label">Địa chỉ</label>
                     <input type="text" name="address" id="address" class="form-control" placeholder="Nhập địa chỉ">
                 </div>
@@ -94,28 +94,24 @@
             <div class="mb-3">
                 <textarea name="trieu_chung" class="form-control" rows="3" placeholder="Triệu chứng"></textarea>
             </div>
-            <div class="d-flex">
-                <button style="font-size: 20px" type="submit" class="btn btn-primary">Đăng ký</button>
+            <div class="d-flex justify-content-between">
 
-                <div
-                    style="
-                        display: flex;
-                        align-items: center;
-                        margin-left: auto;
-                    ">
+                <button style="font-size: 20px" type="submit" class="btn btn-primary">Đăng ký</button>
+                <div class="d-flex">
+                    
                     <select
                         style="    
-                        border: 1px solid #d4d4d4;
-                        background: cadetblue;
-                        color: white;
-                        text-align: center;
-                        border-radius: 4px;
-                        height: 45px;
-                        font-size: 18px;
-                    
-                        "
+                            border: 1px solid #d4d4d4;
+                            background: cadetblue;
+                            color: white;
+                            text-align: center;
+                            border-radius: 4px;
+                            height: 45px;
+                            font-size: 18px;
+                            width: 100px;
+                            "
                         onchange="showMap(this)" name="" id="select-map">
-                        <option selected value="">Xem Bản Đồ</option>
+                        <option selected value="">Bản Đồ</option>
                         @foreach (DB::table('departments')->where('status', 0)->get() as $item)
                             <option value="{{ $item->id }}">{{ $item->department_name }}</option>
                         @endforeach
@@ -124,8 +120,12 @@
                         nhập</a>
                 </div>
 
+
+                
+
             </div>
         </form>
+
     </div>
 @endsection
 
@@ -164,7 +164,7 @@
         });
 
         function showMap(department) {
-            
+
             $.ajax({
                 type: "GET",
                 url: "/get-map/" + department.value,
