@@ -96,8 +96,8 @@
             </div>
             <div class="d-flex justify-content-between">
 
+                <button style="font-size: 20px" type="submit" class="btn btn-primary">Đăng ký</button>
                 <div class="d-flex">
-                    <button style="font-size: 20px" type="submit" class="btn btn-primary">Đăng ký</button>
                     
                     <select
                         style="    
@@ -116,9 +116,10 @@
                             <option value="{{ $item->id }}">{{ $item->department_name }}</option>
                         @endforeach
                     </select>
+                    <a style="font-size: 20px" href="{{ route('patient.login') }}" class="mx-2 btn btn-success">Đăng
+                        nhập</a>
                 </div>
-                <a style="font-size: 20px" href="{{ route('patient.login') }}" class="mx-2 btn btn-success">Đăng
-                    nhập</a>
+                
 
 
                 
