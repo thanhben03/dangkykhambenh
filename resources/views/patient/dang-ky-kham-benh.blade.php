@@ -12,13 +12,13 @@
                     <h5 class="modal-title" id="exampleModalLabel">Bản đồ hướng dẫn đến khoa khám</h5>
                     <button onclick="window.location.reload()" class="my-btn">X</button>
                 </div>
-                <div class="modal-body">
-                    <img style="
+                <div class="modal-body d-flex justify-content-center">
+                    {{-- <img style="
                         display: block;
                         margin-left: auto;
                         margin-right: auto;
                         width: 50%;"
-                        src="" id="img_map" alt="">
+                        src="" id="img_map" alt=""> --}}
                 </div>
                 <div class="modal-footer">
                     {{-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -151,7 +151,12 @@
                 success: function(res) {
                     alert('Đăng ký thành công !')
                     $(".loading").css('display', 'none')
-                    $("#img_map").attr('src', res.img)
+                    $(".modal-body").html(`
+                        <video style="width: 75%" autoplay loop>
+                            <source id="srcVideo" src="/assets/video/${res.video}" type="video/mp4">
+                            </source>
+                        </video>
+                    `)
                     $("#img-map-modal").modal('toggle');
                     // window.location.reload()
                 },

@@ -250,7 +250,7 @@ class PatientController extends Controller
             //            'email' => $this->removeVietnameseAccents($data['email']),
             'phone' => $this->removeVietnameseAccents($data['phone']),
             'arrival_time' => $arrival_time,
-            'department' => $this->removeVietnameseAccents($department->department_name),
+            'department' => $this->removeVietnameseAccents($department->department_name).' - '. $department->room,
             'trieu_chung' => $this->removeVietnameseAccents($data['trieu_chung']),
         ]);
 
@@ -258,7 +258,8 @@ class PatientController extends Controller
         if ($response->successful()) {
             // Khi đăng ký khám thành công sẽ trả về bản đồ đến khoa khám đó
             return response()->json([
-                'img' => $department->img_map
+                'img' => $department->img_map,
+                'video' => $department->video
             ]);
         } else {
             return response()->json(['error' => 'API request failed'], 500);
@@ -296,7 +297,8 @@ class PatientController extends Controller
 
 
         return response()->json([
-            'img' => $department->img_map
+            'img' => $department->img_map,
+            'video' => $department->video
         ]);
     }
 

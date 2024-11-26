@@ -13,13 +13,15 @@
                     <h5 class="modal-title" id="exampleModalLabel">Bản đồ hướng dẫn đến khoa khám</h5>
                     <button onclick="window.location.reload()" class="my-btn">X</button>
                 </div>
-                <div class="modal-body">
-                    <img style="
+                <div class="modal-body d-flex justify-content-center">
+                    {{-- <img style="
                         display: block;
                         margin-left: auto;
                         margin-right: auto;
                         width: 50%;"
-                        src="" id="img_map" alt="">
+                        src="" id="img_map" alt=""> --}}
+                        
+                    
                 </div>
                 <div class="modal-footer">
                     {{-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -98,7 +100,7 @@
 
                 <button style="font-size: 20px" type="submit" class="btn btn-primary">Đăng ký</button>
                 <div class="d-flex">
-                    
+
                     <select
                         style="    
                             border: 1px solid #d4d4d4;
@@ -119,10 +121,10 @@
                     <a style="font-size: 20px" href="{{ route('patient.login') }}" class="mx-2 btn btn-success">Đăng
                         nhập</a>
                 </div>
-                
 
 
-                
+
+
 
             </div>
         </form>
@@ -134,6 +136,7 @@
     {{-- <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
         crossorigin="anonymous"></script> --}}
     <script>
+
         function scan() {
             $.ajax({
                 type: "POST",
@@ -197,7 +200,12 @@
                 success: function(res) {
                     alert('Đăng ký thành công !')
                     $(".loading").css('display', 'none')
-                    $("#img_map").attr('src', res.img)
+                    $(".modal-body").html(`
+                        <video style="width: 75%" autoplay loop>
+                            <source id="srcVideo" src="/assets/video/${res.video}" type="video/mp4">
+                            </source>
+                        </video>
+                    `)
                     $("#img-map-modal").modal('toggle');
                     // window.location.reload()
                 },

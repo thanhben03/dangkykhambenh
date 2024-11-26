@@ -50,13 +50,13 @@
                     <h5 class="modal-title" id="exampleModalLabel">Bản đồ hướng dẫn đến khoa khám</h5>
                     <button onclick="window.location.reload()" class="my-btn">X</button>
                 </div>
-                <div class="modal-body">
-                    <img style="
+                <div class="modal-body d-flex justify-content-center">
+                    {{-- <img style="
                         display: block;
                         margin-left: auto;
                         margin-right: auto;
                         width: 50%;"
-                        src="" id="img_map" alt="">
+                        src="" id="img_map" alt=""> --}}
                 </div>
                 <div class="modal-footer">
                     {{-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -123,7 +123,7 @@
                                         aria-controls="patientInfo-3">
                                         Xem chi tiết
                                     </button>
-                                    <button onclick="showMap({{$patient['department']}})" class="btn btn-info" type="button"
+                                    <button onclick="showMap('{{$patient['department']->video}}')" class="btn btn-info" type="button"
                                         
                                         aria-controls="patientInfo-3">
                                         Bản đồ
@@ -317,10 +317,15 @@
             $("#modal-create-appointment").modal('toggle');
         }
 
-        function showMap(img_map) {
-            console.log(img_map.img_map);
+        function showMap(video) {
+            console.log(video);
             
-            $("#img_map").attr('src', img_map.img_map);
+            $(".modal-body").html(`
+                        <video style="width: 75%" controls>
+                            <source id="srcVideo" src="/assets/video/${video}" type="video/mp4">
+                            </source>
+                        </video>
+                    `)
             $("#img-map-modal").modal('toggle')
         }
     </script>
