@@ -78,7 +78,7 @@
 
                 </div>
                 <div class="">
-                    <img width="61px" src="/assets/images/logo_hcmute.png" alt="">
+                    <img width="51px" src="/assets/images/logo_hcmute.png" alt="">
                     <img width="43px" src="/assets/images/logo_ktys.png" alt="">
                     <img width="50px" style="margin-left: 6px" src="/assets/images/logo_115.png" alt="">
                 </div>
