@@ -5,4 +5,11 @@
 
 .navbar-header {
     justify-content: unset !important;
+    padding: 0 13px 0 0 !important;
+}
+
+@media (min-width: 320px) and (max-width: 480px) {
+    .video-map {
+        width: 108% !important;
+    }
 }

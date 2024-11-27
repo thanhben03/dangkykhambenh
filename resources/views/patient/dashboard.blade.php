@@ -321,7 +321,7 @@
             console.log(video);
             
             $(".modal-body").html(`
-                        <video style="width: 75%" autoplay loop>
+                        <video class="video-map" style="width: 75%" autoplay loop muted>
                             <source id="srcVideo" src="/assets/video/${video}" type="video/mp4">
                             </source>
                         </video>

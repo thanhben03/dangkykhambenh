@@ -152,7 +152,7 @@
                     alert('Đăng ký thành công !')
                     $(".loading").css('display', 'none')
                     $(".modal-body").html(`
-                        <video style="width: 75%" autoplay loop>
+                        <video style="width: 75%" autoplay loop muted>
                             <source id="srcVideo" src="/assets/video/${res.video}" type="video/mp4">
                             </source>
                         </video>
