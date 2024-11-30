@@ -173,7 +173,12 @@
                 type: "GET",
                 url: "/get-map/" + department.value,
                 success: function(res) {
-                    $("#img_map").attr('src', res.img)
+                    $(".modal-body").html(`
+                        <video style="width: 75%" autoplay loop muted>
+                            <source id="srcVideo" src="/assets/video/${res.video}" type="video/mp4">
+                            </source>
+                        </video>
+                    `)
                     $("#img-map-modal").modal('toggle');
                 },
                 error: function(xhr) {

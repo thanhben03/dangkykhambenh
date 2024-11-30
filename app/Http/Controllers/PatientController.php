@@ -30,7 +30,7 @@ class PatientController extends Controller
         $department = Department::query()->findOrFail($department_id);
 
         return response()->json([
-            'img' => $department->img_map
+            'video' => $department->video
         ]);
     }
 
