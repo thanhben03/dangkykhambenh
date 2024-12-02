@@ -179,7 +179,7 @@
                                             <div class="mb-3 row">
                                                 <label for="fullName" class="col-sm-2 col-form-label">Địa chỉ</label>
                                                 <div class="col-sm-10">
-                                                    <input readonly value="123 456 789" type="text"
+                                                    <input readonly value="527 Sư Vạn Hạnh, Phường 12, Quận 10, Thành phố Hồ Chí Minh" type="text"
                                                         class="form-control" id="fullName" name="reg_pname">
                                                 </div>
                                             </div>

@@ -90,7 +90,7 @@
             </div>
             <div class="d-flex">
                 <button type="submit" class="btn btn-primary">Đăng ký</button>
-                <button onclick="scan()" class="mx-2 btn btn-success">Scan CCCD</button>
+                <button onclick="scan()" class="mx-2 btn btn-success">Quét CCCD</button>
             </div>
         </form>
     </div>
@@ -123,6 +123,7 @@
                 error: function(xhr) {
                     console.log(xhr.responseJSON)
                     $(".loading").css('display', 'none')
+                    alert('Đã có lỗi trong quá trình quét')
 
                 }
             })

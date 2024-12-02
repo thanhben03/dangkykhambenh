@@ -160,7 +160,7 @@ class PatientController extends Controller
         // Gọi đến api của ras để lấy dữ liệu từ CCCD
         $response = Http::withHeaders([
             'Content-Type' => 'application/json',
-        ])->timeout(0)->post('crow-wondrous-asp.ngrok-free.app/command', [
+        ])->timeout(60)->post('crow-wondrous-asp.ngrok-free.app/command', [
             'command' => 'scan_qr',
         ]);
         //        return response()->json($this->getDataFromCCCD('089202017098|352576714|Lê Văn Lương|23052002|Nam|Tổ 10 Ấp An Thái, Hòa Bình, Chợ Mới, An Giang|31122021'));
