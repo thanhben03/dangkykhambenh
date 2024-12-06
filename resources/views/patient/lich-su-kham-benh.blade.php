@@ -51,7 +51,7 @@ Lịch Sử Khám Bệnh
                                                                 {{ $history->department->department_name }}
                                                             @endif
                                                         </td>
-                                                        <td>{{ $history->chuan_doan ?? '' }}</td>
+                                                        <td>{{ $history->diagnosis ?? '' }}</td>
                                                         <td>
                                                             {{ $history->medicines->map(function ($item) {
                                                                     return $item->medicine_name . ' (' . $item->use . ')';
