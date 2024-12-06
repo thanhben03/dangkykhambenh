@@ -66,8 +66,8 @@
             <p>Ngày sinh: {{ $patient['bod'] }}</p>
             <p>Nơi sinh: {{ $patient['address'] }}</p>
             <p>CCCD: {{ $patient['cccd'] }}</p>
-            <p>Triệu chứng: {{$patient['trieu_chung']}}</p>
-            <p>Chẩn đoán: {{$patient['chuan_doan']}}</p>
+            <p>Triệu chứng: {{$patient['symptom']}}</p>
+            <p>Chẩn đoán: {{$patient['diagnosis']}}</p>
             <p>Đơn thuốc:<br></p>
             <p>{{$patient['history_medicine']}}</p>
             <p class="signature" style="text-align: right;margin: 20px 35px 0 0 !important;"><strong>Ký tên</strong></p>

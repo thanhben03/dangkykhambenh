@@ -140,14 +140,14 @@ Lịch Sử Khám Bệnh
 
         function nextDepartment() {
             let stt = $("#current-stt")
-            let trieu_chung = $("#trieu_chung")
+            let symptom = $("#symptom")
             let department_id = $("#department_id")
             $.ajax({
                 type: "POST",
                 url: "/next-department",
                 data: {
                     stt: stt.val(),
-                    trieu_chung: trieu_chung.val(),
+                    symptom: symptom.val(),
                     department_id: department_id.val(),
                     "_token": "{{ csrf_token() }}"
                 },
