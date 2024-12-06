@@ -43,7 +43,7 @@ Lịch Sử Khám Bệnh
                                             <tbody>
                                                 @foreach ($patient['history'] as $history)
                                                     <tr>
-                                                        <td>{{ $history->created_at }}</td>
+                                                        <td>{{ $history->arrival_time }}</td>
                                                         <td>
                                                             @if ($history->kham_tq)
                                                                 Khám tổng quát({{ $history->department->department_name }})
