@@ -31,7 +31,7 @@
                     </div>
                     <div class="form-group">
                         <label>Triệu chứng: </label>
-                        <textarea class="form-control" id="trieu_chung"></textarea>
+                        <textarea class="form-control" id="symptom"></textarea>
                     </div>
 
                 </div>
@@ -296,7 +296,7 @@
                 url: "/patients/create-appointment",
                 data: {
                     'department_id': $("#department_id").val(),
-                    'trieu_chung': $("#trieu_chung").val(),
+                    'symptom': $("#symptom").val(),
                     'ngaykham': $("#ngaykham").val(),
                     '_token': '{{ csrf_token() }}',
                 },

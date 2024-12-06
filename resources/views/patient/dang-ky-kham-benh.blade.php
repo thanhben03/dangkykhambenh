@@ -86,7 +86,7 @@
                 </div>
             </div>
             <div class="mb-3">
-                <textarea name="trieu_chung" class="form-control" rows="3" placeholder="Triệu chứng"></textarea>
+                <textarea name="symptom" class="form-control" rows="3" placeholder="Triệu chứng"></textarea>
             </div>
             <div class="d-flex">
                 <button type="submit" class="btn btn-primary">Đăng ký</button>

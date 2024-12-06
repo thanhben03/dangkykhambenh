@@ -51,7 +51,7 @@ Lịch Hẹn Bệnh Nhân
                                     <td>{{ $item->stt }}</td>
                                     <td>{{ $item->name }}</td>
                                     <td>{{ $item->bod }}</td>
-                                    <td>{{ $item->trieu_chung }}</td>
+                                    <td>{{ $item->symptom }}</td>
                                 </tr>
                             @endforeach
                         </tbody>

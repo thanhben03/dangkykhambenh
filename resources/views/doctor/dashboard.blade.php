@@ -26,7 +26,7 @@
                     </div>
                     {{-- <div class="form-group">
                         <label>Ghi Chú: </label>
-                        <textarea class="form-control" id="trieu_chung"></textarea>
+                        <textarea class="form-control" id="symptom"></textarea>
                     </div> --}}
 
                 </div>
@@ -252,11 +252,11 @@
                                                 <input hidden name="current_patient_visit" value="{{ $patient['id'] }}">
                                                 <div class="mb-3">
                                                     <label for="symptoms" class="form-label">Triệu Chứng</label>
-                                                    <textarea class="form-control" id="symptoms" name="symptoms" rows="3">{{ $patient['trieu_chung'] }}</textarea>
+                                                    <textarea class="form-control" id="symptoms" name="symptoms" rows="3">{{ $patient['symptom'] }}</textarea>
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="diagnosis" class="form-label">Chuẩn Đoán</label>
-                                                    <textarea class="form-control" id="diagnosis" name="diagnosis" rows="3">{{ $patient['chuan_doan'] }}</textarea>
+                                                    <textarea class="form-control" id="diagnosis" name="diagnosis" rows="3">{{ $patient['diagnosis'] }}</textarea>
                                                 </div>
                                                 <!-- Prescription Section -->
                                                 <div class="mb-3">
@@ -316,7 +316,7 @@
                                                     @foreach ($patient['history'] as $history)
                                                         <tr>
                                                             <td>{{ $history->created_at }}</td>
-                                                            <td>{{ $history->chuan_doan ?? '' }}</td>
+                                                            <td>{{ $history->diagnosis ?? '' }}</td>
                                                             <td>
                                                                 {{ $history->medicines->map(function ($item) {
                                                                         return $item->medicine_name . ' (' . $item->use . ')';
@@ -447,14 +447,14 @@
 
         function nextDepartment(stt) {
             let currentSTT = stt ? stt : $("#current-stt").val();
-            let trieu_chung = $("#trieu_chung")
+            let symptom = $("#symptom")
             let department_id = $("#department_id")
             $.ajax({
                 type: "POST",
                 url: "/next-department",
                 data: {
                     stt: currentSTT,
-                    // trieu_chung: trieu_chung.val(),
+                    // symptom: symptom.val(),
                     department_id: department_id.val(),
                     "_token": "{{ csrf_token() }}"
                 },
@@ -468,14 +468,14 @@
         function nextDepartmentGeneral() {
             let currentSTT = $("#current-stt").val();
             let currentPatientVisit = $("#current-patient-visit").val();
-            let trieu_chung = $("#trieu_chung_general")
+            let symptom = $("#symptom_general")
             $.ajax({
                 type: "POST",
                 url: "/next-department-general",
                 data: {
                     id: currentPatientVisit,
                     stt: currentSTT,
-                    trieu_chung: trieu_chung.val(),
+                    symptom: symptom.val(),
                     // department_id: department_id.val(),
                     "_token": "{{ csrf_token() }}"
                 },

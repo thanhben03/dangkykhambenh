@@ -39,11 +39,11 @@ class PatientController extends Controller
     {
         try {
 
-            $trieu_chung = $request->trieu_chung;
+            $symptom = $request->symptom;
             $department_id = $request->department_id;
             $patient = Auth::guard('patient')->user();
             $ngaykham = $request->ngaykham;
-            $this->registerPatientVisit($patient->id, $trieu_chung, $department_id, null, $ngaykham);
+            $this->registerPatientVisit($patient->id, $symptom, $department_id, null, $ngaykham);
             return response()->json([]);
         } catch (\Throwable $th) {
             return response()->json($th->getMessage(), 400);
@@ -236,7 +236,7 @@ class PatientController extends Controller
 
             ]);
         }
-        $stt = $this->registerPatientVisit($patient->id, $data['trieu_chung'], $data['department']);
+        $stt = $this->registerPatientVisit($patient->id, $data['symptom'], $data['department']);
 
 
 
@@ -251,7 +251,7 @@ class PatientController extends Controller
             'phone' => $this->removeVietnameseAccents($data['phone']),
             'arrival_time' => $arrival_time,
             'department' => $this->removeVietnameseAccents($department->department_name).' - '. $department->room,
-            'trieu_chung' => $this->removeVietnameseAccents($data['trieu_chung']),
+            'symptom' => $this->removeVietnameseAccents($data['symptom']),
         ]);
 
 
@@ -292,7 +292,7 @@ class PatientController extends Controller
                 'password' => Hash::make($data['cccd']),
             ]);
         }
-        $stt = $this->registerPatientVisit($patient->id, $data['trieu_chung'], $data['department'], null, $ngaykham);
+        $stt = $this->registerPatientVisit($patient->id, $data['symptom'], $data['department'], null, $ngaykham);
 
 
 
@@ -387,7 +387,7 @@ class PatientController extends Controller
     public function nextDepartment(Request $request)
     {
         $stt = $request->stt;
-        $trieu_chung = $request->trieu_chung;
+        $symptom = $request->symptom;
         $department_id = $request->department_id; // khoa kế tiếp
 
         // lấy dữ liệu khám của bệnh nhân
@@ -401,7 +401,7 @@ class PatientController extends Controller
         $patient = Patient::query()->where('id', '=', $patientVisit->patient_id)->first();
 
         $this->done($stt);
-        $this->registerPatientVisit($patient->id, $trieu_chung, $department_id, $stt);
+        $this->registerPatientVisit($patient->id, $symptom, $department_id, $stt);
     }
 
     // Khi bac si an nut hoan thanh
@@ -422,7 +422,7 @@ class PatientController extends Controller
     }
 
     // Xử lý đăng ký stt cho bệnh nhân
-    public function registerPatientVisit($patient_id, $trieu_chung, $department_id, $stt = null, $ngaykham = null)
+    public function registerPatientVisit($patient_id, $symptom, $department_id, $stt = null, $ngaykham = null)
     {
         $patientVisit = PatientVisit::query()
             // ->whereDate($ngaykham ? 'arrival_time' : 'created_at', $ngaykham ? $ngaykham : Carbon::toDay())
@@ -445,7 +445,7 @@ class PatientController extends Controller
                 'patient_id' => $patient_id,
                 'stt' => $stt,
                 'department_id' => $department_id,
-                'trieu_chung' => $trieu_chung,
+                'symptom' => $symptom,
                 'kham_tq' => $kham_tq,
                 'arrival_time' => $this->getArrivalTime($department, $ngaykham)->toDateTimeString(),
             ]);
@@ -455,7 +455,7 @@ class PatientController extends Controller
                 'patient_id' => $patient_id,
                 'stt' => 1,
                 'department_id' => $department_id,
-                'trieu_chung' => $trieu_chung,
+                'symptom' => $symptom,
                 'kham_tq' => $kham_tq,
                 'arrival_time' => $this->getArrivalTime($department, $ngaykham)->toDateTimeString(),
             ]);
@@ -471,7 +471,7 @@ class PatientController extends Controller
                 'patient_id' => $patient_id,
                 'stt' => $newSTT,
                 'department_id' => $department_id,
-                'trieu_chung' => $trieu_chung,
+                'symptom' => $symptom,
                 'kham_tq' => $kham_tq,
                 'arrival_time' => $this->getArrivalTime($department, $ngaykham)->toDateTimeString(),
             ]);
@@ -501,7 +501,7 @@ class PatientController extends Controller
     // Dành cho bệnh nhân khám tổng quát
     public function registerPatientGeneral(Request $request)
     {
-        $trieu_chung = $request->trieu_chung;
+        $symptom = $request->symptom;
         $patient_visit = PatientVisit::query()
             ->where('id', '=', $request->id)
             ->first();
@@ -519,7 +519,7 @@ class PatientController extends Controller
                     ->where('id', '=', $request->id)
                     ->update([
                         'status' => 1,
-                        'trieu_chung' => $trieu_chung
+                        'symptom' => $symptom
                     ]);
                 break;
             default:
@@ -536,7 +536,7 @@ class PatientController extends Controller
                 'stt' => $stt,
                 'department_id' => $department_id,
                 'kham_tq' => 1,
-                'trieu_chung' => $trieu_chung,
+                'symptom' => $symptom,
                 'arrival_time' => $this->getArrivalTime($department)->toDateTimeString(),
             ]);
         }
@@ -585,8 +585,8 @@ class PatientController extends Controller
         }
 
         $patientVisit->update([
-            'trieu_chung' => $data['symptoms'],
-            'chuan_doan' => $data['diagnosis']
+            'symptom' => $data['symptoms'],
+            'diagnosis' => $data['diagnosis']
         ]);
 
         return redirect()->route('dashboard');
