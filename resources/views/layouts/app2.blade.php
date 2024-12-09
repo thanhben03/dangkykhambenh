@@ -102,7 +102,7 @@
                             @csrf
                             <button class="dropdown-item" type="submit">
                                 <i class="mdi mdi-logout font-size-16 align-middle me-1"></i>
-                                Logout
+                                Đăng Xuất
                             </button>
                         </form>
                     </div>

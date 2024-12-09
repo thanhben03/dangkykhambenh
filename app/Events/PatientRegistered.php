@@ -14,7 +14,7 @@ class PatientRegistered implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $departmentId;
+    public $departmentId; // test
     public $patientInfo;
 
     public function __construct($departmentId, $patientInfo)
