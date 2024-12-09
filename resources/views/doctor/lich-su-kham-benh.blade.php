@@ -80,8 +80,7 @@ Lịch Sử Khám Bệnh
                                                     value="N3aCZEQBBHtMdURn9NrkZvXMdfVtQUf9WKa0L0fQ">
                                                 
                                                 <div class="mb-3 row">
-                                                    <label for="fullName" class="col-sm-2 col-form-label">Full
-                                                        Name</label>
+                                                    <label for="fullName" class="col-sm-2 col-form-label">Họ và tên</label>
                                                     <div class="col-sm-10">
                                                         <input readonly value="{{ $patient['name'] }}"
                                                             type="text" class="form-control" id="fullName"
@@ -97,7 +96,7 @@ Lịch Sử Khám Bệnh
                                                     </div>
                                                 </div>
                                                 <div class="mb-3 row">
-                                                    <label for="address" class="col-sm-2 col-form-label">Address</label>
+                                                    <label for="address" class="col-sm-2 col-form-label">Địa chỉ</label>
                                                     <div class="col-sm-10">
                                                         <input readonly value="{{ $patient['address'] }}"
                                                             type="text" class="form-control" id="address"
