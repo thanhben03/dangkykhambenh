@@ -147,7 +147,7 @@ Lịch Sử Khám Bệnh
                                                     <tr>
                                                         <th>Ngày Khám</th>
                                                         <th>Khoa</th>
-                                                        <th>Chuẩn Đoán</th>
+                                                        <th>Chẩn Đoán</th>
                                                         <th>Kê Đơn Thuốc</th>
                                                     </tr>
                                                 </thead>
