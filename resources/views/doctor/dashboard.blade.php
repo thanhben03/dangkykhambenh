@@ -244,7 +244,7 @@
                                             </form>
                                         </div>
 
-                                        <!-- Tab 2: Chuẩn đoán -->
+                                        <!-- Tab 2: Chẩn đoán -->
 
                                         <div role="tabpanel" class="tab-pane fade" id="diagnosis-{{ $patient['stt'] }}">
                                             <form action="/save-diagnose" method="POST">
@@ -255,7 +255,7 @@
                                                     <textarea class="form-control" id="symptoms" name="symptoms" rows="3">{{ $patient['symptom'] }}</textarea>
                                                 </div>
                                                 <div class="mb-3">
-                                                    <label for="diagnosis" class="form-label">Chuẩn Đoán</label>
+                                                    <label for="diagnosis" class="form-label">Chẩn Đoán</label>
                                                     <textarea class="form-control" id="diagnosis" name="diagnosis" rows="3">{{ $patient['diagnosis'] }}</textarea>
                                                 </div>
                                                 <!-- Prescription Section -->
