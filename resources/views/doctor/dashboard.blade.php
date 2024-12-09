@@ -184,8 +184,7 @@
                                                     </div>
                                                 </div> --}}
                                                 <div class="mb-3 row">
-                                                    <label for="fullName" class="col-sm-2 col-form-label">Full
-                                                        Name</label>
+                                                    <label for="fullName" class="col-sm-2 col-form-label">Họ và tên</label>
                                                     <div class="col-sm-10">
                                                         <input readonly value="{{ $patient['info']->name }}"
                                                             type="text" class="form-control" id="fullName"
@@ -201,7 +200,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="mb-3 row">
-                                                    <label for="address" class="col-sm-2 col-form-label">Address</label>
+                                                    <label for="address" class="col-sm-2 col-form-label">Địa chỉ</label>
                                                     <div class="col-sm-10">
                                                         <input readonly value="{{ $patient['info']->address }}"
                                                             type="text" class="form-control" id="address"
@@ -210,7 +209,7 @@
                                                 </div>
                                                 <div class="mb-3 row">
                                                     <label for="telephone"
-                                                        class="col-sm-2 col-form-label">Telephone</label>
+                                                        class="col-sm-2 col-form-label">Số điện thoại</label>
                                                     <div class="col-sm-10">
                                                         <input readonly value="{{ $patient['info']->telephone }}"
                                                             type="tel" class="form-control" id="telephone"
