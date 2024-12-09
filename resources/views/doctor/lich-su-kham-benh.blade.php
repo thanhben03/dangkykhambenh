@@ -105,7 +105,7 @@ Lịch Sử Khám Bệnh
                                                 </div>
                                                 <div class="mb-3 row">
                                                     <label for="telephone"
-                                                        class="col-sm-2 col-form-label">Telephone</label>
+                                                        class="col-sm-2 col-form-label">Số điện thoại</label>
                                                     <div class="col-sm-10">
                                                         <input readonly value="{{ $patient['telephone'] }}"
                                                             type="tel" class="form-control" id="telephone"
@@ -113,13 +113,13 @@ Lịch Sử Khám Bệnh
                                                     </div>
                                                 </div>
                                                 <div class="mb-3 row">
-                                                    <label for="sex" class="col-sm-2 col-form-label">Sex</label>
+                                                    <label for="sex" class="col-sm-2 col-form-label">Giới tính</label>
                                                     <div class="col-sm-2">
                                                         <input readonly value="{{ $patient['sex'] }}"
                                                             type="text" class="form-control" id="sex"
                                                             name="reg_poccupation">
                                                     </div>
-                                                    <label for="dob" class="col-sm-2 col-form-label">DOB</label>
+                                                    <label for="dob" class="col-sm-2 col-form-label">Năm sinh</label>
                                                     <div class="col-sm-3">
                                                         <input readonly value="{{ $patient['bod'] }}"
                                                             type="text" class="form-control" id="dob"
