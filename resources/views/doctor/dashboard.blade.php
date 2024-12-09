@@ -192,7 +192,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="mb-3 row">
-                                                    <label for="nicNumber" class="col-sm-2 col-form-label">CCCD</label>
+                                                    <label for="nicNumber" class="col-sm-2 col-form-label">Số CCCD</label>
                                                     <div class="col-sm-10">
                                                         <input readonly value="{{ $patient['info']->nic }}"
                                                             type="text" class="form-control" id="nicNumber"
@@ -218,13 +218,13 @@
                                                 </div>
 
                                                 <div class="mb-3 row">
-                                                    <label for="sex" class="col-sm-2 col-form-label">Sex</label>
+                                                    <label for="sex" class="col-sm-2 col-form-label">Giới tính</label>
                                                     <div class="col-sm-2">
                                                         <input readonly value="{{ $patient['info']->sex }}"
                                                             type="text" class="form-control" id="sex"
                                                             name="reg_poccupation">
                                                     </div>
-                                                    <label for="dob" class="col-sm-2 col-form-label">DOB</label>
+                                                    <label for="dob" class="col-sm-2 col-form-label">Năm sinh</label>
                                                     <div class="col-sm-3">
                                                         <input readonly value="{{ $patient['info']->bod }}"
                                                             type="text" class="form-control" id="dob"
