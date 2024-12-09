@@ -115,7 +115,7 @@ Lịch Sử Khám Bệnh
                                                 <div class="mb-3 row">
                                                     <label for="sex" class="col-sm-2 col-form-label">Giới tính</label>
                                                     <div class="col-sm-2">
-                                                        <input readonly value="{{ $patient['sex'] }}"
+                                                        <input readonly value="{{ $patient['sex'] === 'Male' ? 'Nam' : 'Nữ' }}"
                                                             type="text" class="form-control" id="sex"
                                                             name="reg_poccupation">
                                                     </div>
