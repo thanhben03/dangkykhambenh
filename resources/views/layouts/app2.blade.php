@@ -132,7 +132,7 @@
 
                         <li>
                             <a href="/patients/medical-history">
-                                <i class="bx bx-history" style="margin-left: -3px"></i>
+                                <i class="bx bx-history"></i>
 
                                 <span data-key="t/medical-history">Lịch Sử Khám Bệnh</span>
                             </a>

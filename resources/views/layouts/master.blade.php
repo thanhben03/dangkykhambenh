@@ -135,14 +135,14 @@
                             </li>
                             <li>
                                 <a href="/medical-history">
-                                    <i class="bx bx-history " style="margin-left: -3px"></i>
+                                    <i class="bx bx-history"></i>
 
                                     <span data-key="t-medical-history">Lịch Sử Khám Bệnh</span>
                                 </a>
                             </li>
                             <li>
                                 <a target="_blank" href="/pending-screen">
-                                    <i class="bx bx-fullscreen" style="margin-left: -3px"></i>
+                                    <i class="bx bx-fullscreen"></i>
 
                                     <span data-key="t-manage-doctor">Màn hình chờ</span>
                                 </a>
