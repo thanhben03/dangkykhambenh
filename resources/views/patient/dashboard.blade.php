@@ -164,7 +164,7 @@
                                             <div class="mb-3 row">
                                                 <label for="patientID" class="col-sm-2 col-form-label">Khoa khám</label>
                                                 <div class="col-sm-10">
-                                                    <input readonly value="{{ $patient['department']->department_name }}"
+                                                    <input readonly value="{{ $patient['department']->department_name }} - {{ $patient['department']->room}}"
                                                         type="text" class="form-control" id="patientID" name="reg_pname">
                                                 </div>
                                             </div>

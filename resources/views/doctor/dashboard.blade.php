@@ -118,10 +118,10 @@
                                             @if ($patient['kham_tq'] == 0)
                                                 <button onclick="done({{ $patient['stt'] }})" type="button"
                                                     class="btn btn-success"
-                                                    style="float: right">{{ __('Hoàn Thành') }}</button>
+                                                    style="float: right">{{ __('Hoàn thành') }}</button>
                                                 <button onclick="step1({{ $patient['stt'] }})" type="button"
                                                     class="btn btn-info mx-2"
-                                                    style="float: right">{{ __('Chuyển Khoa') }}</button>
+                                                    style="float: right">{{ __('Chuyển khoa') }}</button>
                                             @elseif($patient['kham_tq'] == 1 && $patient['department_id'] == 5)
                                                 <button onclick="step1General({{ $patient['stt'] }},{{ $patient['id'] }})"
                                                     type="button" class="btn btn-success"
