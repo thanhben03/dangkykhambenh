@@ -71,7 +71,7 @@
 
 
                 </div>
-                <div class="">
+                <div class="mobile-logo">
                     <img width="51px" src="/assets/images/logo_hcmute.png" alt="">
                     <img width="33px" src="/assets/images/logo_ktys.png" alt="">
                     <img width="40px" style="margin-left: 6px" src="/assets/images/logo_115.png" alt="">
