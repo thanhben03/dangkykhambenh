@@ -217,6 +217,7 @@
                 error: function(xhr) {
                     console.log(xhr.responseJSON)
                     $(".loading").css('display', 'none')
+                    alert(xhr.responseJSON.message)
 
                 }
             })

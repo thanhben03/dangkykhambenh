@@ -278,6 +278,13 @@ class PatientController extends Controller
         }
 
         $ngaykham = $data['ngaykham'];
+        $patient_visit = PatientVisit::query()->whereDate('arrival_time', $ngaykham)->first();
+        
+        if ($patient_visit && $patient_visit->status == 0) {
+            return response()->json([
+                'message' => 'Bạn có một lịch khám ở khoa '. $patient_visit->department->department_name,
+            ], 500);
+        }
 
 
         $patient = Patient::query()->where('nic', '=', $data['cccd'])->first();
