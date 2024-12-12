@@ -44,6 +44,16 @@ class PatientController extends Controller
             $department_id = $request->department_id;
             $patient = Auth::guard('patient')->user();
             $ngaykham = $request->ngaykham;
+
+            $patient_visit = PatientVisit::query()
+                ->whereDate('arrival_time', $ngaykham)
+                ->where('patient_id', $patient->id)
+                ->latest()->first();
+            if ($patient_visit && $patient_visit->status == 0) {
+                return response()->json([
+                    'message' => 'Bạn có một lịch khám ở khoa ' . $patient_visit->department->department_name,
+                ], 500);
+            }
             $this->registerPatientVisit($patient->id, $symptom, $department_id, null, $ngaykham);
             return response()->json([]);
         } catch (\Throwable $th) {
