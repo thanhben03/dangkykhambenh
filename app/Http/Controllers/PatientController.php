@@ -26,7 +26,8 @@ class PatientController extends Controller
     }
 
     // Lấy hình ảnh bản đồ
-    public function getMap ($department_id) {
+    public function getMap($department_id)
+    {
         $department = Department::query()->findOrFail($department_id);
 
         return response()->json([
@@ -138,7 +139,7 @@ class PatientController extends Controller
             ->get();
 
         $patients = PatientPendingResource::make($patients)->resolve();
-        
+
         return view('patient.dashboard', [
             'patients' => $patients
         ]);
@@ -185,7 +186,6 @@ class PatientController extends Controller
     {
         PatientVisit::query()->where('id', $patient_visit_id)->delete();
         broadcast(new StandbyScreenEvent())->toOthers();
-
     }
 
     // Chuyển chuỗi CCCD thành 1 mảng dữ liệu
@@ -210,12 +210,7 @@ class PatientController extends Controller
         $data = $request->all();
         $department = null;
 
-        $patient_visit = PatientVisit::query()->whereDate('arrival_time', Carbon::toDay())->latest()->first();
-        if ($patient_visit && $patient_visit->status == 0) {
-            return response()->json([
-                'message' => 'Bạn có một lịch khám ở khoa '. $patient_visit->department->department_name,
-            ], 500);
-        }
+
 
 
         // nếu người dùng không chọn khám tổng quát
@@ -244,23 +239,35 @@ class PatientController extends Controller
 
             ]);
         }
+
+        $patient_visit = PatientVisit::query()
+            ->whereDate('arrival_time', Carbon::toDay())
+            ->where('patient_id', $patient->id)
+            ->latest()->first();
+        if ($patient_visit && $patient_visit->status == 0) {
+            return response()->json([
+                'message' => 'Bạn có một lịch khám ở khoa ' . $patient_visit->department->department_name,
+            ], 500);
+        }
+
+
         $stt = $this->registerPatientVisit($patient->id, $data['symptom'], $data['department']);
 
 
 
-        // $response = Http::post('crow-wondrous-asp.ngrok-free.app/print', [
-        //     'stt' => $stt,
-        //     'fullname' => $this->removeVietnameseAccents($data['fullname']),
-        //     'cccd' => $this->removeVietnameseAccents($data['cccd']),
-        //     'gender' => $this->removeVietnameseAccents($data['gender']),
-        //     'birthday' => $this->removeVietnameseAccents($data['birthday']),
-        //     'address' => $this->removeVietnameseAccents($data['address']),
-        //     //            'email' => $this->removeVietnameseAccents($data['email']),
-        //     'phone' => $this->removeVietnameseAccents($data['phone']),
-        //     'arrival_time' => $arrival_time,
-        //     'department' => $this->removeVietnameseAccents($department->department_name).' - '. $department->room,
-        //     'symptom' => $this->removeVietnameseAccents($data['symptom']),
-        // ]);
+        $response = Http::post('crow-wondrous-asp.ngrok-free.app/print', [
+            'stt' => $stt,
+            'fullname' => $this->removeVietnameseAccents($data['fullname']),
+            'cccd' => $this->removeVietnameseAccents($data['cccd']),
+            'gender' => $this->removeVietnameseAccents($data['gender']),
+            'birthday' => $this->removeVietnameseAccents($data['birthday']),
+            'address' => $this->removeVietnameseAccents($data['address']),
+            //            'email' => $this->removeVietnameseAccents($data['email']),
+            'phone' => $this->removeVietnameseAccents($data['phone']),
+            'arrival_time' => $arrival_time,
+            'department' => $this->removeVietnameseAccents($department->department_name) . ' - ' . $department->room,
+            'symptom' => $this->removeVietnameseAccents($data['symptom']),
+        ]);
 
 
         if (true) {
@@ -286,13 +293,7 @@ class PatientController extends Controller
         }
 
         $ngaykham = $data['ngaykham'];
-        $patient_visit = PatientVisit::query()->whereDate('arrival_time', $ngaykham)->first();
-        
-        if ($patient_visit && $patient_visit->status == 0) {
-            return response()->json([
-                'message' => 'Bạn có một lịch khám ở khoa '. $patient_visit->department->department_name,
-            ], 500);
-        }
+
 
 
         $patient = Patient::query()->where('nic', '=', $data['cccd'])->first();
@@ -306,6 +307,15 @@ class PatientController extends Controller
                 'nic' => $data['cccd'],
                 'password' => Hash::make($data['cccd']),
             ]);
+        }
+        $patient_visit = PatientVisit::query()
+            ->whereDate('arrival_time', Carbon::toDay())
+            ->where('patient_id', $patient->id)
+            ->latest()->first();
+        if ($patient_visit && $patient_visit->status == 0) {
+            return response()->json([
+                'message' => 'Bạn có một lịch khám ở khoa ' . $patient_visit->department->department_name,
+            ], 500);
         }
         $stt = $this->registerPatientVisit($patient->id, $data['symptom'], $data['department'], null, $ngaykham);
 
@@ -490,8 +500,6 @@ class PatientController extends Controller
                 'kham_tq' => $kham_tq,
                 'arrival_time' => $this->getArrivalTime($department, $ngaykham)->toDateTimeString(),
             ]);
-
-            
         }
 
         // thông báo cho bác sĩ khi có bệnh nhân đăng ký mới
