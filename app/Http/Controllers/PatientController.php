@@ -266,7 +266,7 @@ class PatientController extends Controller
         }
     }
 
-    // Đăng ký khám bệnh từ xa
+    // Đăng ký khám bệnh từ xa cho bệnh nhân
     public function remoteRegister(Request $request)
     {
         $data = $request->all();

@@ -88,7 +88,7 @@ Lịch Sử Khám Bệnh
                                                     </div>
                                                 </div>
                                                 <div class="mb-3 row">
-                                                    <label for="nicNumber" class="col-sm-2 col-form-label">CCCD</label>
+                                                    <label for="nicNumber" class="col-sm-2 col-form-label">Số CCCD</label>
                                                     <div class="col-sm-10">
                                                         <input readonly value="{{ $patient['nic'] }}"
                                                             type="text" class="form-control" id="nicNumber"
