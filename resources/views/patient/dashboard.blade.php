@@ -307,6 +307,7 @@
                 },
                 error: function(xhr) {
                     console.log(xhr);
+                    alert(xhr.responseJSON.message)
 
                 }
 
