@@ -210,6 +210,14 @@ class PatientController extends Controller
         $data = $request->all();
         $department = null;
 
+        $patient_visit = PatientVisit::query()->whereDate('arrival_time', Carbon::toDay())->latest()->first();
+        if ($patient_visit && $patient_visit->status == 0) {
+            return response()->json([
+                'message' => 'Bạn có một lịch khám ở khoa '. $patient_visit->department->department_name,
+            ], 500);
+        }
+
+
         // nếu người dùng không chọn khám tổng quát
         if ($data['department'] != 15) {
             $department = Department::query()->where('id', '=', $data['department'])->first();
@@ -240,22 +248,22 @@ class PatientController extends Controller
 
 
 
-        $response = Http::post('crow-wondrous-asp.ngrok-free.app/print', [
-            'stt' => $stt,
-            'fullname' => $this->removeVietnameseAccents($data['fullname']),
-            'cccd' => $this->removeVietnameseAccents($data['cccd']),
-            'gender' => $this->removeVietnameseAccents($data['gender']),
-            'birthday' => $this->removeVietnameseAccents($data['birthday']),
-            'address' => $this->removeVietnameseAccents($data['address']),
-            //            'email' => $this->removeVietnameseAccents($data['email']),
-            'phone' => $this->removeVietnameseAccents($data['phone']),
-            'arrival_time' => $arrival_time,
-            'department' => $this->removeVietnameseAccents($department->department_name).' - '. $department->room,
-            'symptom' => $this->removeVietnameseAccents($data['symptom']),
-        ]);
+        // $response = Http::post('crow-wondrous-asp.ngrok-free.app/print', [
+        //     'stt' => $stt,
+        //     'fullname' => $this->removeVietnameseAccents($data['fullname']),
+        //     'cccd' => $this->removeVietnameseAccents($data['cccd']),
+        //     'gender' => $this->removeVietnameseAccents($data['gender']),
+        //     'birthday' => $this->removeVietnameseAccents($data['birthday']),
+        //     'address' => $this->removeVietnameseAccents($data['address']),
+        //     //            'email' => $this->removeVietnameseAccents($data['email']),
+        //     'phone' => $this->removeVietnameseAccents($data['phone']),
+        //     'arrival_time' => $arrival_time,
+        //     'department' => $this->removeVietnameseAccents($department->department_name).' - '. $department->room,
+        //     'symptom' => $this->removeVietnameseAccents($data['symptom']),
+        // ]);
 
 
-        if ($response->successful()) {
+        if (true) {
             // Khi đăng ký khám thành công sẽ trả về bản đồ đến khoa khám đó
             return response()->json([
                 'img' => $department->img_map,

@@ -37,8 +37,8 @@
 
         <div class="flex items-center justify-end mt-4">
             @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                    href="{{ route('password.request') }}">
+                <a onclick="alertForget()" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    href="#">
                     {{ __('Quên mật khẩu ?') }}
                 </a>
             @endif
@@ -49,3 +49,9 @@
         </div>
     </form>
 </x-guest-layout>
+
+<script>
+    function alertForget() {
+        alert('Vui lòng liên hệ hotline: 123456 để được cấp lại mật khẩu !')
+    }
+</script>
