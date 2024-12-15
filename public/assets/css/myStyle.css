@@ -12,4 +12,11 @@
     .video-map {
         width: 108% !important;
     }
+    
 }
+
+@media screen and (max-width: 768px) {
+    .mobile-logo {
+        display: none;
+    }
+  }
