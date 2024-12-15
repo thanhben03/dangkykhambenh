@@ -30,11 +30,11 @@ class LoginPatientController extends Controller
         $patient = Patient::query()->where('nic', '=', $data['cccd'])->first();
 
         if (!$patient) {
-            return redirect()->back()->withErrors(['not-found' => 'Patient not found']);
+            return redirect()->back()->withErrors(['not-found' => 'Không tìm thấy số căn cước này.']);
         }
 
         if (!Hash::check($data['password'], $patient->password)) {
-            return back()->withErrors(['password' => 'The provided credentials are incorrect.']);
+            return back()->withErrors(['password' => 'Mật khẩu không đúng.']);
         }
         Auth::guard('patient')->login($patient);
         return redirect()->route('patient.dashboard');
