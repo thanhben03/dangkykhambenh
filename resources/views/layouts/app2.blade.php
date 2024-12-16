@@ -141,7 +141,7 @@
                             <a href="/patients/profile">
                                 <i class="bx bxs-user-rectangle"></i>
 
-                                <span data-key="t-profile">Cá Nhân</span>
+                                <span data-key="t-profile">Trang Cá Nhân</span>
                             </a>
                         </li>
 
