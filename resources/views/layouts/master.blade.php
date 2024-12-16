@@ -159,7 +159,7 @@
                                 <a href="/manage-doctor">
                                     <i class="bx bx-user"></i>
 
-                                    <span data-key="t-manage-doctor">Quản lý bác sĩ</span>
+                                    <span data-key="t-manage-doctor">Quản Lý Bác Sĩ</span>
                                 </a>
                             </li>
                         @endif
