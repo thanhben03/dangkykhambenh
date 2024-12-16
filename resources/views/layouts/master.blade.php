@@ -152,7 +152,7 @@
                                 <a href="/manage-patient">
                                     <i class="bx bx-hotel"></i>
 
-                                    <span data-key="t-manage-patient">Quản lý bệnh nhân</span>
+                                    <span data-key="t-manage-patient">Quản Lý Bệnh Nhân</span>
                                 </a>
                             </li>
                             <li>
