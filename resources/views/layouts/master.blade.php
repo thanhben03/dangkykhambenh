@@ -152,14 +152,14 @@
                                 <a href="/manage-patient">
                                     <i class="bx bx-hotel"></i>
 
-                                    <span data-key="t-manage-patient">Quản lý bệnh nhân</span>
+                                    <span data-key="t-manage-patient">Quản Lý Bệnh Nhân</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="/manage-doctor">
                                     <i class="bx bx-user"></i>
 
-                                    <span data-key="t-manage-doctor">Quản lý bác sĩ</span>
+                                    <span data-key="t-manage-doctor">Quản Lý Bác Sĩ</span>
                                 </a>
                             </li>
                         @endif
