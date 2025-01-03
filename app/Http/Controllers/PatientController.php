@@ -171,7 +171,7 @@ class PatientController extends Controller
         // Gọi đến api của ras để lấy dữ liệu từ CCCD
         $response = Http::withHeaders([
             'Content-Type' => 'application/json',
-        ])->timeout(60)->post('crow-wondrous-asp.ngrok-free.app/command', [
+        ])->timeout(60)->post(env('API_URL').'/command', [
             'command' => 'scan_qr',
         ]);
         //        return response()->json($this->getDataFromCCCD('089202017098|352576714|Lê Văn Lương|23052002|Nam|Tổ 10 Ấp An Thái, Hòa Bình, Chợ Mới, An Giang|31122021'));
@@ -265,7 +265,7 @@ class PatientController extends Controller
 
 
 
-        $response = Http::post('crow-wondrous-asp.ngrok-free.app/print', [
+        $response = Http::post(env('API_URL').'/print', [
             'stt' => $stt,
             'fullname' => $this->removeVietnameseAccents($data['fullname']),
             'cccd' => $this->removeVietnameseAccents($data['cccd']),
@@ -497,9 +497,15 @@ class PatientController extends Controller
             $newSTT = 1;
         } else {
             // lấy số tt mới nhất theo ngày hôm nay
-            $stt = PatientVisit::query()
+            if (!$ngaykham) {
+                $stt = PatientVisit::query()
                 ->whereDate('arrival_time', Carbon::toDay())
                 ->latest()->first()->stt;
+            } else {
+                $stt = PatientVisit::query()
+                ->whereDate('arrival_time', $ngaykham)
+                ->latest()->first()->stt;
+            }
             $newSTT = $stt + 1;
 
             $newPatientVisit = PatientVisit::query()->create([
