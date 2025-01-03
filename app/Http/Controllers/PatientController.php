@@ -280,7 +280,7 @@ class PatientController extends Controller
         ]);
 
 
-        if (true) {
+        if ($response->successful()) {
             // Khi đăng ký khám thành công sẽ trả về bản đồ đến khoa khám đó
             return response()->json([
                 'img' => $department->img_map,
